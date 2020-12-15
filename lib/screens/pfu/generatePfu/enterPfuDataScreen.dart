@@ -111,7 +111,7 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
     try {
       var image = await _picker.getImage(
         source: ImageSource.gallery,
-        imageQuality: 25,
+        imageQuality: 50,
         maxHeight: screenSize.screenHeight * 50,
         maxWidth: screenSize.screenWidth * 100,
       );

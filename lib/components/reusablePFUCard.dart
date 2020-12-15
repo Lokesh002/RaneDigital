@@ -48,7 +48,7 @@ class ReusablePFUCard extends StatelessWidget {
       case 5:
         return Image.asset("images/4.png");
       case 6:
-        return Image.asset("images/0.png");
+        return Image.asset("images/rejected.png");
       default:
         return Image.asset("images/logo.png");
     }

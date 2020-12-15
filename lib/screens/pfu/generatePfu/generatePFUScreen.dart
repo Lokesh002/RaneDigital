@@ -67,6 +67,8 @@ class _GeneratePFUScreenState extends State<GeneratePFUScreen> {
     }
   }
 
+  String accountType;
+
   String dept;
   bool isLoaded = false;
   getLine() async {
@@ -75,6 +77,7 @@ class _GeneratePFUScreenState extends State<GeneratePFUScreen> {
     this.isLoaded = true;
     dept = await savedData.getDepartment();
     setState(() {});
+    accountType = await savedData.getAccountType();
   }
 
   @override
@@ -201,8 +204,13 @@ class _GeneratePFUScreenState extends State<GeneratePFUScreen> {
                                       horizontal: screenSize.screenWidth * 5),
                                   child: MaterialButton(
                                       onPressed: () {
-                                        Navigator.pushNamed(
-                                            context, '/addLineScreen');
+                                        if (accountType == 'admin') {
+                                          Navigator.pushNamed(
+                                              context, '/addLineScreen');
+                                        } else {
+                                          Fluttertoast.showToast(
+                                              msg: "Only Admins can add Line.");
+                                        }
                                       },
                                       elevation: 5.0,
                                       color: Colors.green,
@@ -286,26 +294,32 @@ class _GeneratePFUScreenState extends State<GeneratePFUScreen> {
                                       horizontal: screenSize.screenWidth * 5),
                                   child: MaterialButton(
                                       onPressed: () {
-                                        if (this.selectedLine != null &&
-                                            lineList != null) {
-                                          Line line;
-                                          for (int i = 0;
-                                              i < lineList.length;
-                                              i++) {
-                                            if (lineList[i].lineId ==
-                                                selectedLine)
-                                              line = lineList[i];
-                                          }
+                                        if (accountType == 'admin') {
+                                          if (this.selectedLine != null &&
+                                              lineList != null) {
+                                            Line line;
+                                            for (int i = 0;
+                                                i < lineList.length;
+                                                i++) {
+                                              if (lineList[i].lineId ==
+                                                  selectedLine)
+                                                line = lineList[i];
+                                            }
 
-                                          Navigator.push(context,
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return AddMachineScreen(line);
-                                          }));
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                                    builder: (context) {
+                                              return AddMachineScreen(line);
+                                            }));
+                                          } else {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    "Please select a line first.");
+                                          }
                                         } else {
                                           Fluttertoast.showToast(
                                               msg:
-                                                  "Please select a line first.");
+                                                  "Only Admins can add Machine.");
                                         }
                                       },
                                       elevation: 5.0,
