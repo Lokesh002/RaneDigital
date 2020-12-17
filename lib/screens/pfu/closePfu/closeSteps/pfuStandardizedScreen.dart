@@ -3,6 +3,7 @@ import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/pfuListMaker.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
+import 'package:rane_dms/screens/pfu/closePfu/closeSteps/changePFUDetails.dart';
 
 class PFUStandardizeScreen extends StatefulWidget {
   final PFU pfu;
@@ -208,6 +209,17 @@ class _PFUStandardizeScreenState extends State<PFUStandardizeScreen> {
                     "Responsible Department", widget.pfu.deptResponsible),
                 getElement("Raising Date", widget.pfu.raisingDate.toString()),
                 getElement("Raising Person", widget.pfu.raisingPerson),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ChangePFUDetails(widget.pfu);
+                      }));
+                    },
+                    child: getElement("Root Cause", widget.pfu.rootCause)),
+                getElement("Action Decided", widget.pfu.action),
+                getElement(
+                    "Target Date", widget.pfu.targetDate.substring(0, 10)),
                 SizedBox(
                   height: screenSize.screenHeight * 50,
                   width: screenSize.screenWidth * 100,

@@ -216,6 +216,10 @@ class _ConfirmClosePFUScreenState extends State<ConfirmClosePFUScreen> {
                     "Responsible Department", widget.pfu.deptResponsible),
                 getElement("Raising Date", widget.pfu.raisingDate.toString()),
                 getElement("Raising Person", widget.pfu.raisingPerson),
+                getElement("Root Cause", widget.pfu.rootCause),
+                getElement("Action Decided", widget.pfu.action),
+                getElement(
+                    "Target Date", widget.pfu.targetDate.substring(0, 10)),
                 SizedBox(
                   height: screenSize.screenHeight * 50,
                   width: screenSize.screenWidth * 100,

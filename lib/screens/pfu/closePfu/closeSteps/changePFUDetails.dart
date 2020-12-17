@@ -5,11 +5,11 @@ import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/pfuListMaker.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 
-class EnterPFUDetails extends StatefulWidget {
+class ChangePFUDetails extends StatefulWidget {
   final PFU pfu;
-  EnterPFUDetails(this.pfu);
+  ChangePFUDetails(this.pfu);
   @override
-  _EnterPFUDetailsState createState() => _EnterPFUDetailsState();
+  _ChangePFUDetailsState createState() => _ChangePFUDetailsState();
 }
 
 showAlertDialog(BuildContext context) {
@@ -35,7 +35,7 @@ showAlertDialog(BuildContext context) {
   );
 }
 
-class _EnterPFUDetailsState extends State<EnterPFUDetails> {
+class _ChangePFUDetailsState extends State<ChangePFUDetails> {
   TextEditingController rootCauseController = TextEditingController();
   DateTime _dateTime;
   String rootCause;
@@ -225,6 +225,10 @@ class _EnterPFUDetailsState extends State<EnterPFUDetails> {
                     "Responsible Department", widget.pfu.deptResponsible),
                 getElement("Raising Date", widget.pfu.raisingDate.toString()),
                 getElement("Raising Person", widget.pfu.raisingPerson),
+                getElement("Earlier Root Cause", widget.pfu.rootCause),
+                getElement("Earlier Action Decided", widget.pfu.action),
+                getElement("Earlier Target Date",
+                    widget.pfu.targetDate.substring(0, 10)),
                 SizedBox(
                   height: screenSize.screenHeight * 50,
                   width: screenSize.screenWidth * 100,
@@ -378,24 +382,22 @@ class _EnterPFUDetailsState extends State<EnterPFUDetails> {
                           height: screenSize.screenHeight * 5,
                           minWidth: screenSize.screenWidth * 30,
                           onPressed: () async {
-                            if (_formKey.currentState.validate() &&
-                                _dateTime != null) {
-                              showAlertDialog(context);
-                              Networking networking = Networking();
-                              await networking.postData('PFU/PFUActionDecide', {
-                                'pfuId': widget.pfu.id,
-                                'rootCause': rootCause,
-                                'action': action,
-                                'targetDate':
-                                    _dateTime.toString().substring(0, 10)
-                              });
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg: "Please enter all the fields.");
-                            }
+                            showAlertDialog(context);
+                            Networking networking = Networking();
+                            await networking.postData('PFU/changePFUDetails', {
+                              'pfuId': widget.pfu.id,
+                              'rootCause': rootCause != null
+                                  ? rootCause
+                                  : widget.pfu.rootCause,
+                              'action':
+                                  action != null ? action : widget.pfu.action,
+                              'targetDate': _dateTime != null
+                                  ? _dateTime.toString().substring(0, 10)
+                                  : widget.pfu.targetDate.substring(0, 10)
+                            });
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
                           },
                         ),
                       ),

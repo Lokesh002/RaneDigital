@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:rane_dms/components/ReusableCard.dart';
 import 'package:rane_dms/components/courseCard.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
@@ -44,13 +45,38 @@ class ReusablePFUCard extends StatelessWidget {
         return Image.asset("images/3.png");
 
       case 4:
-        return Image.asset("images/3.png");
+        return Image.asset("images/4.png");
       case 5:
         return Image.asset("images/4.png");
       case 6:
         return Image.asset("images/rejected.png");
       default:
         return Image.asset("images/logo.png");
+    }
+  }
+
+  Color getColor(int status) {
+    switch (status) {
+      case 0:
+        return Colors.white;
+
+      case 1:
+        return Colors.black54;
+
+      case 2:
+        return Colors.black54;
+
+      case 3:
+        return Colors.black54;
+
+      case 4:
+        return Colors.white;
+      case 5:
+        return Colors.white;
+      case 6:
+        return Colors.white;
+      default:
+        return Colors.white;
     }
   }
 
@@ -138,7 +164,7 @@ class ReusablePFUCard extends StatelessWidget {
                                   'Machine: $machineCode',
                                   style: TextStyle(
                                     fontSize: screenSize.screenHeight * 1.5,
-                                    color: Colors.white,
+                                    color: getColor(status),
                                   ),
                                 ),
                                 SizedBox(
@@ -148,7 +174,7 @@ class ReusablePFUCard extends StatelessWidget {
                                   'Issued: $issueDate',
                                   style: TextStyle(
                                     fontSize: screenSize.screenHeight * 1.5,
-                                    color: Colors.white,
+                                    color: getColor(status),
                                   ),
                                 ),
                               ],
