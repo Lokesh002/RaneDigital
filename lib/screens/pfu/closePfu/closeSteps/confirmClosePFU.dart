@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rane_dms/components/ReusableButton.dart';
+import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/pfuListMaker.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
@@ -49,8 +50,9 @@ class _ConfirmClosePFUScreenState extends State<ConfirmClosePFUScreen> {
               ),
               Text(
                 about,
+                overflow: TextOverflow.fade,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Theme.of(context).primaryColor,
                   fontSize: screenSize.screenHeight * 2,
                   fontFamily: "Roboto",
                 ),
@@ -77,7 +79,7 @@ class _ConfirmClosePFUScreenState extends State<ConfirmClosePFUScreen> {
     );
   }
 
-  String photo = 'http://192.168.43.18:3000/PFUpics/logo.png';
+  String photo = ipAddress + 'PFUpics/logo.png';
   @override
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
@@ -119,14 +121,30 @@ class _ConfirmClosePFUScreenState extends State<ConfirmClosePFUScreen> {
                 Padding(
                   padding: EdgeInsets.symmetric(
                       vertical: screenSize.screenHeight * 2.5),
-                  child: Text(
-                    widget.pfu.machine.machineName,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: screenSize.screenHeight * 3,
-                      fontFamily: "Montserrat",
-                      fontWeight: FontWeight.normal,
-                    ),
+                  child: Column(
+                    children: [
+                      Text(
+                        widget.pfu.machine.machineCode,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: screenSize.screenHeight * 3,
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      SizedBox(
+                        height: screenSize.screenHeight * 2,
+                      ),
+                      Text(
+                        widget.pfu.machine.machineName,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: screenSize.screenHeight * 3,
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Row(
@@ -142,7 +160,7 @@ class _ConfirmClosePFUScreenState extends State<ConfirmClosePFUScreen> {
                           child: Text(
                             "Problem: ",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Theme.of(context).primaryColor,
                               fontSize: screenSize.screenHeight * 2,
                               fontFamily: "Roboto",
                             ),
@@ -183,7 +201,7 @@ class _ConfirmClosePFUScreenState extends State<ConfirmClosePFUScreen> {
                           child: Text(
                             "Description: ",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Theme.of(context).primaryColor,
                               fontSize: screenSize.screenHeight * 2,
                               fontFamily: "Roboto",
                             ),

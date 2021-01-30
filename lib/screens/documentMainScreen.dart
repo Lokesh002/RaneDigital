@@ -61,7 +61,7 @@ class _DocumentMainScreenState extends State<DocumentMainScreen> {
                 child: Padding(
                   padding: EdgeInsets.only(top: screenSize.screenHeight * 20),
                   child: Text(
-                    "Document Management System",
+                    "Data Retrieval System",
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: screenSize.screenHeight * 2),

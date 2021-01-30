@@ -5,7 +5,7 @@ import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/icon_content.dart';
 import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
-import 'package:rane_dms/screens/pfu/closePfu/machineListScreen.dart';
+import 'package:rane_dms/screens/pfu/closePfu/otherDeptPFU.dart';
 import 'package:rane_dms/screens/pfu/closePfu/tabBarScreen.dart';
 
 class ClosePFUScreen extends StatefulWidget {
@@ -23,10 +23,10 @@ class _ClosePFUScreenState extends State<ClosePFUScreen> {
   var age = 20;
   List<String> departments = [
     "MED",
-    "PPC",
     "MFG",
     "Store",
     "QAD",
+    "CorpMED",
     "PLE",
     "ALL"
   ];

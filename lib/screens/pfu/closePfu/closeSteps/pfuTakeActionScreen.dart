@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rane_dms/components/ReusableButton.dart';
+import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/pfuListMaker.dart';
+import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 import 'package:rane_dms/screens/pfu/closePfu/closeSteps/changePFUDetails.dart';
 
@@ -78,7 +80,18 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
     );
   }
 
-  String photo = 'http://192.168.43.18:3000/PFUpics/logo.png';
+  String photo = ipAddress + 'PFUpics/logo.png';
+  String genId;
+  SavedData savedData = SavedData();
+  getData() async {
+    genId = await savedData.getGenId();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,14 +126,30 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                 Padding(
                   padding: EdgeInsets.symmetric(
                       vertical: screenSize.screenHeight * 2.5),
-                  child: Text(
-                    widget.pfu.machine.machineName,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: screenSize.screenHeight * 3,
-                      fontFamily: "Montserrat",
-                      fontWeight: FontWeight.normal,
-                    ),
+                  child: Column(
+                    children: [
+                      Text(
+                        widget.pfu.machine.machineCode,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: screenSize.screenHeight * 3,
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      SizedBox(
+                        height: screenSize.screenHeight * 2,
+                      ),
+                      Text(
+                        widget.pfu.machine.machineName,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: screenSize.screenHeight * 3,
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Row(
@@ -212,10 +241,12 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                 getElement("Raising Person", widget.pfu.raisingPerson),
                 GestureDetector(
                     onTap: () {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) {
-                        return ChangePFUDetails(widget.pfu);
-                      }));
+                      if (genId == '14076') {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ChangePFUDetails(widget.pfu);
+                        }));
+                      }
                     },
                     child: getElement("Root Cause", widget.pfu.rootCause)),
                 getElement("Action Decided", widget.pfu.action),

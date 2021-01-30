@@ -2,13 +2,16 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:convert' as convert;
 
+import 'package:rane_dms/components/constants.dart';
+
 class Networking {
-  String ip = "http://192.168.43.18:3000/";
+  String ip = ipAddress;
 
 //  Networking(String url)
 //  {
 //    this.url=url;
 //  }
+
   Future getData(String url) async {
     String fullURL = ip + url;
 

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rane_dms/components/ReusableButton.dart';
+import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/lineDataStructure.dart';
 import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/sharedPref.dart';
@@ -66,7 +67,7 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
 
   SavedData savedData = SavedData();
 
-  List departments = ["MED", "PPC", "MFG", "Store", "QAD", "PLE"];
+  List departments = ["MED", "PPC", "MFG", "Store", "QAD", "PLE", "CorpMED"];
   List<DropdownMenuItem> getDepartmentList() {
     List<DropdownMenuItem> departmentList = [];
 
@@ -154,7 +155,7 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
     });
 
     Response response = await dio.post(
-      'http://192.168.43.18:3000/uploadPFUPhoto',
+      ipAddress + 'uploadPFUPhoto',
       data: formData,
     );
     print(response.data);

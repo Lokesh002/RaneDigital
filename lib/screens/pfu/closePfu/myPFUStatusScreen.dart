@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:rane_dms/components/constants.dart';
 
 import 'package:rane_dms/components/pfuListMaker.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 
-class MyPFUStatsuScreen extends StatefulWidget {
+class MyPFUStatusScreen extends StatefulWidget {
   final PFU pfu;
-  MyPFUStatsuScreen(this.pfu);
+  MyPFUStatusScreen(this.pfu);
   @override
-  _MyPFUStatsuScreenState createState() => _MyPFUStatsuScreenState();
+  _MyPFUStatusScreenState createState() => _MyPFUStatusScreenState();
 }
 
 showAlertDialog(BuildContext context) {
@@ -33,7 +34,7 @@ showAlertDialog(BuildContext context) {
   );
 }
 
-class _MyPFUStatsuScreenState extends State<MyPFUStatsuScreen> {
+class _MyPFUStatusScreenState extends State<MyPFUStatusScreen> {
   SizeConfig screenSize;
   Widget getElement(String about, String value) {
     return Padding(
@@ -98,7 +99,7 @@ class _MyPFUStatsuScreenState extends State<MyPFUStatsuScreen> {
     }
   }
 
-  String photo = 'http://192.168.43.18:3000/PFUpics/logo.png';
+  String photo = ipAddress + 'PFUpics/logo.png';
   @override
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
@@ -131,14 +132,30 @@ class _MyPFUStatsuScreenState extends State<MyPFUStatsuScreen> {
                 Padding(
                   padding: EdgeInsets.symmetric(
                       vertical: screenSize.screenHeight * 2.5),
-                  child: Text(
-                    widget.pfu.machine.machineName,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: screenSize.screenHeight * 3,
-                      fontFamily: "Montserrat",
-                      fontWeight: FontWeight.normal,
-                    ),
+                  child: Column(
+                    children: [
+                      Text(
+                        widget.pfu.machine.machineCode,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: screenSize.screenHeight * 3,
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      SizedBox(
+                        height: screenSize.screenHeight * 2,
+                      ),
+                      Text(
+                        widget.pfu.machine.machineName,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: screenSize.screenHeight * 3,
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Row(
@@ -226,8 +243,18 @@ class _MyPFUStatsuScreenState extends State<MyPFUStatsuScreen> {
                 getElement("Raising Department", widget.pfu.raisingDept),
                 getElement(
                     "Responsible Department", widget.pfu.deptResponsible),
-                getElement("Raising Date", widget.pfu.raisingDate.toString()),
+                getElement("Raising Date",
+                    widget.pfu.raisingDate.toString().substring(0, 10)),
                 getElement("Raising Person", widget.pfu.raisingPerson),
+                getElement("Root Cause",
+                    (widget.pfu.status >= 2) ? widget.pfu.rootCause : '-'),
+                getElement("Action Decided",
+                    (widget.pfu.status >= 2) ? widget.pfu.action : "-"),
+                getElement(
+                    "Target Date",
+                    (widget.pfu.status >= 2)
+                        ? widget.pfu.targetDate.substring(0, 10)
+                        : "-"),
                 SizedBox(
                   height: screenSize.screenHeight * 50,
                   width: screenSize.screenWidth * 100,

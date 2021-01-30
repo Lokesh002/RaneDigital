@@ -60,7 +60,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     passwordController.clear();
   }
 
-  List departments = ["MED", "PPC", "MFG", "Store", "QAD", "PLE"];
+  List departments = ["MED", "PPC", "MFG", "Store", "QAD", "PLE", "CorpMED"];
   List<DropdownMenuItem> getDepartmentList() {
     List<DropdownMenuItem> departmentList = [];
     for (int i = 0; i < departments.length; i++) {

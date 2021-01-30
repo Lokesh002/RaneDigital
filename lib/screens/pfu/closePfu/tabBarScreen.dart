@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
-import 'package:rane_dms/screens/pfu/closePfu/machineListScreen.dart';
+import 'package:rane_dms/screens/pfu/closePfu/otherDeptPFU.dart';
 import 'package:rane_dms/screens/pfu/closePfu/myPFUScreen.dart';
 
 class TabBarScreen extends StatefulWidget {
@@ -86,7 +86,7 @@ class _TabBarScreenState extends State<TabBarScreen> {
         ),
         backgroundColor: Theme.of(context).accentColor,
         body: TabBarView(children: [
-          MachineListScreen(widget.selectedDepartment),
+          OtherDeptPFU(widget.selectedDepartment),
           MyPFUScreen(widget.selectedDepartment)
         ]),
       ),

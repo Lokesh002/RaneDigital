@@ -15,6 +15,7 @@ import 'package:rane_dms/screens/profile/profileScreen.dart';
 import 'package:rane_dms/screens/splashScreen.dart';
 import 'package:rane_dms/screens/documentMainScreen.dart';
 import 'package:rane_dms/screens/homeScreen.dart';
+import 'package:rane_dms/screens/updateAppScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -61,7 +62,8 @@ class _MyAppState extends State<MyApp> {
         '/viewPFUScreen': (context) => EnterFilterDataScreen(),
         '/closePFUScreen': (context) => ClosePFUScreen(),
         '/addLineScreen': (context) => AddLineScreen(),
-        '/changePassword': (context) => ChangePassword()
+        '/changePassword': (context) => ChangePassword(),
+        '/updateAppScreen': (context) => UpdateAppScreen()
       },
     );
   }

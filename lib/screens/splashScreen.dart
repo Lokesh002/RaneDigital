@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:rane_dms/components/constants.dart';
+import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 import 'dart:async';
@@ -17,10 +19,16 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Timer(Duration(seconds: 3), () async {
-      if (await savedData.getLoggedIn()) {
-        Navigator.pushReplacementNamed(context, '/homeScreen');
+      Networking networking = Networking();
+      var updatedAppVersion = await networking.deleteData('updateApp');
+      if (updatedAppVersion == version) {
+        if (await savedData.getLoggedIn()) {
+          Navigator.pushReplacementNamed(context, '/homeScreen');
+        } else {
+          Navigator.pushReplacementNamed(context, '/loginScreen');
+        }
       } else {
-        Navigator.pushReplacementNamed(context, '/loginScreen');
+        Navigator.pushReplacementNamed(context, '/updateAppScreen');
       }
     });
   }

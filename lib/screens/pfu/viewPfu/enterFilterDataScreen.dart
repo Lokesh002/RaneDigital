@@ -20,7 +20,7 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
   DateTime toDate;
   String raisingDepartment;
   String responsibleDepartment;
-  List departments = ["MED", "MFG", "PLE", "Store", "PPC", "QAD"];
+  List departments = ["MED", "MFG", "PLE", "Store", "PPC", "QAD", "CorpMED"];
   String selectedLine;
   String selectedMachine;
   final _formKey = GlobalKey<FormState>();

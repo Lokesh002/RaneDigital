@@ -17,3 +17,6 @@ const kNumberTextStyle = TextStyle(
 const kLabelTextStyle = TextStyle(
   color: Colors.white,
 );
+
+const String ipAddress = 'http://192.168.50.15/';
+const String version = '1.0.0';

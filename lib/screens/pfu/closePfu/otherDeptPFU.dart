@@ -13,15 +13,15 @@ import 'package:rane_dms/screens/pfu/closePfu/closeSteps/pfuStandardizedScreen.d
 import 'package:rane_dms/screens/pfu/closePfu/closeSteps/pfuTakeActionScreen.dart';
 import 'package:rane_dms/screens/pfu/closePfu/myPFUStatusScreen.dart';
 
-class MachineListScreen extends StatefulWidget {
+class OtherDeptPFU extends StatefulWidget {
   final String selectedDepartment;
 
-  MachineListScreen(this.selectedDepartment);
+  OtherDeptPFU(this.selectedDepartment);
   @override
-  _MachineListScreenState createState() => _MachineListScreenState();
+  _OtherDeptPFUState createState() => _OtherDeptPFUState();
 }
 
-class _MachineListScreenState extends State<MachineListScreen> {
+class _OtherDeptPFUState extends State<OtherDeptPFU> {
   bool isLoaded = false;
   List<PFU> pfuList = [];
   SavedData savedData = SavedData();
@@ -87,7 +87,7 @@ class _MachineListScreenState extends State<MachineListScreen> {
         return () {
           setState(() {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return MyPFUStatsuScreen(pfu);
+              return MyPFUStatusScreen(pfu);
             }));
           });
         };
@@ -172,6 +172,7 @@ class _MachineListScreenState extends State<MachineListScreen> {
                                     pfuList[index].raisingDate.year.toString()),
                             status: pfuList[index].status,
                             color: getPFUColor(pfuList[index].status),
+                            raisingDept: pfuList[index].raisingDept,
                             problem: pfuList[index].problem,
                             machineCode: pfuList[index].machine.machineCode,
                             lineName: pfuList[index].lineName,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/reusableCourseCard.dart';
 
 import 'package:http/http.dart' as http;
@@ -119,8 +120,7 @@ class _DeptInFolderState extends State<DeptInFolder> {
   var veh;
 
   void getDocsList() async {
-    var decodedData =
-        await getData("http://192.168.43.18:3000/view/" + widget.id);
+    var decodedData = await getData(ipAddress + "view/" + widget.id);
 
     List data = decodedData;
     print(data.length);

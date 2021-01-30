@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/pfuListMaker.dart';
+import 'package:rane_dms/components/reusableMyPFUCard.dart';
 
 import 'package:rane_dms/components/reusablePFUCard.dart';
 import 'package:rane_dms/components/sharedPref.dart';
@@ -89,7 +90,7 @@ class _MyPFUScreenState extends State<MyPFUScreen> {
         return () {
           setState(() {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return MyPFUStatsuScreen(pfu);
+              return MyPFUStatusScreen(pfu);
             }));
           });
         };
@@ -131,7 +132,7 @@ class _MyPFUScreenState extends State<MyPFUScreen> {
                   height: screenSize.screenHeight * 80,
                   child: ListView.builder(
                       itemBuilder: (BuildContext cntxt, int index) {
-                        return ReusablePFUCard(
+                        return ReusableMyPFUCard(
                           issueDate: (pfuList[index].raisingDate == null)
                               ? " "
                               : (pfuList[index].raisingDate.day.toString() +
@@ -141,6 +142,7 @@ class _MyPFUScreenState extends State<MyPFUScreen> {
                                   pfuList[index].raisingDate.year.toString()),
                           status: pfuList[index].status,
                           color: getPFUColor(pfuList[index].status),
+                          respDept: pfuList[index].deptResponsible,
                           problem: pfuList[index].problem,
                           machineCode: pfuList[index].machine.machineCode,
                           lineName: pfuList[index].lineName,

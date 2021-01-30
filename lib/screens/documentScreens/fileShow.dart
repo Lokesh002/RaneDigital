@@ -4,6 +4,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdftron_flutter/pdftron_flutter.dart';
+import 'package:rane_dms/components/constants.dart';
 
 class FileShow extends StatefulWidget {
   @override
@@ -12,7 +13,7 @@ class FileShow extends StatefulWidget {
 
 class _FileShowState extends State<FileShow> {
   String _version = 'Unknown';
-  String _document = "http://192.168.43.18/pdf";
+  String _document = ipAddress + "pdf";
 
   @override
   void initState() {

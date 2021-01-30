@@ -5,7 +5,7 @@ import 'package:rane_dms/components/ReusableCard.dart';
 import 'package:rane_dms/components/courseCard.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 
-class ReusablePFUCard extends StatelessWidget {
+class ReusableMyPFUCard extends StatelessWidget {
   final String problem;
   final String lastUpdate;
   final String lineName;
@@ -15,10 +15,10 @@ class ReusablePFUCard extends StatelessWidget {
   final String machineCode;
   final int status;
   final String issueDate;
-  final String raisingDept;
-  ReusablePFUCard(
+  final String respDept;
+  ReusableMyPFUCard(
       {this.problem,
-      this.raisingDept,
+      this.respDept,
       this.status,
       this.lastUpdate,
       this.lineName,
@@ -185,7 +185,7 @@ class ReusablePFUCard extends StatelessWidget {
                               height: screenSize.screenHeight * 1,
                             ),
                             Text(
-                              'Raising Dept: $raisingDept',
+                              'Responsible Dept: $respDept',
                               style: TextStyle(
                                 fontSize: screenSize.screenHeight * 2,
                                 color: Colors.black,
