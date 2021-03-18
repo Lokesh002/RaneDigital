@@ -32,7 +32,6 @@ class _AddMachineScreenState extends State<AddMachineScreen> {
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
     return Scaffold(
-      resizeToAvoidBottomPadding: true,
       backgroundColor: Colors.white,
       body: ListView(children: <Widget>[
         Container(

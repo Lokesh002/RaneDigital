@@ -149,7 +149,6 @@ class _OtherDeptPFUState extends State<OtherDeptPFU> {
       );
     } else {
       return Scaffold(
-        resizeToAvoidBottomPadding: true,
         backgroundColor: Theme.of(context).backgroundColor,
         body: ListView(
           children: [

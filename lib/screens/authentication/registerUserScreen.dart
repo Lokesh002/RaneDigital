@@ -133,7 +133,6 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
           );
 
     return Scaffold(
-      resizeToAvoidBottomPadding: true,
       backgroundColor: Colors.white,
       body: ListView(
         children: <Widget>[

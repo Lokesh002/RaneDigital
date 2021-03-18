@@ -246,6 +246,11 @@ class _MyPFUStatusScreenState extends State<MyPFUStatusScreen> {
                 getElement("Raising Date",
                     widget.pfu.raisingDate.toString().substring(0, 10)),
                 getElement("Raising Person", widget.pfu.raisingPerson),
+                getElement(
+                    "PFU Accepted By:",
+                    (widget.pfu.status >= 1)
+                        ? widget.pfu.acceptingPerson
+                        : "-"),
                 getElement("Root Cause",
                     (widget.pfu.status >= 2) ? widget.pfu.rootCause : '-'),
                 getElement("Action Decided",

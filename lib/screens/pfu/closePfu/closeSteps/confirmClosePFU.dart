@@ -234,6 +234,7 @@ class _ConfirmClosePFUScreenState extends State<ConfirmClosePFUScreen> {
                     "Responsible Department", widget.pfu.deptResponsible),
                 getElement("Raising Date", widget.pfu.raisingDate.toString()),
                 getElement("Raising Person", widget.pfu.raisingPerson),
+                getElement("PFU Accepted By", widget.pfu.acceptingPerson),
                 getElement("Root Cause", widget.pfu.rootCause),
                 getElement("Action Decided", widget.pfu.action),
                 getElement(
@@ -249,6 +250,7 @@ class _ConfirmClosePFUScreenState extends State<ConfirmClosePFUScreen> {
                             )
                           : Image.network(widget.pfu.photoURL),
                 ),
+                getElement("Remarks", widget.pfu.closingRemarks),
                 Padding(
                   padding: EdgeInsets.symmetric(
                       vertical: screenSize.screenHeight * 2.5),

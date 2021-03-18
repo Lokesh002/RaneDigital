@@ -30,7 +30,6 @@ class _AddLineScreenState extends State<AddLineScreen> {
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
     return Scaffold(
-      resizeToAvoidBottomPadding: true,
       backgroundColor: Colors.white,
       body: ListView(children: <Widget>[
         Container(

@@ -122,7 +122,6 @@ class _MyPFUScreenState extends State<MyPFUScreen> {
       );
     } else {
       return Scaffold(
-        resizeToAvoidBottomPadding: true,
         backgroundColor: Theme.of(context).backgroundColor,
         body: ListView(
           children: [

@@ -17,6 +17,14 @@ class PFUListScreen extends StatefulWidget {
   final String status;
   final String line;
   final String machine;
+  final bool impactProd;
+  final bool impactQual;
+  final bool impactCost;
+  final bool impactDisp;
+  final bool impactSafe;
+  final bool impactMora;
+  final bool impactEnvi;
+
   PFUListScreen(
       {this.fromDate,
       this.toDate,
@@ -24,7 +32,14 @@ class PFUListScreen extends StatefulWidget {
       this.status,
       this.machine,
       this.line,
-      this.responsibleDepartment});
+      this.responsibleDepartment,
+      this.impactCost,
+      this.impactDisp,
+      this.impactEnvi,
+      this.impactMora,
+      this.impactProd,
+      this.impactQual,
+      this.impactSafe});
 
   @override
   _PFUListScreenState createState() => _PFUListScreenState();
@@ -33,8 +48,8 @@ class PFUListScreen extends StatefulWidget {
 class _PFUListScreenState extends State<PFUListScreen> {
   SizeConfig screenSize;
 
-  List<PFU> pfuList = List<PFU>();
-  Map<String, String> body = Map<String, String>();
+  List<PFU> pfuList = [];
+  Map<String, dynamic> body = Map<String, dynamic>();
   getBody() {
     body["fromDate"] = widget.fromDate.toString().substring(0, 10);
     body["toDate"] = widget.toDate.toString().substring(0, 10);
@@ -59,6 +74,13 @@ class _PFUListScreenState extends State<PFUListScreen> {
       body["lineId"] = widget.line;
       print(widget.line);
     }
+    body['impactProd'] = widget.impactProd;
+    body['impactQual'] = widget.impactQual;
+    body['impactCost'] = widget.impactCost;
+    body['impactDisp'] = widget.impactDisp;
+    body['impactSafe'] = widget.impactSafe;
+    body['impactMora'] = widget.impactMora;
+    body['impactEnvi'] = widget.impactEnvi;
   }
 
   bool isLoaded = false;
@@ -126,7 +148,6 @@ class _PFUListScreenState extends State<PFUListScreen> {
       );
     } else {
       return Scaffold(
-        resizeToAvoidBottomPadding: true,
         backgroundColor: Theme.of(context).backgroundColor,
         body: ListView(
           children: [
@@ -202,10 +223,18 @@ class _PFUListScreenState extends State<PFUListScreen> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: screenSize.screenWidth * 1),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Text(
                                   "Problem",
+                                  textAlign: TextAlign.center,
+                                  softWrap: true,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: screenSize.screenHeight * 3),
+                                ),
+                                Text(
+                                  "Effecting\nAreas",
                                   textAlign: TextAlign.center,
                                   softWrap: true,
                                   style: TextStyle(
@@ -391,9 +420,11 @@ class _PFUListScreenState extends State<PFUListScreen> {
                             rootCause: pfuList[index].rootCause,
                             description: pfuList[index].problemDescription,
                             status: pfuList[index].status,
+                            effectingAreas: pfuList[index].effectingAreas,
                             deptResponsible: pfuList[index].deptResponsible,
                             raisingDepartment: pfuList[index].raisingDept,
                             raisingPerson: pfuList[index].raisingPerson,
+                            acceptingPerson: pfuList[index].acceptingPerson,
                             date: (pfuList[index].raisingDate == null)
                                 ? " "
                                 : (pfuList[index].raisingDate.day.toString() +

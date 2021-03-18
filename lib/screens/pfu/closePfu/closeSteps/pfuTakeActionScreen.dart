@@ -239,6 +239,7 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                     "Responsible Department", widget.pfu.deptResponsible),
                 getElement("Raising Date", widget.pfu.raisingDate.toString()),
                 getElement("Raising Person", widget.pfu.raisingPerson),
+                getElement("PFU Accepted By:", widget.pfu.acceptingPerson),
                 GestureDetector(
                     onTap: () {
                       if (genId == '14076') {

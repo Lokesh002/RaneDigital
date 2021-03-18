@@ -17,7 +17,13 @@ import 'package:rane_dms/screens/documentMainScreen.dart';
 import 'package:rane_dms/screens/homeScreen.dart';
 import 'package:rane_dms/screens/updateAppScreen.dart';
 
-void main() {
+import 'dart:ui';
+
+const debug = true;
+
+void main() async {
+//  WidgetsFlutterBinding.ensureInitialized();
+//  await FlutterDownloader.initialize(debug: debug);
   runApp(MyApp());
 }
 

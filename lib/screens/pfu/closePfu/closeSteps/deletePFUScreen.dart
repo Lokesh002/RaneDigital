@@ -225,6 +225,47 @@ class _DeletePFUScreenState extends State<DeletePFUScreen> {
                     "Responsible Department", widget.pfu.deptResponsible),
                 getElement("Raising Date", widget.pfu.raisingDate.toString()),
                 getElement("Raising Person", widget.pfu.raisingPerson),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding:
+                          EdgeInsets.only(left: screenSize.screenWidth * 5),
+                      child: Container(
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Text(
+                            "Rejecting Reason: ",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: screenSize.screenHeight * 2,
+                              fontFamily: "Roboto",
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: screenSize.screenWidth * 60,
+                      height: screenSize.screenHeight * 15,
+                      child: ListView(
+                        padding:
+                            EdgeInsets.only(right: screenSize.screenWidth * 5),
+                        children: [
+                          Text(
+                            widget.pfu.rejectingReason,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: screenSize.screenHeight * 2,
+                              fontFamily: "Roboto",
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
                 SizedBox(
                   height: screenSize.screenHeight * 50,
                   width: screenSize.screenWidth * 100,

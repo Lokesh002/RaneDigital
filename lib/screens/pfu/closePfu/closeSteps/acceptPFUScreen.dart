@@ -3,6 +3,7 @@ import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/pfuListMaker.dart';
+import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 
 class AcceptPFUScreen extends StatefulWidget {
@@ -37,6 +38,86 @@ showAlertDialog(BuildContext context) {
 
 class _AcceptPFUScreenState extends State<AcceptPFUScreen> {
   SizeConfig screenSize;
+
+  String rejectReason;
+  final rejectReasonController = TextEditingController();
+  showRejectDialog(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          Form(
+            key: _formKey,
+            child: Container(
+              width: screenSize.screenWidth * 64,
+              height: screenSize.screenHeight * 20,
+              child: TextFormField(
+                validator: (val) =>
+                    val.isEmpty ? 'Enter Reason for rejecting' : null,
+                controller: rejectReasonController,
+                maxLines: 8,
+                keyboardType: TextInputType.text,
+                textAlign: TextAlign.start,
+                onChanged: (problem) {
+                  this.rejectReason = problem;
+                  print(this.rejectReason);
+                },
+
+                style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: screenSize.screenHeight * 2),
+                // focusNode: focusNode,
+                decoration: InputDecoration(
+                  hintText: "Reason of Rejecting PFU",
+                  border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(screenSize.screenHeight * 2)),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        Container(
+            color: Colors.red,
+            child: TextButton(
+              onPressed: () async {
+                showAlertDialog(context);
+                Networking networking = Networking();
+                await networking.postData('PFU/rejectPFU', {
+                  'pfuId': widget.pfu.id,
+                  'rejectingReason': this.rejectReason
+                });
+                rejectReasonController.clear();
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Reject',
+                style: TextStyle(color: Colors.white),
+              ),
+            ))
+      ],
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+            onWillPop: () {
+              rejectReasonController.clear();
+              Navigator.pop(context);
+              return;
+            },
+            child: alert);
+      },
+    );
+  }
+
   Widget getElement(String about, String value) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: screenSize.screenHeight * 1),
@@ -78,7 +159,14 @@ class _AcceptPFUScreenState extends State<AcceptPFUScreen> {
     );
   }
 
+  SavedData savedData = SavedData();
   String photo = ipAddress + 'PFUpics/logo.png';
+  @override
+  void dispose() {
+    rejectReasonController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
@@ -275,8 +363,10 @@ class _AcceptPFUScreenState extends State<AcceptPFUScreen> {
                             onPressed: () async {
                               showAlertDialog(context);
                               Networking networking = Networking();
-                              await networking.postData(
-                                  'PFU/acceptPFU', {'pfuId': widget.pfu.id});
+                              await networking.postData('PFU/acceptPFU', {
+                                'pfuId': widget.pfu.id,
+                                'acceptingPerson': await savedData.getUserName()
+                              });
 
                               Navigator.pop(context);
                               Navigator.pop(context);
@@ -300,14 +390,7 @@ class _AcceptPFUScreenState extends State<AcceptPFUScreen> {
                             height: screenSize.screenHeight * 5,
                             minWidth: screenSize.screenWidth * 30,
                             onPressed: () async {
-                              showAlertDialog(context);
-                              Networking networking = Networking();
-                              await networking.postData(
-                                  'PFU/rejectPFU', {'pfuId': widget.pfu.id});
-
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
+                              showRejectDialog(context);
                             },
                           ),
                           SizedBox(

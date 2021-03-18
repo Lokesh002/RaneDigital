@@ -39,6 +39,11 @@ showAlertDialog(BuildContext context) {
 
 class _PFUStandardizeScreenState extends State<PFUStandardizeScreen> {
   SizeConfig screenSize;
+
+  final _formKey = GlobalKey<FormState>();
+  final closingRemarksController = TextEditingController();
+
+  String closingRemarks;
   Widget getElement(String about, String value) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: screenSize.screenHeight * 1),
@@ -85,6 +90,12 @@ class _PFUStandardizeScreenState extends State<PFUStandardizeScreen> {
   SavedData savedData = SavedData();
   getData() async {
     genId = await savedData.getGenId();
+  }
+
+  @override
+  void dispose() {
+    closingRemarksController.dispose();
+    super.dispose();
   }
 
   @override
@@ -239,6 +250,7 @@ class _PFUStandardizeScreenState extends State<PFUStandardizeScreen> {
                     "Responsible Department", widget.pfu.deptResponsible),
                 getElement("Raising Date", widget.pfu.raisingDate.toString()),
                 getElement("Raising Person", widget.pfu.raisingPerson),
+                getElement("PFU Accepted By:", widget.pfu.acceptingPerson),
                 GestureDetector(
                     onTap: () {
                       if (genId == '14076') {
@@ -262,6 +274,42 @@ class _PFUStandardizeScreenState extends State<PFUStandardizeScreen> {
                               fit: BoxFit.contain,
                             )
                           : Image.network(widget.pfu.photoURL),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: screenSize.screenHeight * 5,
+                    right: screenSize.screenHeight * 5,
+                  ),
+                  child: Container(
+                    padding: EdgeInsets.only(
+                        top: screenSize.screenHeight * 1,
+                        bottom: screenSize.screenHeight * 1),
+                    child: Form(
+                      key: _formKey,
+                      child: TextFormField(
+                        validator: (val) =>
+                            val.isEmpty ? 'Enter Closing Remarks' : null,
+                        controller: closingRemarksController,
+                        keyboardType: TextInputType.text,
+                        textAlign: TextAlign.start,
+                        onChanged: (name) {
+                          this.closingRemarks = name;
+                          print(this.closingRemarks);
+                        },
+
+                        style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: screenSize.screenHeight * 2),
+                        // focusNode: focusNode,
+                        decoration: InputDecoration(
+                          hintText: "Closing Remarks/Standard Doc.No.",
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  screenSize.screenHeight * 2)),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -300,14 +348,19 @@ class _PFUStandardizeScreenState extends State<PFUStandardizeScreen> {
                             height: screenSize.screenHeight * 5,
                             minWidth: screenSize.screenWidth * 30,
                             onPressed: () async {
-                              showAlertDialog(context);
-                              Networking networking = Networking();
-                              await networking.postData('PFU/PFUStandardize',
-                                  {'pfuId': widget.pfu.id});
+                              if (_formKey.currentState.validate()) {
+                                showAlertDialog(context);
+                                Networking networking = Networking();
+                                await networking.postData(
+                                    'PFU/PFUStandardize', {
+                                  'pfuId': widget.pfu.id,
+                                  'closingRemarks': closingRemarks
+                                });
 
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              }
                             },
                           ),
                         ],

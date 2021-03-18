@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class EnterPFUDataScreen extends StatefulWidget {
   _EnterPFUDataScreenState createState() => _EnterPFUDataScreenState();
 }
 
-showAlertDialog(BuildContext context) {
+showAlertDiaprint(BuildContext context) {
   AlertDialog alert = AlertDialog(
     content: new Row(
       children: [
@@ -54,6 +55,13 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
   String accountType;
   File _image;
   bool registeredSuccess = false;
+  bool _impactProduction = false;
+  bool _impactQuality = false;
+  bool _impactCost = false;
+  bool _impactDispatch = false;
+  bool _impactSafety = false;
+  bool _impactMorale = false;
+  bool _impactEnvironment = false;
 
   String pfuId;
   final _formKey = GlobalKey<FormState>();
@@ -125,27 +133,10 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
         print(e);
       });
     }
-//    if (_image != null) {
-//      final response = await uploadImage(_image, cntext);
-//      print('asa' + response.toString());
-//      // Check if any error occured
-//      if (response == null) {
-//        //pr.hide();
-//
-//        print('User details not updated');
-//      } else {
-//        setState(() {
-//          photo = response;
-//        });
-//        print(response);
-//      }
-//    } else {
-//      print('Please Select a profile photo');
-//    }
   }
 
   Future<int> uploadImage(File file, BuildContext context) async {
-    showAlertDialog(context);
+    showAlertDiaprint(context);
 
     Dio dio = Dio();
     String fileName = file.path.split('/').last;
@@ -168,7 +159,6 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
     return Scaffold(
-      resizeToAvoidBottomPadding: true,
       backgroundColor: Colors.white,
       body: ListView(
         children: <Widget>[
@@ -348,6 +338,165 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
                         SizedBox(
                           height: screenSize.screenHeight * 3,
                         ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenSize.screenWidth * 7,
+                          ),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Results & Benefits",
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: screenSize.screenHeight * 2.3,
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: screenSize.screenWidth * 4,
+                              vertical: screenSize.screenHeight * 2),
+                          child: Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                  child: Wrap(
+                                spacing: 5,
+                                runSpacing: 3,
+                                children: [
+                                  FilterChip(
+                                      backgroundColor: Colors.blueAccent,
+                                      disabledColor: Colors.orangeAccent,
+                                      checkmarkColor: Colors.blue,
+                                      selectedColor: Colors.amberAccent,
+                                      label: Text(
+                                        'Production',
+                                        style: TextStyle(
+                                            color: _impactProduction
+                                                ? Colors.black
+                                                : Colors.white),
+                                      ),
+                                      selected: _impactProduction,
+                                      onSelected: (val) {
+                                        setState(() {
+                                          _impactProduction =
+                                              !_impactProduction;
+                                        });
+                                      }),
+                                  FilterChip(
+                                      backgroundColor: Colors.blueAccent,
+                                      disabledColor: Colors.orangeAccent,
+                                      checkmarkColor: Colors.blue,
+                                      selectedColor: Colors.amberAccent,
+                                      label: Text(
+                                        'Quality',
+                                        style: TextStyle(
+                                            color: _impactQuality
+                                                ? Colors.black
+                                                : Colors.white),
+                                      ),
+                                      selected: _impactQuality,
+                                      onSelected: (val) {
+                                        setState(() {
+                                          _impactQuality = !_impactQuality;
+                                        });
+                                      }),
+                                  FilterChip(
+                                      backgroundColor: Colors.blueAccent,
+                                      disabledColor: Colors.orangeAccent,
+                                      checkmarkColor: Colors.blue,
+                                      selectedColor: Colors.amberAccent,
+                                      label: Text(
+                                        'Cost',
+                                        style: TextStyle(
+                                            color: _impactCost
+                                                ? Colors.black
+                                                : Colors.white),
+                                      ),
+                                      selected: _impactCost,
+                                      onSelected: (val) {
+                                        setState(() {
+                                          _impactCost = !_impactCost;
+                                        });
+                                      }),
+                                  FilterChip(
+                                      backgroundColor: Colors.blueAccent,
+                                      disabledColor: Colors.orangeAccent,
+                                      checkmarkColor: Colors.blue,
+                                      selectedColor: Colors.amberAccent,
+                                      label: Text(
+                                        'Dispatch',
+                                        style: TextStyle(
+                                            color: _impactDispatch
+                                                ? Colors.black
+                                                : Colors.white),
+                                      ),
+                                      selected: _impactDispatch,
+                                      onSelected: (val) {
+                                        setState(() {
+                                          _impactDispatch = !_impactDispatch;
+                                        });
+                                      }),
+                                  FilterChip(
+                                      backgroundColor: Colors.blueAccent,
+                                      disabledColor: Colors.orangeAccent,
+                                      checkmarkColor: Colors.blue,
+                                      selectedColor: Colors.amberAccent,
+                                      label: Text(
+                                        'Safety',
+                                        style: TextStyle(
+                                            color: _impactSafety
+                                                ? Colors.black
+                                                : Colors.white),
+                                      ),
+                                      selected: _impactSafety,
+                                      onSelected: (val) {
+                                        setState(() {
+                                          _impactSafety = !_impactSafety;
+                                        });
+                                      }),
+                                  FilterChip(
+                                      backgroundColor: Colors.blueAccent,
+                                      disabledColor: Colors.orangeAccent,
+                                      checkmarkColor: Colors.blue,
+                                      selectedColor: Colors.amberAccent,
+                                      label: Text(
+                                        'Morale',
+                                        style: TextStyle(
+                                            color: _impactMorale
+                                                ? Colors.black
+                                                : Colors.white),
+                                      ),
+                                      selected: _impactMorale,
+                                      onSelected: (val) {
+                                        setState(() {
+                                          _impactMorale = !_impactMorale;
+                                        });
+                                      }),
+                                  FilterChip(
+                                      backgroundColor: Colors.blueAccent,
+                                      disabledColor: Colors.orangeAccent,
+                                      checkmarkColor: Colors.blue,
+                                      selectedColor: Colors.amberAccent,
+                                      label: Text(
+                                        'Environment',
+                                        style: TextStyle(
+                                            color: _impactEnvironment
+                                                ? Colors.black
+                                                : Colors.white),
+                                      ),
+                                      selected: _impactEnvironment,
+                                      onSelected: (val) {
+                                        setState(() {
+                                          _impactEnvironment =
+                                              !_impactEnvironment;
+                                        });
+                                      }),
+                                ],
+                              ))),
+                        ),
                         Row(
                           children: [
                             Padding(
@@ -391,43 +540,69 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
                         width: screenSize.screenWidth * 50,
                         content: "Register",
                         onPress: () async {
+                          print(_impactEnvironment.toString());
+                          print(_impactMorale.toString());
+                          print(_impactSafety.toString());
+                          print(_impactDispatch.toString());
+                          print(_impactCost.toString());
+                          print(_impactQuality.toString());
+                          print(_impactProduction.toString());
                           if (_formKey.currentState.validate()) {
-                            if (_image != null) {
-                              Networking networking = Networking();
+                            if (!(!_impactProduction &&
+                                !_impactQuality &&
+                                !_impactCost &&
+                                !_impactDispatch &&
+                                !_impactSafety &&
+                                !_impactMorale &&
+                                !_impactEnvironment)) {
+                              if (_image != null) {
+                                Networking networking = Networking();
 
-                              var data =
-                                  await networking.postData('PFU/generate', {
-                                "problem": problem,
-                                "description": problemDescription,
-                                "raisingDepartment": raisingDepartment,
-                                "departmentResponsible": selectedDepartment,
-                                "machine": widget.selectedMachine.machineId,
-                                "raisingPerson": userId,
-                                "line": widget.selectedLine.lineId
-                              });
+                                var data =
+                                    await networking.postData('PFU/generate', {
+                                  "problem": problem,
+                                  "description": problemDescription,
+                                  "raisingDepartment": raisingDepartment,
+                                  "departmentResponsible": selectedDepartment,
+                                  "machine": widget.selectedMachine.machineId,
+                                  "raisingPerson": userId,
+                                  "line": widget.selectedLine.lineId,
+                                  "impactProd": _impactProduction,
+                                  "impactQual": _impactQuality,
+                                  "impactCost": _impactCost,
+                                  "impactDisp": _impactDispatch,
+                                  "impactSafe": _impactSafety,
+                                  "impactMora": _impactMorale,
+                                  "impactEnvi": _impactEnvironment,
+                                });
 
-                              if (data != null) {
-                                if (data != "Error") {
-                                  pfuId = data['_id'];
-                                  int statusCode =
-                                      await uploadImage(_image, context);
+                                if (data != null) {
+                                  if (data != "Error") {
+                                    pfuId = data['_id'];
+                                    int statusCode =
+                                        await uploadImage(_image, context);
 
-                                  if (statusCode == 200) {
-                                    Fluttertoast.showToast(
-                                        msg: "Successfully Added PFU.");
+                                    if (statusCode == 200) {
+                                      Fluttertoast.showToast(
+                                          msg: "Successfully Added PFU.");
 
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    }
+                                  } else {
+                                    Fluttertoast.showToast(msg: "Error.");
                                   }
                                 } else {
                                   Fluttertoast.showToast(msg: "Error.");
                                 }
                               } else {
-                                Fluttertoast.showToast(msg: "Error.");
+                                Fluttertoast.showToast(
+                                    msg: "Please add a photo first.");
                               }
                             } else {
                               Fluttertoast.showToast(
-                                  msg: "Please add a photo first.");
+                                  msg:
+                                      "Please choose atleast one impacting area.");
                             }
                           }
                         }),

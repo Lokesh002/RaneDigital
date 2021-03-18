@@ -1,9 +1,39 @@
+import 'dart:developer';
+
 import 'package:rane_dms/components/lineDataStructure.dart';
 
 class PFUList {
+  String getEffectingAreas(
+      {bool P, bool Q, bool C, bool D, bool S, bool M, bool E}) {
+    String query = '';
+    if (P) {
+      query += 'P ';
+    }
+    if (Q) {
+      query += 'Q ';
+    }
+    if (C) {
+      query += 'C ';
+    }
+    if (D) {
+      query += 'D ';
+    }
+    if (S) {
+      query += 'S ';
+    }
+    if (M) {
+      query += 'M ';
+    }
+    if (E) {
+      query += 'E';
+    }
+    return query;
+  }
+
   List<PFU> getPFUList(var decodedData) {
     List data = decodedData;
-    List<PFU> pfuList = List<PFU>();
+    log(decodedData.toString());
+    List<PFU> pfuList = [];
     //print(data.length);
     if (data != null) {
       for (int i = 0; i < data.length; i++) {
@@ -16,17 +46,24 @@ class PFUList {
         pfu.problemDescription = data[i]['description'];
         // print("getting rd");
         pfu.raisingDept = data[i]['raisingDept'];
-
+        pfu.rejectingReason = data[i]['rejectingReason'];
         pfu.deptResponsible = data[i]['deptResponsible'];
-
+        pfu.closingRemarks = data[i]['closingRemarks'];
         pfu.status = data[i]['status'];
-
+        pfu.acceptingPerson = data[i]['acceptingPerson'];
         Machines machine = Machines();
         machine.machineId = data[i]['machine']['_id'].toString();
         machine.machineName = data[i]['machine']['name'];
         machine.machineCode = data[i]['machine']['code'];
         pfu.machine = machine;
-
+        pfu.effectingAreas = getEffectingAreas(
+            P: data[i]['impactProd'],
+            Q: data[i]['impactQual'],
+            C: data[i]['impactCost'],
+            D: data[i]['impactDisp'],
+            S: data[i]['impactSafe'],
+            M: data[i]['impactMora'],
+            E: data[i]['impactEnvi']);
         print("getting rootcause");
         if (data[i]['rootCause'] != null) {
           //print("rootcause: " + data[i]['rootCause']);
@@ -93,4 +130,8 @@ class PFU {
   String targetDate;
   String rootCause;
   String photoURL;
+  String acceptingPerson;
+  String effectingAreas;
+  String rejectingReason;
+  String closingRemarks;
 }

@@ -312,36 +312,32 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
                           left: screenSize.screenHeight * 5,
                           right: screenSize.screenHeight * 5,
                         ),
-                        child: Stack(
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.only(
-                                  top: screenSize.screenHeight * 1,
-                                  bottom: screenSize.screenHeight * 1),
-                              child: TextFormField(
-                                validator: (val) =>
-                                    val.isEmpty ? 'Enter Action Details' : null,
-                                controller: actionController,
-                                keyboardType: TextInputType.text,
-                                textAlign: TextAlign.start,
-                                onChanged: (name) {
-                                  this.action = name;
-                                  print(this.action);
-                                },
+                        child: Container(
+                          padding: EdgeInsets.only(
+                              top: screenSize.screenHeight * 1,
+                              bottom: screenSize.screenHeight * 1),
+                          child: TextFormField(
+                            validator: (val) =>
+                                val.isEmpty ? 'Enter Action Details' : null,
+                            controller: actionController,
+                            keyboardType: TextInputType.text,
+                            textAlign: TextAlign.start,
+                            onChanged: (name) {
+                              this.action = name;
+                              print(this.action);
+                            },
 
-                                style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: screenSize.screenHeight * 2),
-                                // focusNode: focusNode,
-                                decoration: InputDecoration(
-                                  hintText: "Action",
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          screenSize.screenHeight * 2)),
-                                ),
-                              ),
+                            style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: screenSize.screenHeight * 2),
+                            // focusNode: focusNode,
+                            decoration: InputDecoration(
+                              hintText: "Action",
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      screenSize.screenHeight * 2)),
                             ),
-                          ],
+                          ),
                         ),
                       ),
                       Padding(

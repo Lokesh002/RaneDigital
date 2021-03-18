@@ -18,12 +18,19 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
   DateTime fromDate;
   String status;
   DateTime toDate;
+  DateTime showToDate;
   String raisingDepartment;
   String responsibleDepartment;
   List departments = ["MED", "MFG", "PLE", "Store", "PPC", "QAD", "CorpMED"];
   String selectedLine;
   String selectedMachine;
-  final _formKey = GlobalKey<FormState>();
+  bool _impactProduction = false;
+  bool _impactQuality = false;
+  bool _impactCost = false;
+  bool _impactDispatch = false;
+  bool _impactSafety = false;
+  bool _impactMorale = false;
+  bool _impactEnvironment = false;
   List<Line> lineList;
 
   LineDataStructure lineDataStructure = LineDataStructure();
@@ -95,18 +102,18 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
 //  }
 
   List<DropdownMenuItem> getDepartmentList() {
-    List<DropdownMenuItem> departmentList = [];
+    List<DropdownMenuItem> raisingDeptList = [];
     for (int i = 0; i < departments.length; i++) {
       if (responsibleDepartment != departments[i]) {
         var item = DropdownMenuItem(
           child: Text(departments[i]),
           value: departments[i],
         );
-        departmentList.add(item);
+        raisingDeptList.add(item);
       }
     }
 
-    return departmentList;
+    return raisingDeptList;
   }
 
   List<DropdownMenuItem> getRespDept() {
@@ -252,6 +259,8 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
                                 ReusableButton(
                                     onPress: () async {
                                       if (fromDate != null) {
+                                        print(DateTime.now().compareTo(
+                                            fromDate.add(Duration(days: 30))));
                                         showDatePicker(
                                                 context: context,
                                                 initialDate: fromDate,
@@ -267,6 +276,8 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
                                                     : DateTime.now())
                                             .then((date) {
                                           toDate = date.add(Duration(days: 1));
+                                          print(toDate);
+                                          showToDate = date;
                                           setState(() {});
                                         });
                                       } else {
@@ -291,14 +302,12 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
                                             screenSize.screenHeight * 1)),
                                     child: toDate != null
                                         ? Center(
-                                            child: Text(toDate
-                                                    .subtract(Duration(days: 1))
-                                                    .day
+                                            child: Text(showToDate.day
                                                     .toString() +
                                                 " / " +
-                                                toDate.month.toString() +
+                                                showToDate.month.toString() +
                                                 " / " +
-                                                toDate.year.toString()),
+                                                showToDate.year.toString()),
                                           )
                                         : Center(child: Text("")),
                                   ),
@@ -503,7 +512,7 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: screenSize.screenWidth * 2),
                               child: Text(
-                                "Choose Line: ",
+                                "Choose\n Line: ",
 //                            style: TextStyle(
 //                              color: Theme.of(context).primaryColor,
 //                              fontSize: screenSize.screenHeight * 2.5,
@@ -532,7 +541,7 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
                                               padding: EdgeInsets.symmetric(
                                                   horizontal:
                                                       screenSize.screenWidth *
-                                                          3),
+                                                          2),
                                               child: DropdownButton(
                                                 disabledHint:
                                                     Text("Choose Line"),
@@ -640,6 +649,178 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
                           ],
                         ),
                       ),
+                      SizedBox(
+                        height: screenSize.screenHeight * 2,
+                      ),
+                      Container(
+                        width: screenSize.screenWidth * 80,
+                        // height: screenSize.screenHeight * 15,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blueGrey),
+                            borderRadius: BorderRadius.circular(
+                                screenSize.screenHeight * 1)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: screenSize.screenHeight * 4),
+                              child: Text(
+                                "Result Areas",
+//                            style: TextStyle(
+//                              color: Theme.of(context).primaryColor,
+//                              fontSize: screenSize.screenHeight * 2.5,
+//                              fontFamily: "Montserrat",
+//                              fontWeight: FontWeight.normal,
+//                            ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: screenSize.screenWidth * 4,
+                                  vertical: screenSize.screenHeight * 2),
+                              child: Align(
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                      child: Wrap(
+                                    spacing: 5,
+                                    runSpacing: 3,
+                                    children: [
+                                      FilterChip(
+                                          backgroundColor: Colors.blueAccent,
+                                          disabledColor: Colors.orangeAccent,
+                                          checkmarkColor: Colors.blue,
+                                          selectedColor: Colors.amberAccent,
+                                          label: Text(
+                                            'Production',
+                                            style: TextStyle(
+                                                color: _impactProduction
+                                                    ? Colors.black
+                                                    : Colors.white),
+                                          ),
+                                          selected: _impactProduction,
+                                          onSelected: (val) {
+                                            setState(() {
+                                              _impactProduction =
+                                                  !_impactProduction;
+                                            });
+                                          }),
+                                      FilterChip(
+                                          backgroundColor: Colors.blueAccent,
+                                          disabledColor: Colors.orangeAccent,
+                                          checkmarkColor: Colors.blue,
+                                          selectedColor: Colors.amberAccent,
+                                          label: Text(
+                                            'Quality',
+                                            style: TextStyle(
+                                                color: _impactQuality
+                                                    ? Colors.black
+                                                    : Colors.white),
+                                          ),
+                                          selected: _impactQuality,
+                                          onSelected: (val) {
+                                            setState(() {
+                                              _impactQuality = !_impactQuality;
+                                            });
+                                          }),
+                                      FilterChip(
+                                          backgroundColor: Colors.blueAccent,
+                                          disabledColor: Colors.orangeAccent,
+                                          checkmarkColor: Colors.blue,
+                                          selectedColor: Colors.amberAccent,
+                                          label: Text(
+                                            'Cost',
+                                            style: TextStyle(
+                                                color: _impactCost
+                                                    ? Colors.black
+                                                    : Colors.white),
+                                          ),
+                                          selected: _impactCost,
+                                          onSelected: (val) {
+                                            setState(() {
+                                              _impactCost = !_impactCost;
+                                            });
+                                          }),
+                                      FilterChip(
+                                          backgroundColor: Colors.blueAccent,
+                                          disabledColor: Colors.orangeAccent,
+                                          checkmarkColor: Colors.blue,
+                                          selectedColor: Colors.amberAccent,
+                                          label: Text(
+                                            'Dispatch',
+                                            style: TextStyle(
+                                                color: _impactDispatch
+                                                    ? Colors.black
+                                                    : Colors.white),
+                                          ),
+                                          selected: _impactDispatch,
+                                          onSelected: (val) {
+                                            setState(() {
+                                              _impactDispatch =
+                                                  !_impactDispatch;
+                                            });
+                                          }),
+                                      FilterChip(
+                                          backgroundColor: Colors.blueAccent,
+                                          disabledColor: Colors.orangeAccent,
+                                          checkmarkColor: Colors.blue,
+                                          selectedColor: Colors.amberAccent,
+                                          label: Text(
+                                            'Safety',
+                                            style: TextStyle(
+                                                color: _impactSafety
+                                                    ? Colors.black
+                                                    : Colors.white),
+                                          ),
+                                          selected: _impactSafety,
+                                          onSelected: (val) {
+                                            setState(() {
+                                              _impactSafety = !_impactSafety;
+                                            });
+                                          }),
+                                      FilterChip(
+                                          backgroundColor: Colors.blueAccent,
+                                          disabledColor: Colors.orangeAccent,
+                                          checkmarkColor: Colors.blue,
+                                          selectedColor: Colors.amberAccent,
+                                          label: Text(
+                                            'Morale',
+                                            style: TextStyle(
+                                                color: _impactMorale
+                                                    ? Colors.black
+                                                    : Colors.white),
+                                          ),
+                                          selected: _impactMorale,
+                                          onSelected: (val) {
+                                            setState(() {
+                                              _impactMorale = !_impactMorale;
+                                            });
+                                          }),
+                                      FilterChip(
+                                          backgroundColor: Colors.blueAccent,
+                                          disabledColor: Colors.orangeAccent,
+                                          checkmarkColor: Colors.blue,
+                                          selectedColor: Colors.amberAccent,
+                                          label: Text(
+                                            'Environment',
+                                            style: TextStyle(
+                                                color: _impactEnvironment
+                                                    ? Colors.black
+                                                    : Colors.white),
+                                          ),
+                                          selected: _impactEnvironment,
+                                          onSelected: (val) {
+                                            setState(() {
+                                              _impactEnvironment =
+                                                  !_impactEnvironment;
+                                            });
+                                          }),
+                                    ],
+                                  ))),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -652,8 +833,14 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
                         status = null;
                         selectedLine = null;
                         selectedMachine = null;
+                        _impactProduction = false;
+                        _impactQuality = false;
+                        _impactCost = false;
+                        _impactDispatch = false;
+                        _impactSafety = false;
+                        _impactMorale = false;
+                        _impactEnvironment = false;
                         setState(() {});
-                        //if (fromDate != null && toDate != null) {}
                       },
                       child: Text(
                         "Reset All",
@@ -668,7 +855,6 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
                   ),
                   MaterialButton(
                       onPressed: () async {
-                        raisingDepartment = null;
                         setState(() {});
                         if (fromDate != null && toDate != null) {
                           await Navigator.push(context,
@@ -681,6 +867,13 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
                               responsibleDepartment: responsibleDepartment,
                               status: status,
                               toDate: toDate,
+                              impactProd: _impactProduction,
+                              impactQual: _impactQuality,
+                              impactCost: _impactCost,
+                              impactDisp: _impactDispatch,
+                              impactSafe: _impactSafety,
+                              impactMora: _impactMorale,
+                              impactEnvi: _impactEnvironment,
                             );
                           }));
                         } else {

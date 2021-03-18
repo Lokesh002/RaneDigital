@@ -19,13 +19,16 @@ class ReusablePFUListCard extends StatelessWidget {
   final String action;
   final String line;
   final String raisingPerson;
+  final String effectingAreas;
   final Function onTap;
   final String actualClosingTime;
   final Function onChangeTap;
+  final String acceptingPerson;
   final Color color;
 
   ReusablePFUListCard(
       {this.problem,
+      this.effectingAreas,
       this.targetDate,
       this.date,
       this.index,
@@ -36,6 +39,7 @@ class ReusablePFUListCard extends StatelessWidget {
       this.rootCause,
       this.raisingDepartment,
       this.raisingPerson,
+      this.acceptingPerson,
       this.onTap,
       this.onChangeTap,
       this.color,
@@ -63,7 +67,10 @@ class ReusablePFUListCard extends StatelessWidget {
 
       case 4:
         return Image.asset("images/3.png");
-
+      case 5:
+        return Image.asset("images/4.png");
+      case 6:
+        return Image.asset("images/rejected.png");
       default:
         return Image.asset("images/4.png");
     }
@@ -197,12 +204,26 @@ class ReusablePFUListCard extends StatelessWidget {
                       child: Center(
                         child: Padding(
                           padding: EdgeInsets.symmetric(
+                              vertical: screenSize.screenHeight * 1,
                               horizontal: screenSize.screenWidth * 1),
-                          child: Text(
-                            problem,
-                            softWrap: true,
-                            style: TextStyle(
-                                fontSize: screenSize.screenHeight * 3),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                problem,
+                                softWrap: true,
+                                style: TextStyle(
+                                    fontSize: screenSize.screenHeight * 3),
+                              ),
+                              Text(
+                                effectingAreas,
+                                softWrap: true,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: screenSize.screenHeight * 3),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -300,15 +321,24 @@ class ReusablePFUListCard extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Center(
-                              child: Text(
-                                deptResponsible,
-                                softWrap: true,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: screenSize.screenHeight * 3),
-                              ),
+                            Text(
+                              deptResponsible,
+                              softWrap: true,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: screenSize.screenHeight * 3),
+                            ),
+                            SizedBox(
+                              height: screenSize.screenHeight * 1,
+                            ),
+                            Text(
+                              acceptingPerson,
+                              softWrap: true,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: screenSize.screenHeight * 3),
                             ),
                             SizedBox(
                               height: screenSize.screenHeight * 2,
