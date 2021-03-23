@@ -82,6 +82,7 @@ class _DeptHomeState extends State<DeptHome> {
                     name: foldersList[index].folderName,
                     color: Colors.red,
                     lastUpdate: "Last Updated: " + foldersList[index].date,
+                    isFolder: true,
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rane_dms/components/ReusableCard.dart';
 import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/icon_content.dart';
@@ -21,16 +22,8 @@ class _ClosePFUScreenState extends State<ClosePFUScreen> {
   SavedData savedData = SavedData();
   String raisingDepartment;
   var age = 20;
-  List<String> departments = [
-    "MED",
-    "MFG",
-    "Store",
-    "QAD",
-    "CorpMED",
-    "PLE",
-    "ALL"
-  ];
-  List<String> finalDepartments = List<String>();
+
+  List<String> finalDepartments = [];
 
   getDepartments() async {
     raisingDepartment = await savedData.getDepartment();
@@ -40,6 +33,7 @@ class _ClosePFUScreenState extends State<ClosePFUScreen> {
         finalDepartments.add(departments[i]);
       }
     }
+    finalDepartments.add('ALL');
     isLoaded = true;
     setState(() {});
   }
@@ -68,137 +62,82 @@ class _ClosePFUScreenState extends State<ClosePFUScreen> {
     } else {
       SizeConfig screenSize = SizeConfig(context);
       return Scaffold(
-        body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: screenSize.screenHeight * 15,
-                child: Padding(
-                  padding: EdgeInsets.only(top: screenSize.screenHeight * 10),
-                  child: Container(
-                    height: screenSize.screenHeight * 10,
-                    child: Text(
-                      "Responsible Department",
-                      softWrap: true,
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: screenSize.screenHeight * 3.5),
-                    ),
-                  ),
-                ),
-              ),
-              Row(children: [
-                ReusableCard(
-                  onPress: () {
-                    selectedDepartment = finalDepartments[0];
-                    setState(() {});
-                  },
-                  colour: selectedDepartment == finalDepartments[0]
-                      ? kactiveColor
-                      : kinactiveColor,
-                  cardChild: IconContent(
-                    icon: "images/logo.png",
-                    label: finalDepartments[0],
-                  ),
-                ),
-                ReusableCard(
-                  onPress: () {
-                    setState(() {
-                      selectedDepartment = finalDepartments[1];
-                    });
-                  },
-                  colour: selectedDepartment == finalDepartments[1]
-                      ? kactiveColor
-                      : kinactiveColor,
-                  cardChild: IconContent(
-                    icon: "images/logo.png",
-                    label: finalDepartments[1],
-                  ),
-                ),
-              ]),
-              Row(children: [
-                ReusableCard(
-                  onPress: () {
-                    selectedDepartment = finalDepartments[2];
-                    setState(() {});
-                  },
-                  colour: selectedDepartment == finalDepartments[2]
-                      ? kactiveColor
-                      : kinactiveColor,
-                  cardChild: IconContent(
-                    icon: "images/logo.png",
-                    label: finalDepartments[2],
-                  ),
-                ),
-                ReusableCard(
-                  onPress: () {
-                    setState(() {
-                      selectedDepartment = finalDepartments[3];
-                    });
-                  },
-                  colour: selectedDepartment == finalDepartments[3]
-                      ? kactiveColor
-                      : kinactiveColor,
-                  cardChild: IconContent(
-                    icon: "images/logo.png",
-                    label: finalDepartments[3],
-                  ),
-                ),
-              ]),
-              Row(children: [
-                ReusableCard(
-                  onPress: () {
-                    selectedDepartment = finalDepartments[4];
-                    setState(() {});
-                  },
-                  colour: selectedDepartment == finalDepartments[4]
-                      ? kactiveColor
-                      : kinactiveColor,
-                  cardChild: IconContent(
-                    icon: "images/logo.png",
-                    label: finalDepartments[4],
-                  ),
-                ),
-                ReusableCard(
-                  onPress: () {
-                    setState(() {
-                      selectedDepartment = finalDepartments[5];
-                    });
-                  },
-                  colour: selectedDepartment == finalDepartments[5]
-                      ? kactiveColor
-                      : kinactiveColor,
-                  cardChild: IconContent(
-                    icon: "images/logo.png",
-                    label: finalDepartments[5],
-                  ),
-                ),
-              ]),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return TabBarScreen(selectedDepartment);
-                  }));
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: screenSize.screenHeight * 10,
-                  color: kresultTextColor,
-                  margin: EdgeInsets.only(top: screenSize.screenHeight * 2),
-                  child: Center(
+        body: Container(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: screenSize.screenHeight * 11,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: screenSize.screenHeight * 7),
+                    child: Container(
+                      height: screenSize.screenHeight * 10,
                       child: Text(
-                    'PROCEED',
-                    style: TextStyle(
-                      color: Theme.of(context).backgroundColor,
-                      fontSize: screenSize.screenHeight * 2.75,
-                      fontWeight: FontWeight.bold,
+                        "Responsible Department",
+                        softWrap: true,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: screenSize.screenHeight * 3.5),
+                      ),
                     ),
-                  )),
+                  ),
                 ),
-              )
-            ]),
+                Container(
+                  height: screenSize.screenHeight * 82,
+                  width: screenSize.screenWidth * 100,
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: finalDepartments.length > 6 ? 3 : 2),
+                    itemBuilder: (BuildContext context, int index) {
+                      return ReusableCard(
+                        onPress: () {
+                          selectedDepartment = finalDepartments[index];
+                          setState(() {});
+                        },
+                        colour: selectedDepartment == finalDepartments[index]
+                            ? klabelColor
+                            : kactiveColor,
+                        cardChild: IconContent(
+                          icon: "images/${finalDepartments[index]}.png",
+                          label: finalDepartments[index],
+                        ),
+                      );
+                    },
+                    itemCount: finalDepartments.length,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    if (selectedDepartment != null)
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return TabBarScreen(selectedDepartment);
+                      }));
+                    else {
+                      Fluttertoast.showToast(
+                          msg: "Please select one department.");
+                    }
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: screenSize.screenHeight * 10,
+                    color: kresultTextColor,
+                    //margin: EdgeInsets.only(top: screenSize.screenHeight * 0),
+                    child: Center(
+                        child: Text(
+                      'PROCEED',
+                      style: TextStyle(
+                        color: Theme.of(context).backgroundColor,
+                        fontSize: screenSize.screenHeight * 2.75,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
+                  ),
+                )
+              ]),
+        ),
       );
     }
   }

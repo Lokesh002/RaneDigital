@@ -75,7 +75,6 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
 
   SavedData savedData = SavedData();
 
-  List departments = ["MED", "PPC", "MFG", "Store", "QAD", "PLE", "CorpMED"];
   List<DropdownMenuItem> getDepartmentList() {
     List<DropdownMenuItem> departmentList = [];
 

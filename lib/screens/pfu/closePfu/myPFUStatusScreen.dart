@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rane_dms/components/constants.dart';
 
-import 'package:rane_dms/components/pfuListMaker.dart';
+import 'package:rane_dms/components/pfuDataStructure.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 
 class MyPFUStatusScreen extends StatefulWidget {

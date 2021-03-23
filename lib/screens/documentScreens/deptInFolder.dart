@@ -185,6 +185,7 @@ class _DeptInFolderState extends State<DeptInFolder> {
                     name: docsList[index].name,
                     color: Colors.red,
                     lastUpdate: "Last updated: " + docsList[index].date,
+                    isFolder: false,
                     onTap: () async {
                       print(docsList[index].link);
                       //if (docsList[index].link.contains(".pdf", 41)) {

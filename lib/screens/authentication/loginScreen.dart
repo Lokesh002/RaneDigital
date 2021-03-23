@@ -69,17 +69,10 @@ class _LoginScreenState extends State<LoginScreen> {
     print("user Id" + userId);
     await savedData.setUserId(userId);
     await savedData.setAddNewUserAccess(access["addNewUser"]);
-//    await savedData.setCssAddAccess(access["cssAdd"]);
-//    await savedData.setQssAddAccess(access["qssAdd"]);
-//    await savedData.setCssEditAccess(access["cssEdit"]);
-//    await savedData.setQssEditAccess(access["qssEdit"]);
+
     await savedData.setPfuAccess(access["pfu"]);
     print(await savedData.getAddNewUserAccess());
     print(await savedData.getGenId());
-//    await savedData.setCssVerifyAccess(access["cssVerify"]);
-//    await savedData.setQssVerifyAccess(access["qssVerify"]);
-//    await savedData.setQssViewAccess(access["qssView"]);
-//    await savedData.setCssViewAccess(access["cssView"]);
   }
 
   @override

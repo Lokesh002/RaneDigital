@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:rane_dms/components/networking.dart';
-import 'package:rane_dms/components/pfuListMaker.dart';
+import 'package:rane_dms/components/pfuDataStructure.dart';
 import 'package:rane_dms/components/reusableMyPFUCard.dart';
 
 import 'package:rane_dms/components/reusablePFUCard.dart';

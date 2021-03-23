@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/networking.dart';
-import 'package:rane_dms/components/pfuListMaker.dart';
+import 'package:rane_dms/components/pfuDataStructure.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 
 class EnterPFUDetails extends StatefulWidget {

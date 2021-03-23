@@ -23,14 +23,14 @@ class LineDataStructure {
   }
 
   _getData(var lineDecodedData) {
-    List<Line> lineList = List<Line>();
+    List<Line> lineList = [];
     List lineData = lineDecodedData;
     if (lineData.isNotEmpty) {
       for (int i = 0; i < lineData.length; i++) {
         Line line = Line();
         line.lineId = lineData[i]["_id"];
         line.lineName = lineData[i]["name"];
-        line.machines = List();
+        line.machines = [];
         List machineData = lineData[i]["machine"];
         for (int j = 0; j < machineData.length; j++) {
           Machines machine = Machines();

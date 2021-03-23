@@ -1,8 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rane_dms/components/ReusableCard.dart';
+import 'package:rane_dms/components/constants.dart';
+import 'package:rane_dms/components/networking.dart';
 
 import 'package:rane_dms/components/sizeConfig.dart';
 import 'package:rane_dms/screens/documentScreens/deptHome.dart';
+import 'package:rane_dms/screens/homeScreen.dart';
 
 class DocumentMainScreen extends StatefulWidget {
   @override
@@ -11,31 +16,48 @@ class DocumentMainScreen extends StatefulWidget {
 
 class _DocumentMainScreenState extends State<DocumentMainScreen> {
   SizeConfig screenSize;
+  bool allowed;
+  String myDept;
   Widget getIcon(String photo, String dept, var department) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          //Here DecodedData is a locally saved variable containing selected course data
-          return department;
-        }));
+        if (allowed != null) {
+          if (allowed) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              //Here DecodedData is a locally saved variable containing selected course data
+              return department;
+            }));
+          } else {
+            if (myDept == dept) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                //Here DecodedData is a locally saved variable containing selected course data
+                return department;
+              }));
+            } else {
+              Fluttertoast.showToast(msg: "You cannot access this department.");
+            }
+          }
+        } else {
+          Fluttertoast.showToast(msg: "ERROR! Not able to connect to Server.");
+        }
       },
       child: Padding(
         padding: EdgeInsets.symmetric(
-            horizontal: screenSize.screenHeight * 2,
+            horizontal: screenSize.screenWidth * 2,
             vertical: screenSize.screenHeight * 1),
         child: Column(
           children: <Widget>[
             Image.asset(
               "images/$photo.png",
-              width: screenSize.screenWidth * 25,
-              height: screenSize.screenHeight * 15,
+              width: screenSize.screenWidth * 15,
+              height: screenSize.screenHeight * 10,
             ),
             Text(
               dept,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.blueGrey,
-                  fontSize: screenSize.screenHeight * 3),
+                  fontSize: screenSize.screenHeight * 2.5),
             ),
           ],
         ),
@@ -43,10 +65,27 @@ class _DocumentMainScreenState extends State<DocumentMainScreen> {
     );
   }
 
+  getSecurity() async {
+    Networking networking = Networking();
+    var allowed = await networking.getData('securityForDRS');
+    print(allowed);
+    this.allowed = allowed['allowed'];
+
+    myDept = await savedData.getDepartment();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSecurity();
+  }
+
   @override
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Stack(
@@ -55,7 +94,7 @@ class _DocumentMainScreenState extends State<DocumentMainScreen> {
                   child: Image.asset(
                 "images/logo.png",
                 width: screenSize.screenWidth * 80,
-                height: screenSize.screenHeight * 30,
+                height: screenSize.screenHeight * 25,
               )),
               Center(
                 child: Padding(
@@ -64,7 +103,8 @@ class _DocumentMainScreenState extends State<DocumentMainScreen> {
                     "Data Retrieval System",
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: screenSize.screenHeight * 2),
+                        fontSize: screenSize.screenHeight * 3,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               )
@@ -73,31 +113,22 @@ class _DocumentMainScreenState extends State<DocumentMainScreen> {
           Column(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: screenSize.screenHeight * 2,
-                    horizontal: screenSize.screenWidth * 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        getIcon("MED", "MED", DeptHome("MED")),
-                        getIcon("PLE", "PLE", DeptHome("PLE")),
-                        getIcon("MFG", "MFG", DeptHome("MFG")),
-                      ],
+                  padding: EdgeInsets.symmetric(
+                      vertical: screenSize.screenHeight * 2,
+                      horizontal: screenSize.screenWidth * 10),
+                  child: Container(
+                    width: screenSize.screenWidth * 100,
+                    height: screenSize.screenHeight * 70,
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: departments.length > 6 ? 3 : 2),
+                      itemBuilder: (BuildContext context, int index) {
+                        return getIcon(departments[index], departments[index],
+                            DeptHome(departments[index]));
+                      },
+                      itemCount: departments.length,
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        getIcon("PPC", "PPC", DeptHome("PPC")),
-                        getIcon("QAD", "QAD", DeptHome("QAD")),
-                        getIcon("Store", "Store", DeptHome("Store")),
-                      ],
-                    ),
-                  ],
-                ),
-              )
+                  ))
             ],
           ),
         ],

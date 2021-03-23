@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:pdftron_flutter/pdftron_flutter.dart';
 
 import 'package:flutter/material.dart';
+import 'package:rane_dms/components/constants.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class OpenPDF extends StatefulWidget {
@@ -55,7 +56,7 @@ class _OpenPDFState extends State<OpenPDF> {
           title: const Text('Rane DMS'),
         ),
         body: Center(
-          child: Text('version 1.0.0'),
+          child: Text('version $version'),
         ),
       ),
     );

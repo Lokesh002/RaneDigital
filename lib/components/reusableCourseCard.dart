@@ -13,6 +13,7 @@ class ReusableCourseCard extends StatelessWidget {
   final Color color;
   final String image;
   final String size;
+  final isFolder;
   ReusableCourseCard(
       {this.name,
       this.lastUpdate,
@@ -21,7 +22,8 @@ class ReusableCourseCard extends StatelessWidget {
       this.onChangeTap,
       this.color,
       this.image,
-      this.size});
+      this.size,
+      this.isFolder});
   String getInitials(String name) {
     String a = name.trim();
     return a.substring(0, 1).toUpperCase();
@@ -44,32 +46,40 @@ class ReusableCourseCard extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   CourseCard(
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).backgroundColor,
                     width: screenSize.screenWidth * 90,
                     // height: screenSize.screenHeight * 10,
                     cardChild: Row(
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: screenSize.screenWidth * 2.5),
+                              horizontal: screenSize.screenWidth * 4),
                           child: SizedBox(
-                            width: screenSize.screenWidth * 15,
-                            height: screenSize.screenWidth * 15,
-                            child: Material(
-                              color: Theme.of(context).primaryColor,
-                              elevation: 5.0,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(screenSize.screenHeight * 1),
-                              ),
-                              child: Center(
-                                  child: Text(
-                                getInitials(this.name),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Theme.of(context).accentColor,
-                                    fontSize: screenSize.screenHeight * 4),
-                              )),
-                            ),
+                            width: screenSize.screenWidth * 10,
+                            height: screenSize.screenWidth * 10,
+                            child: isFolder
+                                ? Icon(
+                                    Icons.folder,
+                                    size: screenSize.screenHeight * 7,
+                                    color: Colors.orangeAccent,
+                                  )
+                                : Material(
+                                    color: Theme.of(context).primaryColor,
+                                    elevation: 5.0,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(
+                                          screenSize.screenHeight * 1),
+                                    ),
+                                    child: Center(
+                                        child: Text(
+                                      getInitials(this.name),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Theme.of(context).accentColor,
+                                          fontSize:
+                                              screenSize.screenHeight * 4),
+                                    )),
+                                  ),
                           ),
                         ),
 //                    Icon(

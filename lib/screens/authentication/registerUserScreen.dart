@@ -4,6 +4,7 @@ import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
+import 'package:rane_dms/components/constants.dart';
 
 class RegisterUserScreen extends StatefulWidget {
   @override
@@ -42,16 +43,9 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     await savedData.setGenId(genId);
     await savedData.setUserId(userId);
     await savedData.setAddNewUserAccess(access["addNewUser"]);
-//    await savedData.setCssAddAccess(access["cssAdd"]);
-//    await savedData.setQssAddAccess(access["qssAdd"]);
-//    await savedData.setCssEditAccess(access["cssEdit"]);
-//    await savedData.setQssEditAccess(access["qssEdit"]);
+
     await savedData.setPfuAccess(access["pfu"]);
     print(savedData.getAddNewUserAccess());
-//    await savedData.setCssVerifyAccess(access["cssVerify"]);
-//    await savedData.setQssVerifyAccess(access["qssVerify"]);
-//    await savedData.setQssViewAccess(access["qssView"]);
-//    await savedData.setCssViewAccess(access["cssView"]);
   }
 
   clearTextInput() {
@@ -60,7 +54,6 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     passwordController.clear();
   }
 
-  List departments = ["MED", "PPC", "MFG", "Store", "QAD", "PLE", "CorpMED"];
   List<DropdownMenuItem> getDepartmentList() {
     List<DropdownMenuItem> departmentList = [];
     for (int i = 0; i < departments.length; i++) {

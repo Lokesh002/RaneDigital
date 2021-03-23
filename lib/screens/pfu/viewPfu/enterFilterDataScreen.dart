@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rane_dms/components/ReusableButton.dart';
+import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/lineDataStructure.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 import 'package:rane_dms/screens/pfu/generatePfu/addLineAndMachine/addMachineScreen.dart';
@@ -21,7 +22,7 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
   DateTime showToDate;
   String raisingDepartment;
   String responsibleDepartment;
-  List departments = ["MED", "MFG", "PLE", "Store", "PPC", "QAD", "CorpMED"];
+
   String selectedLine;
   String selectedMachine;
   bool _impactProduction = false;
@@ -93,13 +94,6 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
     super.initState();
     getLine();
   }
-
-//  setOrientation(BuildContext context) {
-//    if (MediaQuery.of(context).orientation == Orientation.landscape) {
-//      SystemChrome.setPreferredOrientations(
-//          [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
-//    }
-//  }
 
   List<DropdownMenuItem> getDepartmentList() {
     List<DropdownMenuItem> raisingDeptList = [];
