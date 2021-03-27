@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rane_dms/components/ReusableCard.dart';
 import 'package:rane_dms/components/constants.dart';
+import 'package:rane_dms/components/icon_content.dart';
 import 'package:rane_dms/components/networking.dart';
 
 import 'package:rane_dms/components/sizeConfig.dart';
@@ -110,26 +111,66 @@ class _DocumentMainScreenState extends State<DocumentMainScreen> {
               )
             ],
           ),
-          Column(
-            children: <Widget>[
-              Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: screenSize.screenHeight * 2,
-                      horizontal: screenSize.screenWidth * 10),
-                  child: Container(
-                    width: screenSize.screenWidth * 100,
-                    height: screenSize.screenHeight * 70,
-                    child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: departments.length > 6 ? 3 : 2),
-                      itemBuilder: (BuildContext context, int index) {
-                        return getIcon(departments[index], departments[index],
-                            DeptHome(departments[index]));
-                      },
-                      itemCount: departments.length,
-                    ),
-                  ))
-            ],
+          // Column(
+          //   children: <Widget>[
+          //     Padding(
+          //         padding: EdgeInsets.symmetric(
+          //             vertical: screenSize.screenHeight * 2,
+          //             horizontal: screenSize.screenWidth * 10),
+          //         child: Container(
+          //           width: screenSize.screenWidth * 100,
+          //           height: screenSize.screenHeight * 70,
+          //           child: GridView.builder(
+          //             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          //                 crossAxisCount: departments.length > 6 ? 3 : 2),
+          //             itemBuilder: (BuildContext context, int index) {
+          //               return getIcon(departments[index], departments[index],
+          //                   DeptHome(departments[index]));
+          //             },
+          //             itemCount: departments.length,
+          //           ),
+          //         )),
+          Container(
+            height: screenSize.screenHeight * 78,
+            width: screenSize.screenWidth * 100,
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: departments.length > 6 ? 3 : 2),
+              itemBuilder: (BuildContext context, int index) {
+                return ReusableCard(
+                  cardChild: IconContent(
+                    icon: "images/${departments[index]}.png",
+                    label: departments[index],
+                  ),
+                  onPress: () {
+                    if (allowed != null) {
+                      if (allowed) {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          //Here DecodedData is a locally saved variable containing selected course data
+                          return DeptHome(departments[index]);
+                        }));
+                      } else {
+                        if (myDept == departments[index]) {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            //Here DecodedData is a locally saved variable containing selected course data
+                            return DeptHome(departments[index]);
+                          }));
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: "You cannot access this department.");
+                        }
+                      }
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: "ERROR! Not able to connect to Server.");
+                    }
+                  },
+                );
+              },
+              itemCount: departments.length,
+            ),
           ),
         ],
       ),

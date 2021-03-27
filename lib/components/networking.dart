@@ -17,7 +17,10 @@ class Networking {
 
     http.Response getResponse = await http.get(
       fullURL,
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Accept": "application/json",
+        // "Access-Control-Allow-Origin": "*"
+      },
     );
 
     if (getResponse.statusCode == 200) {
@@ -33,7 +36,10 @@ class Networking {
   Future postData(String url, var body) async {
     String fullURL = ip + url;
     http.Response postResponse = await http.post(fullURL,
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        },
         body: convert.jsonEncode(body));
 
     if (postResponse.statusCode == 200) {
@@ -53,8 +59,10 @@ class Networking {
 
   Future deleteData(String url) async {
     String fullURL = ip + url;
-    http.Response postResponse = await http
-        .delete(fullURL, headers: {"Content-Type": "application/json"});
+    http.Response postResponse = await http.delete(fullURL, headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
+    });
 
     if (postResponse.statusCode == 200) {
       String data = postResponse.body;

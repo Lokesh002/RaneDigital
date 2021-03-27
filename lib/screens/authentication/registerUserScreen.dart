@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/sharedPref.dart';
+import 'dart:convert' as convert;
 import 'package:rane_dms/components/sizeConfig.dart';
 import 'package:rane_dms/components/constants.dart';
 
@@ -17,6 +18,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
   bool lineLeaderSelected = false;
   bool operatorSelected = false;
   bool adminSelected = false;
+  bool moreThanOneDept = false;
 
   String name;
   String genId;
@@ -24,7 +26,8 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
 
   String address;
   String accountType;
-
+  List<bool> departmentsSelected = [];
+  List<String> accessDepartments = [];
   bool registeredSuccess = false;
 
   final _formKey = GlobalKey<FormState>();
@@ -43,7 +46,12 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     await savedData.setGenId(genId);
     await savedData.setUserId(userId);
     await savedData.setAddNewUserAccess(access["addNewUser"]);
+    List<String> accDept = [];
+    for (int i = 0; i < access['accessDept'].length; i++) {
+      accDept.add(access['accessDept'][i].toString());
+    }
 
+    await savedData.setAccessDept(accDept);
     await savedData.setPfuAccess(access["pfu"]);
     print(savedData.getAddNewUserAccess());
   }
@@ -67,6 +75,32 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     return departmentList;
   }
 
+  void getData() {
+    for (int i = 0; i < departments.length; i++) {
+      if (departmentsSelected.length != departments.length) {
+        departmentsSelected.add(false);
+        accessDepartments = [];
+      } else {
+        departmentsSelected[i] = false;
+        accessDepartments = [];
+      }
+    }
+  }
+
+  void getStringListofDept() {
+    accessDepartments = [];
+    if (moreThanOneDept) {
+      if (departmentsSelected != null && departmentsSelected.length != 0)
+        for (int i = 0; i < departmentsSelected.length; i++) {
+          if (departmentsSelected[i]) {
+            accessDepartments.add(departments[i]);
+          }
+        }
+    } else {
+      accessDepartments = [selectedDepartment];
+    }
+  }
+
   @override
   void dispose() {
     nameController.dispose();
@@ -77,51 +111,58 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SizeConfig screenSize = SizeConfig(context);
 
     Icon staff = staffSelected
         ? Icon(
             Icons.check_circle,
-            size: screenSize.screenHeight * 2,
+            size: screenSize.screenHeight * 3,
             color: Theme.of(context).primaryColor,
           )
         : Icon(
             Icons.check_circle_outline,
-            size: screenSize.screenHeight * 2,
+            size: screenSize.screenHeight * 3,
             color: Theme.of(context).primaryColor,
           );
     Icon lineLeader = lineLeaderSelected
         ? Icon(
             Icons.check_circle,
-            size: screenSize.screenHeight * 2,
+            size: screenSize.screenHeight * 3,
             color: Theme.of(context).primaryColor,
           )
         : Icon(
             Icons.check_circle_outline,
-            size: screenSize.screenHeight * 2,
+            size: screenSize.screenHeight * 3,
             color: Theme.of(context).primaryColor,
           );
     Icon operator = operatorSelected
         ? Icon(
             Icons.check_circle,
-            size: screenSize.screenHeight * 2,
+            size: screenSize.screenHeight * 3,
             color: Theme.of(context).primaryColor,
           )
         : Icon(
             Icons.check_circle_outline,
-            size: screenSize.screenHeight * 2,
+            size: screenSize.screenHeight * 3,
             color: Theme.of(context).primaryColor,
           );
     Icon admin = adminSelected
         ? Icon(
             Icons.check_circle,
-            size: screenSize.screenHeight * 2,
+            size: screenSize.screenHeight * 3,
             color: Theme.of(context).primaryColor,
           )
         : Icon(
             Icons.check_circle_outline,
-            size: screenSize.screenHeight * 2,
+            size: screenSize.screenHeight * 3,
             color: Theme.of(context).primaryColor,
           );
 
@@ -277,39 +318,97 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                           height: screenSize.screenHeight * 6,
                         ),
                         Container(
-                            width: screenSize.screenWidth * 50,
-                            height: screenSize.screenHeight * 11,
-                            child: Material(
-                              color: Theme.of(context).accentColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(screenSize.screenHeight * 1),
-                              ),
-                              child: Center(
+                          width: screenSize.screenWidth * 100,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Choose more than one department: "),
+                              Checkbox(
+                                  value: moreThanOneDept,
+                                  activeColor: Theme.of(context).primaryColor,
+                                  onChanged: (val) {
+                                    moreThanOneDept = val;
+                                    getData();
+                                    selectedDepartment = null;
+                                    setState(() {});
+                                  }),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: screenSize.screenHeight * 6,
+                        ),
+                        Visibility(
+                            visible: moreThanOneDept,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Container(
                                 child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: screenSize.screenWidth * 3),
-                                    child: DropdownButtonFormField(
-                                      disabledHint: Text("Choose Department"),
-                                      validator: (val) => val == null
-                                          ? 'Select Department'
-                                          : null,
-                                      elevation: 7,
-                                      isExpanded: false,
-                                      hint: Text('Choose',
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .accentColor)),
-                                      value: selectedDepartment,
-                                      items: getDepartmentList(),
-                                      onChanged: (value) {
-                                        selectedDepartment = value;
-                                        print('selected1: $selectedDepartment');
-
-                                        setState(() {});
-                                      },
-                                    )),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: screenSize.screenWidth * 5),
+                                  child: Wrap(
+                                    spacing: 5,
+                                    runSpacing: 3,
+                                    children: List.generate(departments.length,
+                                        (index) {
+                                      return FilterChip(
+                                        backgroundColor: Colors.blueAccent,
+                                        disabledColor: Colors.orangeAccent,
+                                        checkmarkColor: Colors.blue,
+                                        selectedColor: Colors.amberAccent,
+                                        label: Text(departments[index]),
+                                        selected: departmentsSelected[index],
+                                        onSelected: (v) {
+                                          setState(() {
+                                            departmentsSelected[index] =
+                                                !departmentsSelected[index];
+                                          });
+                                        },
+                                      );
+                                    }),
+                                  ),
+                                ),
                               ),
                             )),
+                        Visibility(
+                          visible: !moreThanOneDept,
+                          child: Container(
+                              width: screenSize.screenWidth * 50,
+                              height: screenSize.screenHeight * 11,
+                              child: Material(
+                                color: Theme.of(context).accentColor,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(screenSize.screenHeight * 1),
+                                ),
+                                child: Center(
+                                  child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal:
+                                              screenSize.screenWidth * 3),
+                                      child: DropdownButtonFormField(
+                                        disabledHint: Text("Choose Department"),
+                                        validator: (val) => val == null
+                                            ? 'Select Department'
+                                            : null,
+                                        elevation: 7,
+                                        isExpanded: false,
+                                        hint: Text('Choose Department',
+                                            style: TextStyle(
+                                                color: Colors.black45)),
+                                        value: selectedDepartment,
+                                        items: getDepartmentList(),
+                                        onChanged: (value) {
+                                          selectedDepartment = value;
+                                          print(
+                                              'selected1: $selectedDepartment');
+
+                                          setState(() {});
+                                        },
+                                      )),
+                                ),
+                              )),
+                        ),
                       ],
                     ),
                   ),
@@ -458,54 +557,55 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                         width: screenSize.screenWidth * 50,
                         content: "Register",
                         onPress: () async {
-                          if (accountType != null) {
-                            if (_formKey.currentState.validate()) {
-                              print("details\n" +
-                                  name +
-                                  "\n" +
-                                  genId +
-                                  "\n" +
-                                  password +
-                                  "\n" +
-                                  selectedDepartment +
-                                  "\n" +
-                                  accountType);
-                              clearTextInput();
+                          getStringListofDept();
+                          print(departmentsSelected.toString());
+                          print(convert.jsonEncode(accessDepartments));
+                          if (moreThanOneDept
+                              ? (accessDepartments.length > 0)
+                              : selectedDepartment != null) {
+                            if (accountType != null) {
+                              if (_formKey.currentState.validate()) {
+                                clearTextInput();
 
-                              Networking networking = Networking();
-                              var userData = await networking
-                                  .postData("User/registerUser", {
-                                'genId': this.genId,
-                                'username': this.name,
-                                'department': this.selectedDepartment,
-                                'password': this.password,
-                                'accountType': this.accountType,
-                              });
-                              if (userData != null) {
-                                //print("userdata " + userData);
-                                if (userData != "User already exists") {
-                                  clearTextInput();
-                                  print(userData["access"]);
-                                  await dataSaveToSharedPref(
-                                      userData["_id"],
-                                      name,
-                                      genId,
-                                      selectedDepartment,
-                                      accountType,
-                                      userData["access"]);
-                                  Navigator.pop(context);
-                                  Navigator.pushReplacementNamed(
-                                      context, '/homeScreen');
+                                Networking networking = Networking();
+                                var userData = await networking
+                                    .postData("User/registerUser", {
+                                  'genId': this.genId,
+                                  'username': this.name,
+                                  'department': this.accessDepartments[0],
+                                  'password': this.password,
+                                  'accountType': this.accountType,
+                                  'accessDept': this.accessDepartments,
+                                });
+                                if (userData != null) {
+                                  //print("userdata " + userData);
+                                  if (userData != "User already exists") {
+                                    clearTextInput();
+                                    print(userData["access"]);
+                                    await dataSaveToSharedPref(
+                                        userData["_id"],
+                                        name,
+                                        genId,
+                                        this.accessDepartments[0],
+                                        accountType,
+                                        userData["access"]);
+                                    Navigator.pop(context);
+                                    Navigator.pushReplacementNamed(
+                                        context, '/homeScreen');
+                                  } else {
+                                    Fluttertoast.showToast(msg: userData);
+                                  }
                                 } else {
-                                  Fluttertoast.showToast(msg: userData);
+                                  Fluttertoast.showToast(msg: "Error");
                                 }
-                              } else {
-                                Fluttertoast.showToast(msg: "Error");
                               }
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "Please select account type");
                             }
                           } else {
                             Fluttertoast.showToast(
-                                msg: "Please select account type");
+                                msg: "Please select atleast one department.");
                           }
                         }),
                   ),

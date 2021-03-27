@@ -18,8 +18,8 @@ const kLabelTextStyle = TextStyle(
   color: Colors.white,
 );
 
-const String ipAddress = 'http://192.168.43.18:3000/';
-const String version = '1.0.0';
+const String ipAddress = 'http://192.168.0.200:3000/';
+const String version = '1.0.2';
 
 const departments = [
   'MED',
@@ -28,7 +28,6 @@ const departments = [
   'Store',
   'Dispatch',
   'HR',
-  'IT',
   'Safety',
   'Accounts',
   'SQA',

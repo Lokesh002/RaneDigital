@@ -69,7 +69,12 @@ class _LoginScreenState extends State<LoginScreen> {
     print("user Id" + userId);
     await savedData.setUserId(userId);
     await savedData.setAddNewUserAccess(access["addNewUser"]);
+    List<String> accDept = [];
+    for (int i = 0; i < access['accessDept'].length; i++) {
+      accDept.add(access['accessDept'][i].toString());
+    }
 
+    await savedData.setAccessDept(accDept);
     await savedData.setPfuAccess(access["pfu"]);
     print(await savedData.getAddNewUserAccess());
     print(await savedData.getGenId());

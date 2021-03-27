@@ -84,12 +84,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(height: screenSize.screenHeight * 5),
                   ReusableButton(
                     onPress: () async {
+                      //Navigator.pushNamed(context, '/QPCRMainScreen');
                       Fluttertoast.showToast(
-                          msg: "This page is under construction.");
+                          msg: "This portal is under construction.");
                     },
                     height: screenSize.screenHeight * 10,
                     width: screenSize.screenWidth * 80,
-                    content: "4M Change",
+                    content: "QPCR",
                   ),
                 ],
               ),

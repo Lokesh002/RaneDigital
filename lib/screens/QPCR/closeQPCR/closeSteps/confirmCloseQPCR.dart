@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:rane_dms/components/QPCRDataStructure.dart';
+import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/networking.dart';
-import 'package:rane_dms/components/pfuDataStructure.dart';
-import 'package:rane_dms/components/sharedPref.dart';
+import 'package:rane_dms/components/QPCRDataStructure.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
-import 'package:rane_dms/screens/pfu/closePfu/closeSteps/changePFUDetails.dart';
 
-class PFUTakeActionScreen extends StatefulWidget {
-  final PFU pfu;
-  PFUTakeActionScreen(this.pfu);
+class ConfirmCloseQPCRScreen extends StatefulWidget {
+  final QPCR qpcr;
+  ConfirmCloseQPCRScreen(this.qpcr);
   @override
-  _PFUTakeActionScreenState createState() => _PFUTakeActionScreenState();
+  _ConfirmCloseQPCRScreenState createState() => _ConfirmCloseQPCRScreenState();
 }
 
 showAlertDialog(BuildContext context) {
@@ -36,7 +36,7 @@ showAlertDialog(BuildContext context) {
   );
 }
 
-class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
+class _ConfirmCloseQPCRScreenState extends State<ConfirmCloseQPCRScreen> {
   SizeConfig screenSize;
   Widget getElement(String about, String value) {
     return Padding(
@@ -51,8 +51,9 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
               ),
               Text(
                 about,
+                overflow: TextOverflow.fade,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Theme.of(context).primaryColor,
                   fontSize: screenSize.screenHeight * 2,
                   fontFamily: "Roboto",
                 ),
@@ -79,19 +80,7 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
     );
   }
 
-  String photo = ipAddress + 'PFUpics/logo.png';
-  String genId;
-  SavedData savedData = SavedData();
-  getData() async {
-    genId = await savedData.getGenId();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getData();
-  }
-
+  String photo = ipAddress + 'QPCRpics/logo.png';
   @override
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
@@ -101,19 +90,27 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
         width: double.infinity,
         color: Theme.of(context).backgroundColor,
         child: ListView(
-          padding: EdgeInsets.zero,
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: screenSize.screenHeight * 10,
+                  height: screenSize.screenHeight * 3,
+                ),
+                Text(
+                  "This QPCR has been closed.",
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontSize: screenSize.screenHeight * 3.5,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
                       vertical: screenSize.screenHeight * 2.5),
                   child: Text(
-                    widget.pfu.lineName,
+                    widget.qpcr.lineName,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: screenSize.screenHeight * 3.5,
@@ -128,7 +125,7 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                   child: Column(
                     children: [
                       Text(
-                        widget.pfu.machine.machineCode,
+                        widget.qpcr.machine.machineCode,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: screenSize.screenHeight * 3,
@@ -140,7 +137,7 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                         height: screenSize.screenHeight * 2,
                       ),
                       Text(
-                        widget.pfu.machine.machineName,
+                        widget.qpcr.machine.machineName,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: screenSize.screenHeight * 3,
@@ -164,7 +161,7 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                           child: Text(
                             "Problem: ",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Theme.of(context).primaryColor,
                               fontSize: screenSize.screenHeight * 2,
                               fontFamily: "Roboto",
                             ),
@@ -180,7 +177,7 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                             EdgeInsets.only(right: screenSize.screenWidth * 5),
                         children: [
                           Text(
-                            widget.pfu.problem,
+                            widget.qpcr.problem,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: screenSize.screenHeight * 2,
@@ -205,7 +202,7 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                           child: Text(
                             "Description: ",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Theme.of(context).primaryColor,
                               fontSize: screenSize.screenHeight * 2,
                               fontFamily: "Roboto",
                             ),
@@ -221,7 +218,7 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                             EdgeInsets.only(right: screenSize.screenWidth * 5),
                         children: [
                           Text(
-                            widget.pfu.problemDescription,
+                            widget.qpcr.problemDescription,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: screenSize.screenHeight * 2,
@@ -233,41 +230,33 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                     ),
                   ],
                 ),
-                getElement("Raising Department", widget.pfu.raisingDept),
+                getElement("Raising Department", widget.qpcr.raisingDept),
                 getElement(
-                    "Responsible Department", widget.pfu.deptResponsible),
-                getElement("Raising Date", widget.pfu.raisingDate.toString()),
-                getElement("Raising Person", widget.pfu.raisingPerson),
-                getElement("PFU Accepted By:", widget.pfu.acceptingPerson),
-                GestureDetector(
-                    onTap: () {
-                      if (genId == '14076') {
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ChangePFUDetails(widget.pfu);
-                        }));
-                      }
-                    },
-                    child: getElement("Root Cause", widget.pfu.rootCause)),
-                getElement("Action Decided", widget.pfu.action),
+                    "Responsible Department", widget.qpcr.deptResponsible),
+                getElement("Raising Date", widget.qpcr.raisingDate.toString()),
+                getElement("Raising Person", widget.qpcr.raisingPerson),
+                getElement("QPCR Accepted By", widget.qpcr.acceptingPerson),
+                getElement("Root Cause", widget.qpcr.rootCause),
+                getElement("Action Decided", widget.qpcr.action),
                 getElement(
-                    "Target Date", widget.pfu.targetDate.substring(0, 10)),
+                    "Target Date", widget.qpcr.targetDate.substring(0, 10)),
                 SizedBox(
                   height: screenSize.screenHeight * 50,
                   width: screenSize.screenWidth * 100,
-                  child:
-                      (widget.pfu.photoURL == null || widget.pfu.photoURL == "")
-                          ? Image.network(
-                              photo,
-                              fit: BoxFit.contain,
-                            )
-                          : Image.network(widget.pfu.photoURL),
+                  child: (widget.qpcr.photoURL == null ||
+                          widget.qpcr.photoURL == "")
+                      ? Image.network(
+                          photo,
+                          fit: BoxFit.contain,
+                        )
+                      : Image.network(widget.qpcr.photoURL),
                 ),
+                getElement("Remarks", widget.qpcr.closingRemarks),
                 Padding(
                   padding: EdgeInsets.symmetric(
                       vertical: screenSize.screenHeight * 2.5),
                   child: Text(
-                    "Did you take action on PFU?",
+                    "Do you confirm the closure of this QPCR?",
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontSize: screenSize.screenHeight * 2.5,
@@ -302,8 +291,11 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                             onPressed: () async {
                               showAlertDialog(context);
                               Networking networking = Networking();
-                              await networking.postData('PFU/PFUActionDone',
-                                  {'pfuId': widget.pfu.id});
+                              await networking.postData('QPCR/QPCRClose', {
+                                'QPCRId': widget.qpcr.id,
+                                'actualClosingDate':
+                                    DateTime.now().toString().substring(0, 10)
+                              });
 
                               Navigator.pop(context);
                               Navigator.pop(context);
@@ -327,6 +319,13 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                             height: screenSize.screenHeight * 5,
                             minWidth: screenSize.screenWidth * 30,
                             onPressed: () async {
+                              showAlertDialog(context);
+                              Networking networking = Networking();
+                              await networking.postData('QPCR/reSubmitQPCR',
+                                  {'QPCRId': widget.qpcr.id});
+
+                              Navigator.pop(context);
+                              Navigator.pop(context);
                               Navigator.pop(context);
                             },
                           ),

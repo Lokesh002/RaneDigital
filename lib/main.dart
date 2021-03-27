@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
+import 'package:rane_dms/screens/QPCR/QPCRMainScreen.dart';
+import 'package:rane_dms/screens/QPCR/closeQPCR/closeQPCRScreen.dart';
+import 'package:rane_dms/screens/QPCR/generateQPCR/generateQPCRScreen.dart';
+import 'package:rane_dms/screens/QPCR/viewQPCR/enterQPCRFilterDataScreen.dart';
 import 'package:rane_dms/screens/authentication/adminPasswordScreen.dart';
 import 'package:rane_dms/screens/authentication/loginScreen.dart';
 import 'package:rane_dms/screens/authentication/registerUserScreen.dart';
@@ -16,7 +20,7 @@ import 'package:rane_dms/screens/splashScreen.dart';
 import 'package:rane_dms/screens/documentMainScreen.dart';
 import 'package:rane_dms/screens/homeScreen.dart';
 import 'package:rane_dms/screens/updateAppScreen.dart';
-
+import 'package:provider/provider.dart';
 import 'dart:ui';
 
 const debug = true;
@@ -34,22 +38,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-//  getColr() {
-//    themes.getColor();
-//  }
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    // getColr();
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-//          primaryColor: primaryColor,
-//          accentColor: accentColor,
           primaryColor: Colors.blue,
           accentColor: Color(0xffe0e0e0),
           backgroundColor: Colors.white),
@@ -69,7 +67,11 @@ class _MyAppState extends State<MyApp> {
         '/closePFUScreen': (context) => ClosePFUScreen(),
         '/addLineScreen': (context) => AddLineScreen(),
         '/changePassword': (context) => ChangePassword(),
-        '/updateAppScreen': (context) => UpdateAppScreen()
+        '/updateAppScreen': (context) => UpdateAppScreen(),
+        '/QPCRMainScreen': (context) => QPCRMainScreen(),
+        '/generateQPCRScreen': (context) => GenerateQPCRScreen(),
+        '/viewQPCRScreen': (context) => EnterQPCRFilterDataScreen(),
+        '/closeQPCRScreen': (context) => CloseQPCRScreen(),
       },
     );
   }

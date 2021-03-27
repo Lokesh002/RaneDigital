@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:rane_dms/components/pfuDataStructure.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rane_dms/components/QPCRDataStructure.dart';
+import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/networking.dart';
+import 'package:rane_dms/components/QPCRDataStructure.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 
-class ChangePFUDetails extends StatefulWidget {
-  final PFU pfu;
-  ChangePFUDetails(this.pfu);
+class EnterQPCRDetails extends StatefulWidget {
+  final QPCR qpcr;
+  EnterQPCRDetails(this.qpcr);
   @override
-  _ChangePFUDetailsState createState() => _ChangePFUDetailsState();
+  _EnterQPCRDetailsState createState() => _EnterQPCRDetailsState();
 }
 
 showAlertDialog(BuildContext context) {
@@ -34,7 +37,7 @@ showAlertDialog(BuildContext context) {
   );
 }
 
-class _ChangePFUDetailsState extends State<ChangePFUDetails> {
+class _EnterQPCRDetailsState extends State<EnterQPCRDetails> {
   TextEditingController rootCauseController = TextEditingController();
   DateTime _dateTime;
   String rootCause;
@@ -81,7 +84,7 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
     );
   }
 
-  String photo = ipAddress + 'PFUpics/logo.png';
+  String photo = ipAddress + 'QPCRpics/logo.png';
   final _formKey = GlobalKey<FormState>();
   TextEditingController actionController = TextEditingController();
 
@@ -115,7 +118,7 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
                   padding: EdgeInsets.symmetric(
                       vertical: screenSize.screenHeight * 2.5),
                   child: Text(
-                    widget.pfu.lineName,
+                    widget.qpcr.lineName,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: screenSize.screenHeight * 3.5,
@@ -130,7 +133,7 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
                   child: Column(
                     children: [
                       Text(
-                        widget.pfu.machine.machineCode,
+                        widget.qpcr.machine.machineCode,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: screenSize.screenHeight * 3,
@@ -142,7 +145,7 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
                         height: screenSize.screenHeight * 2,
                       ),
                       Text(
-                        widget.pfu.machine.machineName,
+                        widget.qpcr.machine.machineName,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: screenSize.screenHeight * 3,
@@ -182,7 +185,7 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
                             EdgeInsets.only(right: screenSize.screenWidth * 5),
                         children: [
                           Text(
-                            widget.pfu.problem,
+                            widget.qpcr.problem,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: screenSize.screenHeight * 2,
@@ -223,7 +226,7 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
                             EdgeInsets.only(right: screenSize.screenWidth * 5),
                         children: [
                           Text(
-                            widget.pfu.problemDescription,
+                            widget.qpcr.problemDescription,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: screenSize.screenHeight * 2,
@@ -235,25 +238,22 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
                     ),
                   ],
                 ),
-                getElement("Raising Department", widget.pfu.raisingDept),
+                getElement("Raising Department", widget.qpcr.raisingDept),
                 getElement(
-                    "Responsible Department", widget.pfu.deptResponsible),
-                getElement("Raising Date", widget.pfu.raisingDate.toString()),
-                getElement("Raising Person", widget.pfu.raisingPerson),
-                getElement("Earlier Root Cause", widget.pfu.rootCause),
-                getElement("Earlier Action Decided", widget.pfu.action),
-                getElement("Earlier Target Date",
-                    widget.pfu.targetDate.substring(0, 10)),
+                    "Responsible Department", widget.qpcr.deptResponsible),
+                getElement("Raising Date", widget.qpcr.raisingDate.toString()),
+                getElement("Raising Person", widget.qpcr.raisingPerson),
+                getElement("QPCR Accepted By:", widget.qpcr.acceptingPerson),
                 SizedBox(
                   height: screenSize.screenHeight * 50,
                   width: screenSize.screenWidth * 100,
-                  child:
-                      (widget.pfu.photoURL == null || widget.pfu.photoURL == "")
-                          ? Image.network(
-                              photo,
-                              fit: BoxFit.contain,
-                            )
-                          : Image.network(widget.pfu.photoURL),
+                  child: (widget.qpcr.photoURL == null ||
+                          widget.qpcr.photoURL == "")
+                      ? Image.network(
+                          photo,
+                          fit: BoxFit.contain,
+                        )
+                      : Image.network(widget.qpcr.photoURL),
                 ),
                 Form(
                   key: _formKey,
@@ -310,32 +310,36 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
                           left: screenSize.screenHeight * 5,
                           right: screenSize.screenHeight * 5,
                         ),
-                        child: Container(
-                          padding: EdgeInsets.only(
-                              top: screenSize.screenHeight * 1,
-                              bottom: screenSize.screenHeight * 1),
-                          child: TextFormField(
-                            validator: (val) =>
-                                val.isEmpty ? 'Enter Action Details' : null,
-                            controller: actionController,
-                            keyboardType: TextInputType.text,
-                            textAlign: TextAlign.start,
-                            onChanged: (name) {
-                              this.action = name;
-                              print(this.action);
-                            },
+                        child: Stack(
+                          children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.only(
+                                  top: screenSize.screenHeight * 1,
+                                  bottom: screenSize.screenHeight * 1),
+                              child: TextFormField(
+                                validator: (val) =>
+                                    val.isEmpty ? 'Enter Action Details' : null,
+                                controller: actionController,
+                                keyboardType: TextInputType.text,
+                                textAlign: TextAlign.start,
+                                onChanged: (name) {
+                                  this.action = name;
+                                  print(this.action);
+                                },
 
-                            style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: screenSize.screenHeight * 2),
-                            // focusNode: focusNode,
-                            decoration: InputDecoration(
-                              hintText: "Action",
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      screenSize.screenHeight * 2)),
+                                style: TextStyle(
+                                    color: Colors.black87,
+                                    fontSize: screenSize.screenHeight * 2),
+                                // focusNode: focusNode,
+                                decoration: InputDecoration(
+                                  hintText: "Action",
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          screenSize.screenHeight * 2)),
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
                       Padding(
@@ -393,22 +397,25 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
                           height: screenSize.screenHeight * 5,
                           minWidth: screenSize.screenWidth * 30,
                           onPressed: () async {
-                            showAlertDialog(context);
-                            Networking networking = Networking();
-                            await networking.postData('PFU/changePFUDetails', {
-                              'pfuId': widget.pfu.id,
-                              'rootCause': rootCause != null
-                                  ? rootCause
-                                  : widget.pfu.rootCause,
-                              'action':
-                                  action != null ? action : widget.pfu.action,
-                              'targetDate': _dateTime != null
-                                  ? _dateTime.toString().substring(0, 10)
-                                  : widget.pfu.targetDate.substring(0, 10)
-                            });
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                            Navigator.pop(context);
+                            if (_formKey.currentState.validate() &&
+                                _dateTime != null) {
+                              showAlertDialog(context);
+                              Networking networking = Networking();
+                              await networking
+                                  .postData('QPCR/QPCRActionDecide', {
+                                'QPCRId': widget.qpcr.id,
+                                'rootCause': rootCause,
+                                'action': action,
+                                'targetDate':
+                                    _dateTime.toString().substring(0, 10)
+                              });
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "Please enter all the fields.");
+                            }
                           },
                         ),
                       ),

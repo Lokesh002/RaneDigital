@@ -323,4 +323,18 @@ class SavedData {
     } else
       return name;
   }
+
+  setAccessDept(List<String> name) async {
+    final savedUserName = await SharedPreferences.getInstance();
+    await savedUserName.setStringList('accessDept', name);
+  }
+
+  Future<List<String>> getAccessDept() async {
+    final savedUserName = await SharedPreferences.getInstance();
+    final name = savedUserName.getStringList('accessDept');
+    if (name == null) {
+      return null;
+    } else
+      return name;
+  }
 }

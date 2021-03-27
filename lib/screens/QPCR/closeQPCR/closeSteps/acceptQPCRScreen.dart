@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:rane_dms/components/QPCRDataStructure.dart';
+import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/networking.dart';
-import 'package:rane_dms/components/pfuDataStructure.dart';
+import 'package:rane_dms/components/QPCRDataStructure.dart';
 import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
-import 'package:rane_dms/screens/pfu/closePfu/closeSteps/changePFUDetails.dart';
 
-class PFUTakeActionScreen extends StatefulWidget {
-  final PFU pfu;
-  PFUTakeActionScreen(this.pfu);
+class AcceptQPCRScreen extends StatefulWidget {
+  final QPCR qpcr;
+  AcceptQPCRScreen(this.qpcr);
   @override
-  _PFUTakeActionScreenState createState() => _PFUTakeActionScreenState();
+  _AcceptQPCRScreenState createState() => _AcceptQPCRScreenState();
 }
 
 showAlertDialog(BuildContext context) {
@@ -36,8 +37,88 @@ showAlertDialog(BuildContext context) {
   );
 }
 
-class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
+class _AcceptQPCRScreenState extends State<AcceptQPCRScreen> {
   SizeConfig screenSize;
+
+  String rejectReason;
+  final rejectReasonController = TextEditingController();
+  showRejectDialog(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          Form(
+            key: _formKey,
+            child: Container(
+              width: screenSize.screenWidth * 64,
+              height: screenSize.screenHeight * 20,
+              child: TextFormField(
+                validator: (val) =>
+                    val.isEmpty ? 'Enter Reason for rejecting' : null,
+                controller: rejectReasonController,
+                maxLines: 8,
+                keyboardType: TextInputType.text,
+                textAlign: TextAlign.start,
+                onChanged: (problem) {
+                  this.rejectReason = problem;
+                  print(this.rejectReason);
+                },
+
+                style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: screenSize.screenHeight * 2),
+                // focusNode: focusNode,
+                decoration: InputDecoration(
+                  hintText: "Reason of Rejecting QPCR",
+                  border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(screenSize.screenHeight * 2)),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        Container(
+            color: Colors.red,
+            child: TextButton(
+              onPressed: () async {
+                showAlertDialog(context);
+                Networking networking = Networking();
+                await networking.postData('QPCR/rejectQPCR', {
+                  'qpcrId': widget.qpcr.id,
+                  'rejectingReason': this.rejectReason
+                });
+                rejectReasonController.clear();
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Reject',
+                style: TextStyle(color: Colors.white),
+              ),
+            ))
+      ],
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+            onWillPop: () {
+              rejectReasonController.clear();
+              Navigator.pop(context);
+              return;
+            },
+            child: alert);
+      },
+    );
+  }
+
   Widget getElement(String about, String value) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: screenSize.screenHeight * 1),
@@ -79,17 +160,12 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
     );
   }
 
-  String photo = ipAddress + 'PFUpics/logo.png';
-  String genId;
   SavedData savedData = SavedData();
-  getData() async {
-    genId = await savedData.getGenId();
-  }
-
+  String photo = ipAddress + 'QPCRpics/logo.png';
   @override
-  void initState() {
-    super.initState();
-    getData();
+  void dispose() {
+    rejectReasonController.dispose();
+    super.dispose();
   }
 
   @override
@@ -113,7 +189,7 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                   padding: EdgeInsets.symmetric(
                       vertical: screenSize.screenHeight * 2.5),
                   child: Text(
-                    widget.pfu.lineName,
+                    widget.qpcr.lineName,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: screenSize.screenHeight * 3.5,
@@ -128,7 +204,7 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                   child: Column(
                     children: [
                       Text(
-                        widget.pfu.machine.machineCode,
+                        widget.qpcr.machine.machineCode,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: screenSize.screenHeight * 3,
@@ -140,7 +216,7 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                         height: screenSize.screenHeight * 2,
                       ),
                       Text(
-                        widget.pfu.machine.machineName,
+                        widget.qpcr.machine.machineName,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: screenSize.screenHeight * 3,
@@ -180,7 +256,7 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                             EdgeInsets.only(right: screenSize.screenWidth * 5),
                         children: [
                           Text(
-                            widget.pfu.problem,
+                            widget.qpcr.problem,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: screenSize.screenHeight * 2,
@@ -221,7 +297,7 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                             EdgeInsets.only(right: screenSize.screenWidth * 5),
                         children: [
                           Text(
-                            widget.pfu.problemDescription,
+                            widget.qpcr.problemDescription,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: screenSize.screenHeight * 2,
@@ -233,41 +309,27 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                     ),
                   ],
                 ),
-                getElement("Raising Department", widget.pfu.raisingDept),
+                getElement("Raising Department", widget.qpcr.raisingDept),
                 getElement(
-                    "Responsible Department", widget.pfu.deptResponsible),
-                getElement("Raising Date", widget.pfu.raisingDate.toString()),
-                getElement("Raising Person", widget.pfu.raisingPerson),
-                getElement("PFU Accepted By:", widget.pfu.acceptingPerson),
-                GestureDetector(
-                    onTap: () {
-                      if (genId == '14076') {
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ChangePFUDetails(widget.pfu);
-                        }));
-                      }
-                    },
-                    child: getElement("Root Cause", widget.pfu.rootCause)),
-                getElement("Action Decided", widget.pfu.action),
-                getElement(
-                    "Target Date", widget.pfu.targetDate.substring(0, 10)),
+                    "Responsible Department", widget.qpcr.deptResponsible),
+                getElement("Raising Date", widget.qpcr.raisingDate.toString()),
+                getElement("Raising Person", widget.qpcr.raisingPerson),
                 SizedBox(
                   height: screenSize.screenHeight * 50,
                   width: screenSize.screenWidth * 100,
-                  child:
-                      (widget.pfu.photoURL == null || widget.pfu.photoURL == "")
-                          ? Image.network(
-                              photo,
-                              fit: BoxFit.contain,
-                            )
-                          : Image.network(widget.pfu.photoURL),
+                  child: (widget.qpcr.photoURL == null ||
+                          widget.qpcr.photoURL == "")
+                      ? Image.network(
+                          photo,
+                          fit: BoxFit.contain,
+                        )
+                      : Image.network(widget.qpcr.photoURL),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
                       vertical: screenSize.screenHeight * 2.5),
                   child: Text(
-                    "Did you take action on PFU?",
+                    "Do you want to accept the QPCR?",
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontSize: screenSize.screenHeight * 2.5,
@@ -290,7 +352,7 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                           MaterialButton(
                             color: Colors.green,
                             child: Text(
-                              "Yes",
+                              "Accept",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: screenSize.screenHeight * 2,
@@ -302,8 +364,10 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                             onPressed: () async {
                               showAlertDialog(context);
                               Networking networking = Networking();
-                              await networking.postData('PFU/PFUActionDone',
-                                  {'pfuId': widget.pfu.id});
+                              await networking.postData('QPCR/acceptQPCR', {
+                                'QPCRId': widget.qpcr.id,
+                                'acceptingPerson': await savedData.getUserName()
+                              });
 
                               Navigator.pop(context);
                               Navigator.pop(context);
@@ -317,7 +381,7 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                           MaterialButton(
                             color: Colors.red,
                             child: Text(
-                              "No",
+                              "Reject",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: screenSize.screenHeight * 2,
@@ -327,7 +391,7 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
                             height: screenSize.screenHeight * 5,
                             minWidth: screenSize.screenWidth * 30,
                             onPressed: () async {
-                              Navigator.pop(context);
+                              showRejectDialog(context);
                             },
                           ),
                           SizedBox(

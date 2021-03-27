@@ -11,6 +11,7 @@ import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
+import 'package:rane_dms/screens/profile/changeDepartmentScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -51,55 +52,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
   SavedData savedData = SavedData();
   String levelOfSubscription = '';
   File _image;
+
+  List<String> accessDept = [];
   @override
   void initState() {
+    super.initState();
     getData();
   }
 
-  getImageFromGallery(BuildContext cntext) async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _image = image;
-      print("image path: $image");
-    });
-    if (_image != null) {
-      final response = await uploadImage(_image, cntext);
-      print('asa' + response.toString());
-      // Check if any error occured
-      if (response == null) {
-        //pr.hide();
+  // getImageFromGallery(BuildContext cntext) async {
+  //   var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+  //   setState(() {
+  //     _image = image;
+  //     print("image path: $image");
+  //   });
+  //   if (_image != null) {
+  //     final response = await uploadImage(_image, cntext);
+  //     print('asa' + response.toString());
+  //     // Check if any error occured
+  //     if (response == null) {
+  //       //pr.hide();
+  //
+  //       print('User details not updated');
+  //     } else {
+  //       setState(() {
+  //         photo = response;
+  //       });
+  //       print(response);
+  //     }
+  //   } else {
+  //     print('Please Select a profile photo');
+  //   }
+  // }
 
-        print('User details not updated');
-      } else {
-        setState(() {
-          photo = response;
-        });
-        print(response);
-      }
-    } else {
-      print('Please Select a profile photo');
-    }
-  }
-
-  Future<String> uploadImage(File file, BuildContext context) async {
-    showAlertDialog(context);
-
-    Dio dio = Dio();
-    String fileName = file.path.split('/').last;
-    FormData formData = FormData.fromMap({
-      "image": await MultipartFile.fromFile(file.path, filename: fileName),
-    });
-
-    Response response = await dio.post(
-      '',
-      data: formData,
-    );
-    print(response.data);
-    photo = response.data;
-    savedData.setProfileImage(photo);
-    Navigator.pop(context);
-    return (response.data);
-  }
+  // Future<String> uploadImage(File file, BuildContext context) async {
+  //   showAlertDialog(context);
+  //
+  //   Dio dio = Dio();
+  //   String fileName = file.path.split('/').last;
+  //   FormData formData = FormData.fromMap({
+  //     "image": await MultipartFile.fromFile(file.path, filename: fileName),
+  //   });
+  //
+  //   Response response = await dio.post(
+  //     '',
+  //     data: formData,
+  //   );
+  //   print(response.data);
+  //   photo = response.data;
+  //   savedData.setProfileImage(photo);
+  //   Navigator.pop(context);
+  //   return (response.data);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -145,16 +149,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                             ),
-//                            GestureDetector(
-//                              onTap: () {
-//                                getImageFromGallery(context);
-//                              },
-//                              child: Icon(
-//                                Icons.add_circle,
-//                                color: Theme.of(context).accentColor,
-//                                size: screenSize.screenHeight * 5,
-//                              ),
-//                            ),
                           ],
                         ),
                         SizedBox(
@@ -328,7 +322,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         await savedData.setUserId(null);
                                         await savedData
                                             .setAddNewUserAccess(null);
-
+                                        await savedData.setAccessDept(null);
                                         await savedData.setPfuAccess(null);
                                         print(savedData.getAddNewUserAccess());
                                         Navigator.pop(context);
@@ -341,10 +335,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ),
                                   ),
                                 ),
+                                Visibility(
+                                  visible: accessDept != null
+                                      ? accessDept.length > 1
+                                      : false,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        bottom: screenSize.screenHeight * 2,
+                                        top: screenSize.screenHeight * 2),
+                                    child: Center(
+                                      child: ReusableButton(
+                                        onPress: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChangeDepartmentScreen(
+                                                          accessDept))).then(
+                                              (value) {
+                                            if (value != null) {
+                                              department = value;
+                                              setState(() {});
+                                            }
+                                          });
+                                        },
+                                        content: "Change Department",
+                                        height: screenSize.screenHeight * 5,
+                                        width: screenSize.screenWidth * 30,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                                 Padding(
                                   padding: EdgeInsets.only(
-                                      bottom: screenSize.screenHeight * 3,
-                                      top: screenSize.screenHeight * 3),
+                                      bottom: screenSize.screenHeight * 2,
+                                      top: screenSize.screenHeight * 0),
                                   child: Center(
                                     child: ReusableButton(
                                       onPress: () {
@@ -357,47 +382,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ),
                                   ),
                                 )
-//                                Padding(
-//                                  padding: EdgeInsets.all(
-//                                      screenSize.screenHeight * 5),
-//                                  child: Center(
-//                                    child: ReusableButton(
-//                                      onPress: () async {
-//                                        String userId =
-//                                            await savedData.getUserId();
-//                                        print("user Id" + userId);
-//
-//                                        Networking networking = Networking();
-//                                        var data = await networking.deleteData(
-//                                            "User/deleteAccount/"+userId);
-//                                        if (data == "Successfully Deleted") {
-//                                          await savedData.setLoggedIn(false);
-//                                          await savedData.setUserName(null);
-//                                          await savedData.setAccountType(null);
-//                                          await savedData.setDepartment(null);
-//                                          await savedData.setGenId(null);
-//                                          await savedData.setUserId(null);
-//                                          await savedData
-//                                              .setAddNewUserAccess(null);
-//
-//                                          await savedData.setPfuAccess(null);
-//                                          print(
-//                                              savedData.getAddNewUserAccess());
-//                                          Fluttertoast.showToast(msg: data);
-//                                          Navigator.pop(context);
-//                                          Navigator.pushReplacementNamed(
-//                                              context, '/loginScreen');
-//                                        } else {
-//                                          Fluttertoast.showToast(
-//                                              msg: "Error Occured");
-//                                        }
-//                                      },
-//                                      height: screenSize.screenHeight * 5,
-//                                      width: screenSize.screenWidth * 30,
-//                                      content: "Delete Account",
-//                                    ),
-//                                  ),
-//                                ),
                               ],
                             ),
                           ),
@@ -417,6 +401,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     genId = await savedData.getGenId();
     department = await savedData.getDepartment();
     accountType = await savedData.getAccountType();
+    accessDept = await savedData.getAccessDept();
     setState(() {});
   }
 }

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:rane_dms/components/pfuDataStructure.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rane_dms/components/QPCRDataStructure.dart';
+import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/networking.dart';
+import 'package:rane_dms/components/QPCRDataStructure.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 
-class ChangePFUDetails extends StatefulWidget {
-  final PFU pfu;
-  ChangePFUDetails(this.pfu);
+class ChangeQPCRDetails extends StatefulWidget {
+  final QPCR qpcr;
+  ChangeQPCRDetails(this.qpcr);
   @override
-  _ChangePFUDetailsState createState() => _ChangePFUDetailsState();
+  _ChangeQPCRDetailsState createState() => _ChangeQPCRDetailsState();
 }
 
 showAlertDialog(BuildContext context) {
@@ -34,7 +37,7 @@ showAlertDialog(BuildContext context) {
   );
 }
 
-class _ChangePFUDetailsState extends State<ChangePFUDetails> {
+class _ChangeQPCRDetailsState extends State<ChangeQPCRDetails> {
   TextEditingController rootCauseController = TextEditingController();
   DateTime _dateTime;
   String rootCause;
@@ -81,7 +84,7 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
     );
   }
 
-  String photo = ipAddress + 'PFUpics/logo.png';
+  String photo = ipAddress + 'QPCRpics/logo.png';
   final _formKey = GlobalKey<FormState>();
   TextEditingController actionController = TextEditingController();
 
@@ -115,7 +118,7 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
                   padding: EdgeInsets.symmetric(
                       vertical: screenSize.screenHeight * 2.5),
                   child: Text(
-                    widget.pfu.lineName,
+                    widget.qpcr.lineName,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: screenSize.screenHeight * 3.5,
@@ -130,7 +133,7 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
                   child: Column(
                     children: [
                       Text(
-                        widget.pfu.machine.machineCode,
+                        widget.qpcr.machine.machineCode,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: screenSize.screenHeight * 3,
@@ -142,7 +145,7 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
                         height: screenSize.screenHeight * 2,
                       ),
                       Text(
-                        widget.pfu.machine.machineName,
+                        widget.qpcr.machine.machineName,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: screenSize.screenHeight * 3,
@@ -182,7 +185,7 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
                             EdgeInsets.only(right: screenSize.screenWidth * 5),
                         children: [
                           Text(
-                            widget.pfu.problem,
+                            widget.qpcr.problem,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: screenSize.screenHeight * 2,
@@ -223,7 +226,7 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
                             EdgeInsets.only(right: screenSize.screenWidth * 5),
                         children: [
                           Text(
-                            widget.pfu.problemDescription,
+                            widget.qpcr.problemDescription,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: screenSize.screenHeight * 2,
@@ -235,25 +238,25 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
                     ),
                   ],
                 ),
-                getElement("Raising Department", widget.pfu.raisingDept),
+                getElement("Raising Department", widget.qpcr.raisingDept),
                 getElement(
-                    "Responsible Department", widget.pfu.deptResponsible),
-                getElement("Raising Date", widget.pfu.raisingDate.toString()),
-                getElement("Raising Person", widget.pfu.raisingPerson),
-                getElement("Earlier Root Cause", widget.pfu.rootCause),
-                getElement("Earlier Action Decided", widget.pfu.action),
+                    "Responsible Department", widget.qpcr.deptResponsible),
+                getElement("Raising Date", widget.qpcr.raisingDate.toString()),
+                getElement("Raising Person", widget.qpcr.raisingPerson),
+                getElement("Earlier Root Cause", widget.qpcr.rootCause),
+                getElement("Earlier Action Decided", widget.qpcr.action),
                 getElement("Earlier Target Date",
-                    widget.pfu.targetDate.substring(0, 10)),
+                    widget.qpcr.targetDate.substring(0, 10)),
                 SizedBox(
                   height: screenSize.screenHeight * 50,
                   width: screenSize.screenWidth * 100,
-                  child:
-                      (widget.pfu.photoURL == null || widget.pfu.photoURL == "")
-                          ? Image.network(
-                              photo,
-                              fit: BoxFit.contain,
-                            )
-                          : Image.network(widget.pfu.photoURL),
+                  child: (widget.qpcr.photoURL == null ||
+                          widget.qpcr.photoURL == "")
+                      ? Image.network(
+                          photo,
+                          fit: BoxFit.contain,
+                        )
+                      : Image.network(widget.qpcr.photoURL),
                 ),
                 Form(
                   key: _formKey,
@@ -395,16 +398,17 @@ class _ChangePFUDetailsState extends State<ChangePFUDetails> {
                           onPressed: () async {
                             showAlertDialog(context);
                             Networking networking = Networking();
-                            await networking.postData('PFU/changePFUDetails', {
-                              'pfuId': widget.pfu.id,
+                            await networking
+                                .postData('QPCR/changeQPCRDetails', {
+                              'QPCRId': widget.qpcr.id,
                               'rootCause': rootCause != null
                                   ? rootCause
-                                  : widget.pfu.rootCause,
+                                  : widget.qpcr.rootCause,
                               'action':
-                                  action != null ? action : widget.pfu.action,
+                                  action != null ? action : widget.qpcr.action,
                               'targetDate': _dateTime != null
                                   ? _dateTime.toString().substring(0, 10)
-                                  : widget.pfu.targetDate.substring(0, 10)
+                                  : widget.qpcr.targetDate.substring(0, 10)
                             });
                             Navigator.pop(context);
                             Navigator.pop(context);
