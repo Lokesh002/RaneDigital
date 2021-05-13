@@ -96,7 +96,7 @@ class _QPCRMainScreenState extends State<QPCRMainScreen> {
                   },
                   height: screenSize.screenHeight * 10,
                   width: screenSize.screenWidth * 80,
-                  content: "View QPCR",
+                  content: "View QPCR Past Data",
                 ),
                 SizedBox(height: screenSize.screenHeight * 5),
                 ReusableButton(

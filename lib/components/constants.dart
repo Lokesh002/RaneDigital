@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rane_dms/components/QPCRDataStructure.dart';
 
 const kprimaryColor = Color(0xFF0A0E21);
 const ktoolbarColor = Color(0xFF0A0E21);
@@ -18,9 +19,9 @@ const kLabelTextStyle = TextStyle(
   color: Colors.white,
 );
 
-const String ipAddress = 'http://192.168.0.200:3000/';
+const String ipAddress = 'http://10.0.2.2:3000/';
 const String version = '1.0.2';
-
+QPCR globalQpcr;
 const departments = [
   'MED',
   'PLE',
@@ -29,7 +30,6 @@ const departments = [
   'Dispatch',
   'HR',
   'Safety',
-  'Accounts',
   'SQA',
   'QAD'
 ];

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rane_dms/screens/QPCR/QPCRMainScreen.dart';
 import 'package:rane_dms/screens/QPCR/closeQPCR/closeQPCRScreen.dart';
-import 'package:rane_dms/screens/QPCR/generateQPCR/generateQPCRScreen.dart';
+import 'package:rane_dms/screens/QPCR/generateQPCR/QPCRGenerateChoiceScreen.dart';
+import 'package:rane_dms/screens/QPCR/generateQPCR/processRejQPCR.dart';
 import 'package:rane_dms/screens/QPCR/viewQPCR/enterQPCRFilterDataScreen.dart';
 import 'package:rane_dms/screens/authentication/adminPasswordScreen.dart';
 import 'package:rane_dms/screens/authentication/loginScreen.dart';
@@ -69,7 +70,7 @@ class _MyAppState extends State<MyApp> {
         '/changePassword': (context) => ChangePassword(),
         '/updateAppScreen': (context) => UpdateAppScreen(),
         '/QPCRMainScreen': (context) => QPCRMainScreen(),
-        '/generateQPCRScreen': (context) => GenerateQPCRScreen(),
+        '/generateQPCRScreen': (context) => QPCRGenerateChoiceScreen(),
         '/viewQPCRScreen': (context) => EnterQPCRFilterDataScreen(),
         '/closeQPCRScreen': (context) => CloseQPCRScreen(),
       },

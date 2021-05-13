@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:rane_dms/components/ReusableCard.dart';
 import 'package:rane_dms/components/courseCard.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 

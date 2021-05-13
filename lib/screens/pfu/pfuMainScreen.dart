@@ -96,7 +96,7 @@ class _PFUMainScreenState extends State<PFUMainScreen> {
                   },
                   height: screenSize.screenHeight * 10,
                   width: screenSize.screenWidth * 80,
-                  content: "View PFU",
+                  content: "View PFU History",
                 ),
                 SizedBox(height: screenSize.screenHeight * 5),
                 ReusableButton(

@@ -1,5 +1,6 @@
+import 'dart:developer';
+
 import 'package:http/http.dart' as http;
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:convert' as convert;
 
 import 'package:rane_dms/components/constants.dart';
@@ -19,7 +20,6 @@ class Networking {
       fullURL,
       headers: {
         "Accept": "application/json",
-        // "Access-Control-Allow-Origin": "*"
       },
     );
 
@@ -35,10 +35,12 @@ class Networking {
 
   Future postData(String url, var body) async {
     String fullURL = ip + url;
+    //log(body.toString());
+
     http.Response postResponse = await http.post(fullURL,
         headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
+          "Content-Type": "application/json"
+          // "Access-Control-Allow-Origin": "*"
         },
         body: convert.jsonEncode(body));
 
@@ -46,6 +48,7 @@ class Networking {
       String data = postResponse.body;
 
       var decodedData = convert.jsonDecode(data);
+
       return decodedData;
     } else if (postResponse.statusCode == 404) {
       print(postResponse.statusCode);

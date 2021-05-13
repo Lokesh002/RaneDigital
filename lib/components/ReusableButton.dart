@@ -6,7 +6,7 @@ class ReusableButton extends StatelessWidget {
   final String content;
   final double height;
   final double width;
-  double elev = 4.0;
+  final double elev = 4.0;
   ReusableButton(
       {@required this.onPress,
       @required this.content,

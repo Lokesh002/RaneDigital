@@ -1,8 +1,14 @@
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rane_dms/components/QPCRDataStructure.dart';
 import 'package:rane_dms/components/constants.dart';
 
 import 'package:rane_dms/components/sizeConfig.dart';
+
+import '../../../components/QPCRDataStructure.dart';
+import '../../../components/networking.dart';
 
 class MyQPCRStatusScreen extends StatefulWidget {
   final QPCR qpcr;
@@ -35,266 +41,524 @@ showAlertDialog(BuildContext context) {
 }
 
 class _MyQPCRStatusScreenState extends State<MyQPCRStatusScreen> {
+  QPCR qpcr = QPCR();
   SizeConfig screenSize;
   Widget getElement(String about, String value) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: screenSize.screenHeight * 1),
+      padding: EdgeInsets.symmetric(
+          horizontal: screenSize.screenWidth * 5,
+          vertical: screenSize.screenHeight * 1),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              SizedBox(
-                width: screenSize.screenWidth * 5,
+          Container(
+            width: screenSize.screenWidth * 25,
+            child: Text(
+              about,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontSize: screenSize.screenHeight * 2.5,
+                fontFamily: "Roboto",
               ),
-              Text(
-                about,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: screenSize.screenHeight * 2,
-                  fontFamily: "Roboto",
-                ),
-              ),
-            ],
+            ),
           ),
-          Row(
-            children: <Widget>[
-              Text(
-                value,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: screenSize.screenHeight * 2,
-                  fontFamily: "Roboto",
-                ),
+          Container(
+            width: screenSize.screenWidth * 65,
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: screenSize.screenHeight * 2.5,
+                fontFamily: "Roboto",
               ),
-              SizedBox(
-                width: screenSize.screenWidth * 5,
-              ),
-            ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget getImage(int status) {
-    switch (status) {
-      case 0:
-        return Image.asset("images/0.png");
+  String photo = ipAddress + 'QPCRpics/logo.png';
+  bool isReady = false;
+  void getData() async {
+    Networking networking = Networking();
+    var data =
+        await networking.postData('QPCR/getQPCR', {"qpcrId": widget.qpcr.id});
 
-      case 1:
-        return Image.asset("images/1.png");
+    QPCRList qpcrList = QPCRList();
+    qpcr = qpcrList.getQPCR(data);
+    isReady = true;
+    setState(() {});
+  }
 
-      case 2:
-        return Image.asset("images/2.png");
+  TableRow getTableRow(String name, String value) {
+    return TableRow(children: [
+      Padding(
+        padding: EdgeInsets.all(6.0),
+        child: Center(
+            child: Text(
+          name,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: screenSize.screenHeight * 2.5,
+              color: Theme.of(context).primaryColor),
+        )),
+      ),
+      Padding(
+        padding: EdgeInsets.all(6.0),
+        child: Center(
+            child: Text(
+          value,
+          style: TextStyle(fontSize: screenSize.screenHeight * 2.5),
+        )),
+      )
+    ]);
+  }
 
-      case 3:
-        return Image.asset("images/3.png");
+  TableRow getFourColTableRow(
+      String name1, String value1, String name2, String value2) {
+    return TableRow(children: [
+      Padding(
+        padding: EdgeInsets.all(6.0),
+        child: Center(
+            child: Text(
+          name1,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: screenSize.screenHeight * 2.5,
+              color: Theme.of(context).primaryColor),
+        )),
+      ),
+      Padding(
+        padding: EdgeInsets.all(6.0),
+        child: Center(
+            child: (value1 != 'true' && value1 != 'false')
+                ? Text(
+                    value1,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: screenSize.screenHeight * 2.5,
+                    ),
+                  )
+                : SizedBox(
+                    width: screenSize.screenWidth * 10,
+                    child: Image.asset(
+                      'images/$value1.png',
+                      fit: BoxFit.contain,
+                    ))),
+      ),
+      Padding(
+        padding: EdgeInsets.all(6.0),
+        child: Center(
+            child: Text(
+          name2,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: screenSize.screenHeight * 2.5,
+              color: Theme.of(context).primaryColor),
+        )),
+      ),
+      Padding(
+        padding: EdgeInsets.all(6.0),
+        child: Center(
+          child: (value2 != 'true' && value2 != 'false')
+              ? Text(
+                  value2,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: screenSize.screenHeight * 2.5,
+                  ),
+                )
+              : SizedBox(
+                  width: screenSize.screenWidth * 10,
+                  child: Image.asset(
+                    'images/$value2.png',
+                    fit: BoxFit.contain,
+                  )),
+        ),
+      ),
+    ]);
+  }
 
-      case 4:
-        return Image.asset("images/4.png");
-
-      default:
-        return Image.asset("images/logo.png");
+  dynamic getOperator(String key) {
+    switch (key) {
+      case 'receiptStage':
+        return qpcr.detectionStage.receiptStage;
+      case 'customerEnd':
+        return qpcr.detectionStage.customerEnd;
+      case 'pdi':
+        return qpcr.detectionStage.pdi;
+      case 'others':
+        return qpcr.detectionStage.others;
+      case 'machineName':
+        return qpcr.detectionStage.detectionMachine.machineName;
     }
   }
 
-  String photo = ipAddress + 'QPCRpics/logo.png';
+  List a = ['receiptStage', 'customerEnd', 'pdi', 'others', 'machineName'];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+
   @override
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
-    return Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        color: Theme.of(context).backgroundColor,
-        child: ListView(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: screenSize.screenHeight * 3,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: screenSize.screenHeight * 2.5),
-                  child: Text(
-                    widget.qpcr.lineName,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: screenSize.screenHeight * 3.5,
-                      fontFamily: "Montserrat",
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: screenSize.screenHeight * 2.5),
-                  child: Column(
+    return !isReady
+        ? Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.black87,
+              ),
+            ),
+          )
+        : Scaffold(
+            body: Container(
+              height: double.infinity,
+              width: double.infinity,
+              color: Theme.of(context).backgroundColor,
+              child: ListView(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      SizedBox(
+                        height: screenSize.screenHeight * 3,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: screenSize.screenHeight * 2.5),
+                        child: Text(
+                          'Quality Problem Report (QPCR)',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: screenSize.screenHeight * 3.5,
+                            fontFamily: "Montserrat",
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: screenSize.screenHeight * 2.5),
+                        child: Column(
+                          children: [
+                            Text(
+                              qpcr.qpcrNo,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: screenSize.screenHeight * 3,
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                            SizedBox(
+                              height: screenSize.screenHeight * 2,
+                            ),
+                            Text(
+                              '${qpcr.defectRank} Rank Defect',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: screenSize.screenHeight * 3,
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                            SizedBox(
+                              height: screenSize.screenHeight * 3,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: screenSize.screenWidth * 5),
+                              child: Table(
+                                columnWidths: {
+                                  0: FlexColumnWidth(2),
+                                  1: FlexColumnWidth(3)
+                                },
+                                border: TableBorder.symmetric(
+                                    outside: BorderSide(width: 3),
+                                    inside: BorderSide(width: 1)),
+                                children: [
+                                  getTableRow(
+                                      'QPCR Raised Date',
+                                      qpcr.raisingDate
+                                          .toString()
+                                          .substring(0, 10)),
+                                  getTableRow('Part Name', qpcr.partName),
+                                  getTableRow('Part Number', qpcr.partNumber),
+                                  getTableRow('Supplier', qpcr.deptResponsible),
+                                  getTableRow(
+                                      qpcr.lotCode == null
+                                          ? 'Production Order Number'
+                                          : 'Lot Code',
+                                      qpcr.lotCode == null
+                                          ? qpcr.productionOrderNumber
+                                          : qpcr.lotCode),
+                                  getTableRow(
+                                      qpcr.supplierInvoiceNumber == null
+                                          ? 'Production Order Quantity'
+                                          : 'Supplier Invoice Number',
+                                      qpcr.supplierInvoiceNumber == null
+                                          ? qpcr.productionOrderQty.toString()
+                                          : qpcr.supplierInvoiceNumber),
+                                  getTableRow('Model', qpcr.model),
+                                  if (qpcr.manufacturingDate
+                                          .millisecondsSinceEpoch !=
+                                      0)
+                                    getTableRow(
+                                        'Mfg. Date',
+                                        qpcr.manufacturingDate
+                                            .toString()
+                                            .substring(0, 10)),
+                                  getTableRow('Concern Type', qpcr.concernType),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Text(
+                          "Detection Stage",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: screenSize.screenHeight * 3,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: screenSize.screenWidth * 5),
+                          child: Table(
+                              columnWidths: {
+                                0: FlexColumnWidth(2),
+                                1: FlexColumnWidth(1),
+                                2: FlexColumnWidth(2),
+                                3: (qpcr.detectionStage.detectionLine
+                                                .lineName !=
+                                            null &&
+                                        qpcr.detectionStage.others != null)
+                                    ? FlexColumnWidth(2)
+                                    : FlexColumnWidth(1)
+                              },
+                              border: TableBorder.symmetric(
+                                  outside: BorderSide(width: 3),
+                                  inside: BorderSide(width: 1)),
+                              children: [
+                                getFourColTableRow(
+                                    'Receipt Stage',
+                                    qpcr.detectionStage.receiptStage != null
+                                        ? qpcr.detectionStage.receiptStage
+                                            .toString()
+                                        : 'false',
+                                    "Line Name",
+                                    qpcr.detectionStage.detectionLine
+                                                .lineName !=
+                                            null
+                                        ? qpcr.detectionStage.detectionLine
+                                            .lineName
+                                        : "false"),
+                                getFourColTableRow(
+                                    'Customer End',
+                                    qpcr.detectionStage.customerEnd != null
+                                        ? qpcr.detectionStage.customerEnd
+                                            .toString()
+                                        : 'false',
+                                    "Machine Name",
+                                    qpcr.detectionStage.detectionMachine
+                                                .machineName !=
+                                            null
+                                        ? qpcr.detectionStage.detectionMachine
+                                            .machineName
+                                        : "false"),
+                                getFourColTableRow(
+                                    "PDI (Pre Dispatch Inspection)",
+                                    qpcr.detectionStage.pdi != null
+                                        ? qpcr.detectionStage.pdi.toString()
+                                        : "false",
+                                    'Others',
+                                    qpcr.detectionStage.others != null
+                                        ? qpcr.detectionStage.others.toString()
+                                        : 'false')
+                              ])),
+                      SizedBox(
+                        height: screenSize.screenHeight * 3,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Text(
+                          "Complaint Details",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: screenSize.screenHeight * 3,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: screenSize.screenWidth * 5),
+                          child: Table(
+                              columnWidths: {
+                                0: FlexColumnWidth(2),
+                                1: qpcr.complaintImpactAreas.otherImpact != null
+                                    ? FlexColumnWidth(2)
+                                    : FlexColumnWidth(1),
+                                2: FlexColumnWidth(2),
+                                3: FlexColumnWidth(1)
+                              },
+                              border: TableBorder.symmetric(
+                                  outside: BorderSide(width: 3),
+                                  inside: BorderSide(width: 1)),
+                              children: [
+                                getFourColTableRow(
+                                    "Safety",
+                                    qpcr.complaintImpactAreas.safetyImpact !=
+                                            null
+                                        ? qpcr.complaintImpactAreas.safetyImpact
+                                            .toString()
+                                        : "false",
+                                    "Functional",
+                                    qpcr.complaintImpactAreas
+                                                .functionalImpact !=
+                                            null
+                                        ? qpcr.complaintImpactAreas
+                                            .functionalImpact
+                                            .toString()
+                                        : "false"),
+                                getFourColTableRow(
+                                    "Fitment",
+                                    qpcr.complaintImpactAreas.fitmentImpact !=
+                                            null
+                                        ? qpcr
+                                            .complaintImpactAreas.fitmentImpact
+                                            .toString()
+                                        : "false",
+                                    "Visual",
+                                    qpcr.complaintImpactAreas.visualImpact !=
+                                            null
+                                        ? qpcr.complaintImpactAreas.visualImpact
+                                            .toString()
+                                        : "false"),
+                                getFourColTableRow(
+                                    "Others",
+                                    qpcr.complaintImpactAreas.otherImpact !=
+                                            null
+                                        ? qpcr.complaintImpactAreas.otherImpact
+                                        : 'false',
+                                    "",
+                                    "")
+                              ])),
+                      SizedBox(
+                        height: screenSize.screenHeight * 3,
+                      ),
+                      getElement("Problem", qpcr.problem),
+                      Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: screenSize.screenWidth * 5),
+                          child: Table(
+                              columnWidths: {
+                                0: FlexColumnWidth(2.5),
+                                1: FlexColumnWidth(1),
+                                2: FlexColumnWidth(1),
+                                3: FlexColumnWidth(1)
+                              },
+                              border: TableBorder.symmetric(
+                                  outside: BorderSide(width: 3),
+                                  inside: BorderSide(width: 1)),
+                              children: [
+                                getFourColTableRow('Problem Description',
+                                    'Defect Rank', 'Defective Qty', '% Defect'),
+                                getFourColTableRow(
+                                    qpcr.problemDescription,
+                                    qpcr.defectRank,
+                                    qpcr.defectiveQuantity.toString(),
+                                    qpcr.totalLotQty != null
+                                        ? ((qpcr.defectiveQuantity * 100) /
+                                                    qpcr.totalLotQty)
+                                                .toStringAsFixed(2)
+                                                .toString() +
+                                            ' %'
+                                        : ((qpcr.defectiveQuantity * 100) /
+                                                    (qpcr.productionOrderQty +
+                                                        qpcr.defectiveQuantity))
+                                                .toStringAsFixed(2)
+                                                .toString() +
+                                            ' %')
+                              ])),
+                      getElement("Raising Department", qpcr.raisingDept),
+                      getElement("Raising Person", qpcr.raisingPerson.username),
+                      getElement("QPCR Accepted By:",
+                          (qpcr.status >= 1) ? qpcr.acceptingPerson : "-"),
+                      getElement(
+                          "Target Submitting Date",
+                          (qpcr.status >= 1)
+                              ? qpcr.targetSubmittingDate
+                                  .toString()
+                                  .substring(0, 10)
+                              : "-"),
                       Text(
-                        widget.qpcr.machine.machineCode,
+                        "OK Image",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: screenSize.screenHeight * 3,
-                          fontFamily: "Montserrat",
                           fontWeight: FontWeight.normal,
                         ),
                       ),
                       SizedBox(
-                        height: screenSize.screenHeight * 2,
+                        height: screenSize.screenHeight * 50,
+                        width: screenSize.screenWidth * 100,
+                        child:
+                            (qpcr.okPhotoURL == null || qpcr.okPhotoURL == "")
+                                ? Image.network(
+                                    photo,
+                                    fit: BoxFit.contain,
+                                  )
+                                : Image.network(qpcr.okPhotoURL),
                       ),
-                      Text(
-                        widget.qpcr.machine.machineName,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: screenSize.screenHeight * 3,
-                          fontFamily: "Montserrat",
-                          fontWeight: FontWeight.normal,
+                      Padding(
+                        padding:
+                            EdgeInsets.only(top: screenSize.screenHeight * 3),
+                        child: Text(
+                          "NG Image",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: screenSize.screenHeight * 3,
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
                       ),
+                      SizedBox(
+                        height: screenSize.screenHeight * 50,
+                        width: screenSize.screenWidth * 100,
+                        child:
+                            (qpcr.ngPhotoURL == null || qpcr.ngPhotoURL == "")
+                                ? Image.network(
+                                    photo,
+                                    fit: BoxFit.contain,
+                                  )
+                                : Image.network(qpcr.ngPhotoURL),
+                      ),
+                      getElement(
+                          'Status',
+                          qpcr.status <= 0
+                              ? "Not yet Accepted"
+                              : "QPCR Accepted"),
+                      SizedBox(
+                        height: screenSize.screenHeight * 3,
+                      )
                     ],
                   ),
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Padding(
-                      padding:
-                          EdgeInsets.only(left: screenSize.screenWidth * 5),
-                      child: Container(
-                        child: Align(
-                          alignment: Alignment.topCenter,
-                          child: Text(
-                            "Problem: ",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: screenSize.screenHeight * 2,
-                              fontFamily: "Roboto",
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: screenSize.screenWidth * 60,
-                      height: screenSize.screenHeight * 10,
-                      child: ListView(
-                        padding:
-                            EdgeInsets.only(right: screenSize.screenWidth * 5),
-                        children: [
-                          Text(
-                            widget.qpcr.problem,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: screenSize.screenHeight * 2,
-                              fontFamily: "Roboto",
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Padding(
-                      padding:
-                          EdgeInsets.only(left: screenSize.screenWidth * 5),
-                      child: Container(
-                        child: Align(
-                          alignment: Alignment.topCenter,
-                          child: Text(
-                            "Description: ",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: screenSize.screenHeight * 2,
-                              fontFamily: "Roboto",
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: screenSize.screenWidth * 60,
-                      height: screenSize.screenHeight * 15,
-                      child: ListView(
-                        padding:
-                            EdgeInsets.only(right: screenSize.screenWidth * 5),
-                        children: [
-                          Text(
-                            widget.qpcr.problemDescription,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: screenSize.screenHeight * 2,
-                              fontFamily: "Roboto",
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                getElement("Raising Department", widget.qpcr.raisingDept),
-                getElement(
-                    "Responsible Department", widget.qpcr.deptResponsible),
-                getElement("Raising Date",
-                    widget.qpcr.raisingDate.toString().substring(0, 10)),
-                getElement("Raising Person", widget.qpcr.raisingPerson),
-                getElement(
-                    "QPCR Accepted By:",
-                    (widget.qpcr.status >= 1)
-                        ? widget.qpcr.acceptingPerson
-                        : "-"),
-                getElement("Root Cause",
-                    (widget.qpcr.status >= 2) ? widget.qpcr.rootCause : '-'),
-                getElement("Action Decided",
-                    (widget.qpcr.status >= 2) ? widget.qpcr.action : "-"),
-                getElement(
-                    "Target Date",
-                    (widget.qpcr.status >= 2)
-                        ? widget.qpcr.targetDate.substring(0, 10)
-                        : "-"),
-                SizedBox(
-                  height: screenSize.screenHeight * 50,
-                  width: screenSize.screenWidth * 100,
-                  child: (widget.qpcr.photoURL == null ||
-                          widget.qpcr.photoURL == "")
-                      ? Image.network(
-                          photo,
-                          fit: BoxFit.contain,
-                        )
-                      : Image.network(widget.qpcr.photoURL),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: screenSize.screenHeight * 2.5),
-                  child: Text(
-                    "Status:",
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: screenSize.screenHeight * 2.5,
-                      fontFamily: "Montserrat",
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ),
-                Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: screenSize.screenHeight * 1),
-                    child: Container(
-                        height: screenSize.screenHeight * 15,
-                        child: getImage(widget.qpcr.status))),
-              ],
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }

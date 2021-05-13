@@ -333,7 +333,7 @@ class ReusableQPCRListCard extends StatelessWidget {
                               height: screenSize.screenHeight * 1,
                             ),
                             Text(
-                              acceptingPerson,
+                              acceptingPerson == null ? "" : acceptingPerson,
                               softWrap: true,
                               textAlign: TextAlign.center,
                               style: TextStyle(

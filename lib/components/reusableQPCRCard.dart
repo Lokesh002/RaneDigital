@@ -6,54 +6,50 @@ import 'package:rane_dms/components/courseCard.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 
 class ReusableQPCRCard extends StatelessWidget {
-  final String problem;
+  final String qpcrNo;
   final String lastUpdate;
-  final String lineName;
+  final String partName;
   final Function onTap;
   final Function onChangeTap;
   final Color color;
-  final String machineCode;
+  final String concernType;
   final int status;
+  final String defectRank;
   final String issueDate;
   final String raisingDept;
   ReusableQPCRCard(
-      {this.problem,
+      {this.qpcrNo,
       this.raisingDept,
       this.status,
       this.lastUpdate,
-      this.lineName,
+      this.defectRank,
+      this.partName,
       this.issueDate,
       this.onTap,
       this.onChangeTap,
       this.color,
-      this.machineCode});
+      this.concernType});
   String getInitials(String name) {
     String a = name.trim();
     return a.substring(0, 1).toUpperCase();
   }
 
-  Widget getImage(int status) {
-    switch (status) {
-      case 0:
-        return Image.asset("images/0.png");
+  Widget getImage(String defectRank) {
+    switch (defectRank) {
+      case "A":
+        return Image.asset("images/A.png");
 
-      case 1:
-        return Image.asset("images/1.png");
+      case "B":
+        return Image.asset("images/B.png");
 
-      case 2:
-        return Image.asset("images/2.png");
+      case "C":
+        return Image.asset("images/C.png");
 
-      case 3:
-        return Image.asset("images/3.png");
+      case "D":
+        return Image.asset("images/D.png");
 
-      case 4:
-        return Image.asset("images/4.png");
-      case 5:
-        return Image.asset("images/4.png");
-      case 6:
-        return Image.asset("images/rejected.png");
       default:
-        return Image.asset("images/logo.png");
+        return Image.asset("images/D.png");
     }
   }
 
@@ -107,16 +103,13 @@ class ReusableQPCRCard extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: screenSize.screenWidth * 2.5),
-                          child: SizedBox(
-                            width: screenSize.screenWidth * 15,
-                            height: screenSize.screenWidth * 15,
-                            child: Material(
-                              color: Theme.of(context).primaryColor,
-                              elevation: 5.0,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(screenSize.screenHeight * 1),
-                              ),
-                              child: Center(child: getImage(status)),
+                          child: CircleAvatar(
+                            radius: screenSize.screenWidth * 8.5,
+                            backgroundColor: Colors.white,
+                            child: SizedBox(
+                              width: screenSize.screenWidth * 15,
+                              height: screenSize.screenWidth * 15,
+                              child: Center(child: getImage(defectRank)),
                             ),
                           ),
                         ),
@@ -138,7 +131,7 @@ class ReusableQPCRCard extends StatelessWidget {
                             Container(
                               width: screenSize.screenWidth * 60,
                               child: Text(
-                                '$problem',
+                                '$qpcrNo',
                                 overflow: TextOverflow.clip,
                                 style: TextStyle(
                                     color: Colors.black,
@@ -150,7 +143,7 @@ class ReusableQPCRCard extends StatelessWidget {
                               height: screenSize.screenHeight * 1,
                             ),
                             Text(
-                              '$lineName',
+                              '$partName',
                               style: TextStyle(
                                 fontSize: screenSize.screenHeight * 2,
                                 color: Colors.black,
@@ -163,7 +156,7 @@ class ReusableQPCRCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Machine: $machineCode',
+                                  'Concern Type: $concernType',
                                   style: TextStyle(
                                     fontSize: screenSize.screenHeight * 1.5,
                                     color: getColor(status),

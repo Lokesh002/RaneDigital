@@ -6,16 +6,17 @@ import 'package:rane_dms/components/lineDataStructure.dart';
 import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
-import 'package:rane_dms/screens/QPCR/generateQPCR/enterQPCRDataScreen.dart';
 import 'package:rane_dms/screens/homeScreen.dart';
 import 'package:rane_dms/screens/pfu/generatePfu/addLineAndMachine/addMachineScreen.dart';
+import 'package:rane_dms/screens/pfu/generatePfu/enterPfuDataScreen.dart';
 
-class GenerateQPCRScreen extends StatefulWidget {
+class PMSPastDataFilterScreen extends StatefulWidget {
   @override
-  _GenerateQPCRScreenState createState() => _GenerateQPCRScreenState();
+  _PMSPastDataFilterScreenState createState() =>
+      _PMSPastDataFilterScreenState();
 }
 
-class _GenerateQPCRScreenState extends State<GenerateQPCRScreen> {
+class _PMSPastDataFilterScreenState extends State<PMSPastDataFilterScreen> {
   String selectedLine;
   String selectedMachine;
   final _formKey = GlobalKey<FormState>();
@@ -369,7 +370,7 @@ class _GenerateQPCRScreenState extends State<GenerateQPCRScreen> {
 
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
-                                return EnterQPCRDataScreen(line, machine, dept);
+                                return EnterPFUDataScreen(line, machine, dept);
                               }));
                             } else {}
                           }),

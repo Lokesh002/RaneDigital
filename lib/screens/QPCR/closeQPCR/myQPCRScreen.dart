@@ -46,7 +46,7 @@ class _MyQPCRScreenState extends State<MyQPCRScreen> {
     String myDept = await savedData.getDepartment();
     Networking networking = Networking();
 
-    var data = await networking.postData('QPCR/getQPCR', {
+    var data = await networking.postData('QPCR/getQPCRListShort', {
       "status": "mineOpen",
       "raisingDepartment": myDept,
       "departmentResponsible": widget.selectedDepartment
@@ -54,7 +54,7 @@ class _MyQPCRScreenState extends State<MyQPCRScreen> {
 
     QPCRList qpcrListMaker = QPCRList();
     if (data != null) {
-      qpcrList = qpcrListMaker.getQPCRList(data);
+      qpcrList = qpcrListMaker.getQPCRShortList(data);
     } else {
       //QPCRList = QPCRListMaker.getQPCRList([]);
     }
@@ -68,17 +68,17 @@ class _MyQPCRScreenState extends State<MyQPCRScreen> {
       case 4:
         return () {
           setState(() {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return ConfirmCloseQPCRScreen(qpcr);
-            }));
+            // Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //   return ConfirmCloseQPCRScreen(qpcr);
+            // }));
           });
         };
       case 6:
         return () {
           setState(() {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return DeleteQPCRScreen(qpcr);
-            }));
+            // Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //   return DeleteQPCRScreen(qpcr);
+            // }));
           });
         };
       default:
@@ -127,6 +127,7 @@ class _MyQPCRScreenState extends State<MyQPCRScreen> {
                   child: ListView.builder(
                       itemBuilder: (BuildContext cntxt, int index) {
                         return ReusableMyQPCRCard(
+                          defectRank: qpcrList[index].defectRank,
                           issueDate: (qpcrList[index].raisingDate == null)
                               ? " "
                               : (qpcrList[index].raisingDate.day.toString() +
@@ -138,8 +139,9 @@ class _MyQPCRScreenState extends State<MyQPCRScreen> {
                           color: getQPCRColor(qpcrList[index].status),
                           respDept: qpcrList[index].deptResponsible,
                           problem: qpcrList[index].problem,
-                          machineCode: qpcrList[index].machine.machineCode,
-                          lineName: qpcrList[index].lineName,
+                          qpcrNo: qpcrList[index].qpcrNo,
+                          conernType: qpcrList[index].concernType,
+                          partName: qpcrList[index].partName,
                           onTap: moveNextPage(
                               qpcrList[index].status, qpcrList[index]),
                         );

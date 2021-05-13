@@ -74,7 +74,7 @@ class _ClosePFUScreenState extends State<ClosePFUScreen> {
                     child: Container(
                       height: screenSize.screenHeight * 10,
                       child: Text(
-                        "Responsible Department",
+                        "Other Department",
                         softWrap: true,
                         style: TextStyle(
                             color: Theme.of(context).primaryColor,

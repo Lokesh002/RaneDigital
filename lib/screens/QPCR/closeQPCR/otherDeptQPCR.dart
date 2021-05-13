@@ -32,7 +32,7 @@ class _OtherDeptQPCRState extends State<OtherDeptQPCR> {
     print(widget.selectedDepartment);
     print(myDept);
 
-    var data = await networking.postData('QPCR/getQPCR', {
+    var data = await networking.postData('QPCR/getQPCRListShort', {
       "status": "open",
       "raisingDepartment": widget.selectedDepartment,
       "departmentResponsible": myDept
@@ -40,7 +40,7 @@ class _OtherDeptQPCRState extends State<OtherDeptQPCR> {
     print(data);
     QPCRList qpcrListMaker = QPCRList();
     if (data != null) {
-      qpcrList = qpcrListMaker.getQPCRList(data);
+      qpcrList = qpcrListMaker.getQPCRShortList(data);
     } else {
       //QPCRList = QPCRListMaker.getQPCRList([]);
     }
@@ -54,50 +54,50 @@ class _OtherDeptQPCRState extends State<OtherDeptQPCR> {
       case 0:
         return () {
           setState(() {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return AcceptQPCRScreen(qpcr);
-            }));
+            // Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //   return AcceptQPCRScreen(qpcr);
+            // }));
           });
         };
       case 1:
         return () {
           setState(() {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return EnterQPCRDetails(qpcr);
-            }));
+            // Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //   return EnterQPCRDetails(qpcr);
+            // }));
           });
         };
       case 2:
         return () {
           setState(() {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return QPCRTakeActionScreen(qpcr);
-            }));
+            // Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //   return QPCRTakeActionScreen(qpcr);
+            // }));
           });
         };
       case 3:
         return () {
           setState(() {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return QPCRStandardizeScreen(qpcr);
-            }));
+            // Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //   return QPCRStandardizeScreen(qpcr);
+            // }));
           });
         };
       case 4:
         return () {
           setState(() {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return MyQPCRStatusScreen(qpcr);
-            }));
+            // Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //   return MyQPCRStatusScreen(qpcr);
+            // }));
           });
         };
 
       default:
         return () {
           setState(() {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return AcceptQPCRScreen(qpcr);
-            }));
+            // Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //   return AcceptQPCRScreen(qpcr);
+            // }));
           });
         };
     }
@@ -158,7 +158,9 @@ class _OtherDeptQPCRState extends State<OtherDeptQPCR> {
                   height: screenSize.screenHeight * 80,
                   child: ListView.builder(
                       itemBuilder: (BuildContext cntxt, int index) {
+                        print(qpcrList[index].raisingDate);
                         return ReusableQPCRCard(
+                            defectRank: qpcrList[index].defectRank,
                             issueDate: (qpcrList[index].raisingDate == null)
                                 ? " "
                                 : (qpcrList[index].raisingDate.day.toString() +
@@ -175,11 +177,16 @@ class _OtherDeptQPCRState extends State<OtherDeptQPCR> {
                             status: qpcrList[index].status,
                             color: getQPCRColor(qpcrList[index].status),
                             raisingDept: qpcrList[index].raisingDept,
-                            problem: qpcrList[index].problem,
-                            machineCode: qpcrList[index].machine.machineCode,
-                            lineName: qpcrList[index].lineName,
-                            onTap: moveNextPage(
-                                qpcrList[index].status, qpcrList[index]));
+                            qpcrNo: qpcrList[index].qpcrNo,
+                            concernType: qpcrList[index].concernType,
+                            partName: qpcrList[index].partName,
+                            onTap: () async {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          AcceptQPCRScreen(qpcrList[index])));
+                            });
                       },
                       itemCount: qpcrList.length,
                       padding: EdgeInsets.fromLTRB(

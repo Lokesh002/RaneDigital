@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -90,10 +92,9 @@ class _QPCRListScreenState extends State<QPCRListScreen> {
     Networking networking = Networking();
     getBody();
     QPCRList qpcrList = QPCRList();
-    var data = await networking.postData('qpcr/getqpcr', body);
-    if (data != "Cannot get qpcrs" && data != null) {
-      this.qpcrList = qpcrList.getQPCRList(data);
-      print("hahaha" + data.toString());
+    var data = await networking.postData('qpcr/getQPCRListLong', body);
+    if (data != "Nothing Found" && data != null) {
+      this.qpcrList = qpcrList.getQPCRLongList(data);
 
       isLoaded = true;
 
@@ -419,13 +420,14 @@ class _QPCRListScreenState extends State<QPCRListScreen> {
                       itemBuilder: (BuildContext cntxt, int index) {
                         return ReusableQPCRListCard(
                             index: index,
-                            rootCause: qpcrList[index].rootCause,
+                            rootCause: qpcrList[index].concernType,
                             description: qpcrList[index].problemDescription,
                             status: qpcrList[index].status,
-                            effectingAreas: qpcrList[index].effectingAreas,
+                            effectingAreas: qpcrList[index].model,
                             deptResponsible: qpcrList[index].deptResponsible,
                             raisingDepartment: qpcrList[index].raisingDept,
-                            raisingPerson: qpcrList[index].raisingPerson,
+                            raisingPerson:
+                                qpcrList[index].raisingPerson.username,
                             acceptingPerson: qpcrList[index].acceptingPerson,
                             date: (qpcrList[index].raisingDate == null)
                                 ? " "
@@ -441,33 +443,45 @@ class _QPCRListScreenState extends State<QPCRListScreen> {
                                         .year
                                         .toString()),
                             color: Colors.white,
-                            action: qpcrList[index].action,
-                            targetDate: (qpcrList[index].targetDate == null ||
-                                    qpcrList[index].targetDate == "")
+                            action: qpcrList[index].defectRank,
+                            targetDate: (qpcrList[index].detectionStage.detectionMachine == null || qpcrList[index].targetSubmittingDate == null)
                                 ? " "
-                                : (qpcrList[index].targetDate.substring(8, 10) +
+                                : (qpcrList[index].targetSubmittingDate.toString().substring(8, 10) +
                                     "/" +
-                                    qpcrList[index].targetDate.substring(5, 7) +
+                                    qpcrList[index]
+                                        .targetSubmittingDate
+                                        .toString()
+                                        .substring(5, 7) +
                                     "/" +
-                                    qpcrList[index].targetDate.substring(0, 4)),
+                                    qpcrList[index]
+                                        .targetSubmittingDate
+                                        .toString()
+                                        .substring(0, 4)),
                             problem: qpcrList[index].problem,
-                            machine: qpcrList[index].machine.machineCode,
-                            line: qpcrList[index].lineName,
-                            actualClosingTime:
-                                (qpcrList[index].actualClosingTime == null ||
-                                        qpcrList[index].actualClosingTime == "")
-                                    ? " "
-                                    : (qpcrList[index]
-                                            .actualClosingTime
-                                            .substring(8, 10) +
-                                        "/" +
-                                        qpcrList[index]
-                                            .actualClosingTime
-                                            .substring(5, 7) +
-                                        "/" +
-                                        qpcrList[index]
-                                            .actualClosingTime
-                                            .substring(0, 4)),
+                            machine: qpcrList[index]
+                                .detectionStage
+                                .detectionMachine
+                                .machineCode,
+                            line: qpcrList[index]
+                                .detectionStage
+                                .detectionLine
+                                .lineName,
+                            actualClosingTime: (qpcrList[index].actualClosingDate == null)
+                                ? " "
+                                : (qpcrList[index]
+                                        .actualClosingDate
+                                        .toString()
+                                        .substring(8, 10) +
+                                    "/" +
+                                    qpcrList[index]
+                                        .actualClosingDate
+                                        .toString()
+                                        .substring(5, 7) +
+                                    "/" +
+                                    qpcrList[index]
+                                        .actualClosingDate
+                                        .toString()
+                                        .substring(0, 4)),
                             onChangeTap: () {},
                             onTap: () {});
                       },
