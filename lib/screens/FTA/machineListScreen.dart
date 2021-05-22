@@ -62,6 +62,7 @@ class _FTAMachineListScreenState extends State<FTAMachineListScreen> {
                             MaterialPageRoute(
                                 builder: (context) => FTAListScreen(
                                     null,
+                                    null,
                                     machines[index].machineId,
                                     machines[index].machineCode.toLowerCase() !=
                                             "others"
@@ -69,7 +70,8 @@ class _FTAMachineListScreenState extends State<FTAMachineListScreen> {
                                             " - " +
                                             machines[index].machineName
                                         : machines[index].machineName,
-                                    widget.lineId)));
+                                    widget.lineId,
+                                    null)));
                       },
                       child: Material(
                         color: Colors.white,

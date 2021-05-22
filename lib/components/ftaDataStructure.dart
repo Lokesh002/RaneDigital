@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class FTA {
   String id;
   String description;
@@ -8,6 +10,7 @@ class FTA {
   String machineName;
   String lineName;
   String lineId;
+  String photo;
   FTA(
       {this.id,
       this.description,
@@ -17,12 +20,14 @@ class FTA {
       this.machineId,
       this.parentDesc,
       this.parentId,
-      this.lineId});
+      this.lineId,
+      this.photo});
 }
 
 class FTAList {
   List<FTA> getFTAList(decodedData) {
     List<FTA> ftaList = [];
+    //log(decodedData.toString());
     List data = decodedData;
     for (int i = 0; i < data.length; i++) {
       FTA fta = FTA(
@@ -36,7 +41,8 @@ class FTAList {
           parentId: data[i]['parent'] != null ? data[i]['parent']['_id'] : null,
           parentDesc: data[i]['parent'] != null
               ? data[i]['parent']['description']
-              : null);
+              : null,
+          photo: data[i]['photoURL'] != "" ? data[i]['photoURL'] : null);
       ftaList.add(fta);
     }
     return ftaList;

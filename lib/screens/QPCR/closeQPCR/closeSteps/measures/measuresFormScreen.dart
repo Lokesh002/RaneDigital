@@ -8,6 +8,7 @@ import 'package:rane_dms/components/QPCRMeasureCard.dart';
 import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
+import 'package:rane_dms/screens/QPCR/closeQPCR/closeSteps/teamInvolved/TeamInvolvedScreen.dart';
 
 class MeasuresScreen extends StatefulWidget {
   @override
@@ -61,18 +62,20 @@ class _MeasuresScreenState extends State<MeasuresScreen> {
   }
 
   getData() {
-    drawingController.text = globalQpcr.standardization.drawingDocNumber;
-    pfdController.text = globalQpcr.standardization.pfdDocNumber;
-    fmeaController.text = globalQpcr.standardization.fmeaDocNumber;
-    cpController.text = globalQpcr.standardization.cpDocNumber;
-    pisController.text = globalQpcr.standardization.pisDocNumber;
+    if (globalQpcr.standardization != null) {
+      drawingController.text = globalQpcr.standardization.drawingDocNumber;
+      pfdController.text = globalQpcr.standardization.pfdDocNumber;
+      fmeaController.text = globalQpcr.standardization.fmeaDocNumber;
+      cpController.text = globalQpcr.standardization.cpDocNumber;
+      pisController.text = globalQpcr.standardization.pisDocNumber;
 
-    sopController.text = globalQpcr.standardization.sopDocNumber;
-    fipController.text = globalQpcr.standardization.fipDocNumber;
-    fdController.text = globalQpcr.standardization.fdDocNumber;
-    psController.text = globalQpcr.standardization.psDocNumber;
-    otherStandardController.text =
-        globalQpcr.standardization.otherStandardization;
+      sopController.text = globalQpcr.standardization.sopDocNumber;
+      fipController.text = globalQpcr.standardization.fipDocNumber;
+      fdController.text = globalQpcr.standardization.fdDocNumber;
+      psController.text = globalQpcr.standardization.psDocNumber;
+      otherStandardController.text =
+          globalQpcr.standardization.otherStandardization;
+    }
     setState(() {
       isReady = true;
     });
@@ -95,7 +98,7 @@ class _MeasuresScreenState extends State<MeasuresScreen> {
                 child: ListView(
                   children: [
                     Container(
-                      height: screenSize.screenHeight * 77,
+                      height: screenSize.screenHeight * 140,
                       width: double.infinity,
                       child: ListView.builder(
                         itemBuilder: (context, index) => QPCRMeasureCard(
@@ -105,6 +108,14 @@ class _MeasuresScreenState extends State<MeasuresScreen> {
                         itemCount: globalQpcr.measures.length,
                         scrollDirection: Axis.horizontal,
                       ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: screenSize.screenWidth * 5,
+                          top: screenSize.screenHeight * 2),
+                      child: Text("Standardization Details",
+                          style:
+                              TextStyle(fontSize: screenSize.screenHeight * 3)),
                     ),
                     getTextField(drawingController, "Drawing Number",
                         screenSize, TextInputType.text),
@@ -243,9 +254,7 @@ class _MeasuresScreenState extends State<MeasuresScreen> {
                                                 .pmOutflowMeasure ==
                                             "")) {
                                   flag = false;
-                                  log(globalQpcr.measures[i].preventiveMeasures
-                                      .pmOutflowMeasure
-                                      .toString());
+
                                   break;
                                 }
                               }
@@ -259,6 +268,12 @@ class _MeasuresScreenState extends State<MeasuresScreen> {
                                 var d = await networking.postData(
                                     'QPCR/QPCRSave', {"newQPCR": data});
                                 globalQpcr = qpcrList.getQPCR(d);
+
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            TeamInvolvedScreen()));
                                 isReady = true;
                                 setState(() {});
                               }

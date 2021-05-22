@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rane_dms/components/QPCRDataStructure.dart';
 import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/networking.dart';
@@ -68,12 +69,23 @@ class _FishBoneTabScreenState extends State<FishBoneTabScreen> {
             child: MaterialButton(
               onPressed: () async {
                 await getCausestoValidation();
-
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            CauseValidationScreen(globalQpcr)));
+                if ((globalQpcr.fishBoneAnalysis.man != null &&
+                        globalQpcr.fishBoneAnalysis.man.isNotEmpty) ||
+                    (globalQpcr.fishBoneAnalysis.material != null &&
+                        globalQpcr.fishBoneAnalysis.material.isNotEmpty) ||
+                    (globalQpcr.fishBoneAnalysis.machine != null &&
+                        globalQpcr.fishBoneAnalysis.machine.isNotEmpty) ||
+                    (globalQpcr.fishBoneAnalysis.method != null &&
+                        globalQpcr.fishBoneAnalysis.method.isNotEmpty)) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              CauseValidationScreen(globalQpcr)));
+                } else {
+                  Fluttertoast.showToast(
+                      msg: "Please enter at least one cause");
+                }
               },
               color: Colors.white,
               elevation: 5,

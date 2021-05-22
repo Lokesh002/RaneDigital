@@ -37,7 +37,7 @@ class _CauseValidationScreenState extends State<CauseValidationScreen> {
 
   Future _onDone() async {
     bool flag = false;
-
+    bool allInvalid = true;
     for (int i = 0; i < globalQpcr.validationReports.length; i++) {
       if (globalQpcr.validationReports[i].cause == null ||
           globalQpcr.validationReports[i].cause == "") {
@@ -51,6 +51,9 @@ class _CauseValidationScreenState extends State<CauseValidationScreen> {
       if (globalQpcr.validationReports[i].isValid == null) {
         flag = true;
       }
+      if (globalQpcr.validationReports[i].isValid == true) {
+        allInvalid = false;
+      }
       if (globalQpcr.validationReports[i].remarks == null ||
           globalQpcr.validationReports[i].remarks == "") {
         flag = true;
@@ -60,82 +63,86 @@ class _CauseValidationScreenState extends State<CauseValidationScreen> {
       Fluttertoast.showToast(
           msg: "please fill validation report and save before proceeding.");
     } else {
-      List<String> newWhyWhy = [];
-      for (ValidationReport v in globalQpcr.validationReports) {
-        if (v.isValid) {
-          newWhyWhy.add(v.cause);
+      if (allInvalid) {
+        Fluttertoast.showToast(msg: "All causes cannot be Invalid");
+      } else {
+        List<String> newWhyWhy = [];
+        for (ValidationReport v in globalQpcr.validationReports) {
+          if (v.isValid) {
+            newWhyWhy.add(v.cause);
+          }
         }
-      }
 
-      List<WhyWhyAnalysis> oldWhyWhy = [];
-      oldWhyWhy.addAll(globalQpcr.whyWhyAnalysis);
+        List<WhyWhyAnalysis> oldWhyWhy = [];
+        oldWhyWhy.addAll(globalQpcr.whyWhyAnalysis);
 
-      int oldIndex = 0;
-      List<WhyWhyAnalysis> res = [];
-      if (oldWhyWhy != null && oldWhyWhy.length != 0) {
-        for (int i = 0; i < newWhyWhy.length; i++) {
-          if (oldIndex < oldWhyWhy.length) {
-            if (newWhyWhy[i] == oldWhyWhy[oldIndex].problem) {
-              res.add(oldWhyWhy[oldIndex]);
-              oldIndex++;
-              print("true1");
-            } else {
-              bool flag = false;
-              print(i);
-              for (int j = oldIndex; j < oldWhyWhy.length; j++) {
-                print("__$j");
-                if (newWhyWhy[i] == oldWhyWhy[j].problem) {
-                  print("true");
-                  res.add(oldWhyWhy[j]);
-                  oldWhyWhy.removeRange(oldIndex, j);
-                  print("old: " + oldWhyWhy.toString());
-                  flag = true;
-                  oldIndex = oldIndex + 1;
-                  break;
+        int oldIndex = 0;
+        List<WhyWhyAnalysis> res = [];
+        if (oldWhyWhy != null && oldWhyWhy.length != 0) {
+          for (int i = 0; i < newWhyWhy.length; i++) {
+            if (oldIndex < oldWhyWhy.length) {
+              if (newWhyWhy[i] == oldWhyWhy[oldIndex].problem) {
+                res.add(oldWhyWhy[oldIndex]);
+                oldIndex++;
+                print("true1");
+              } else {
+                bool flag = false;
+                print(i);
+                for (int j = oldIndex; j < oldWhyWhy.length; j++) {
+                  print("__$j");
+                  if (newWhyWhy[i] == oldWhyWhy[j].problem) {
+                    print("true");
+                    res.add(oldWhyWhy[j]);
+                    oldWhyWhy.removeRange(oldIndex, j);
+                    print("old: " + oldWhyWhy.toString());
+                    flag = true;
+                    oldIndex = oldIndex + 1;
+                    break;
+                  }
+                }
+
+                if (!flag) {
+                  print(false);
+                  WhyWhyAnalysis whyWhyAnalysis = WhyWhyAnalysis();
+                  whyWhyAnalysis.problem = newWhyWhy[i];
+                  whyWhyAnalysis.id = null;
+                  whyWhyAnalysis.detectionWhyWhy = null;
+                  whyWhyAnalysis.detectionWhyWhy = null;
+                  res.add(whyWhyAnalysis);
                 }
               }
-
-              if (!flag) {
-                print(false);
-                WhyWhyAnalysis whyWhyAnalysis = WhyWhyAnalysis();
-                whyWhyAnalysis.problem = newWhyWhy[i];
-                whyWhyAnalysis.id = null;
-                whyWhyAnalysis.detectionWhyWhy = null;
-                whyWhyAnalysis.detectionWhyWhy = null;
-                res.add(whyWhyAnalysis);
-              }
+            } else {
+              WhyWhyAnalysis whyWhyAnalysis = WhyWhyAnalysis();
+              whyWhyAnalysis.problem = newWhyWhy[i];
+              whyWhyAnalysis.id = null;
+              whyWhyAnalysis.detectionWhyWhy = null;
+              whyWhyAnalysis.detectionWhyWhy = null;
+              res.add(whyWhyAnalysis);
             }
-          } else {
+          }
+        } else {
+          for (int i = 0; i < newWhyWhy.length; i++) {
             WhyWhyAnalysis whyWhyAnalysis = WhyWhyAnalysis();
             whyWhyAnalysis.problem = newWhyWhy[i];
-            whyWhyAnalysis.id = null;
+            whyWhyAnalysis.id = i;
             whyWhyAnalysis.detectionWhyWhy = null;
             whyWhyAnalysis.detectionWhyWhy = null;
             res.add(whyWhyAnalysis);
           }
         }
-      } else {
-        for (int i = 0; i < newWhyWhy.length; i++) {
-          WhyWhyAnalysis whyWhyAnalysis = WhyWhyAnalysis();
-          whyWhyAnalysis.problem = newWhyWhy[i];
-          whyWhyAnalysis.id = i;
-          whyWhyAnalysis.detectionWhyWhy = null;
-          whyWhyAnalysis.detectionWhyWhy = null;
-          res.add(whyWhyAnalysis);
-        }
+
+        globalQpcr.whyWhyAnalysis = res;
+
+        Networking networking = Networking();
+        QPCRList qpcrList = QPCRList();
+        var data = qpcrList.QpcrToMap(globalQpcr);
+
+        var d = await networking.postData('QPCR/QPCRSave', {"newQPCR": data});
+        globalQpcr = qpcrList.getQPCR(d);
+
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => WhyWhyScreen()));
       }
-
-      globalQpcr.whyWhyAnalysis = res;
-
-      Networking networking = Networking();
-      QPCRList qpcrList = QPCRList();
-      var data = qpcrList.QpcrToMap(globalQpcr);
-
-      var d = await networking.postData('QPCR/QPCRSave', {"newQPCR": data});
-      globalQpcr = qpcrList.getQPCR(d);
-
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => WhyWhyScreen()));
     }
   }
 

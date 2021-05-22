@@ -120,7 +120,18 @@ class QPCRList {
             data['measures'][j]['correctiveMeasures']['CMOutflowMeasure'];
         correctiveMeasures.cmOutflowPhotoURL =
             data['measures'][j]['correctiveMeasures']['CMOutflowPhotoURL'];
+
+        correctiveMeasures.cmOccurrenceTargetDate = data['measures'][j]
+            ['correctiveMeasures']['CMOccurrenceMeasureTargetDate'];
+        correctiveMeasures.cmOccurrenceResp = data['measures'][j]
+            ['correctiveMeasures']['CMOccurenceResponsibility'];
+        correctiveMeasures.cmOutflowResp =
+            data['measures'][j]['correctiveMeasures']['CMOutflowResponsibiliy'];
+        correctiveMeasures.cmOutflowTargetDate = data['measures'][j]
+            ['correctiveMeasures']['CMOutflowMeasureTargetDate'];
+
         measures.correctiveMeasures = correctiveMeasures;
+
         preventiveMeasures.pmOccurrenceMeasure =
             data['measures'][j]['preventiveMeasures']['PMOccurenceMeasure'];
         preventiveMeasures.pmOccurrencePhotoURL =
@@ -129,6 +140,14 @@ class QPCRList {
             data['measures'][j]['preventiveMeasures']['PMOutflowMeasure'];
         preventiveMeasures.pmOutflowPhotoURL =
             data['measures'][j]['preventiveMeasures']['PMOutflowPhotoURL'];
+        preventiveMeasures.pmOccurrenceTargetDate = data['measures'][j]
+            ['preventiveMeasures']['PMOccurrenceMeasureTargetDate'];
+        preventiveMeasures.pmOccurrenceResp = data['measures'][j]
+            ['preventiveMeasures']['PMOccurenceResponsibility'];
+        preventiveMeasures.pmOutflowResp =
+            data['measures'][j]['preventiveMeasures']['PMOutflowResponsibiliy'];
+        preventiveMeasures.pmOutflowTargetDate = data['measures'][j]
+            ['preventiveMeasures']['PMOutflowMeasureTargetDate'];
         measures.preventiveMeasures = preventiveMeasures;
         qpcr.measures.add(measures);
       }
@@ -609,6 +628,16 @@ class QPCRList {
           qpcr.measures[i].preventiveMeasures.pmOccurrenceMeasure;
       preventiveMeasures['PMOccurencePhotoURL'] =
           qpcr.measures[i].preventiveMeasures.pmOccurrencePhotoURL;
+
+      preventiveMeasures['PMOutflowMeasureTargetDate'] =
+          qpcr.measures[i].preventiveMeasures.pmOutflowTargetDate;
+      preventiveMeasures['PMOutflowResponsibiliy'] =
+          qpcr.measures[i].preventiveMeasures.pmOutflowResp;
+      preventiveMeasures['PMOccurenceResponsibility'] =
+          qpcr.measures[i].preventiveMeasures.pmOccurrenceResp;
+      preventiveMeasures['PMOccurrenceMeasureTargetDate'] =
+          qpcr.measures[i].preventiveMeasures.pmOccurrenceTargetDate;
+
       correctiveMeasures['CMOutflowMeasure'] =
           qpcr.measures[i].correctiveMeasures.cmOutflowMeasure;
       correctiveMeasures['CMOutflowPhotoURL'] =
@@ -617,6 +646,15 @@ class QPCRList {
           qpcr.measures[i].correctiveMeasures.cmOccurrenceMeasure;
       correctiveMeasures['CMOccurencePhotoURL'] =
           qpcr.measures[i].correctiveMeasures.cmOccurrencePhotoURL;
+      correctiveMeasures['CMOutflowMeasureTargetDate'] =
+          qpcr.measures[i].correctiveMeasures.cmOutflowTargetDate;
+      correctiveMeasures['CMOutflowResponsibiliy'] =
+          qpcr.measures[i].correctiveMeasures.cmOutflowResp;
+      correctiveMeasures['CMOccurenceResponsibility'] =
+          qpcr.measures[i].correctiveMeasures.cmOccurrenceResp;
+      correctiveMeasures['CMOccurrenceMeasureTargetDate'] =
+          qpcr.measures[i].correctiveMeasures.cmOccurrenceTargetDate;
+
       measures['correctiveMeasures'] = correctiveMeasures;
       measures['preventiveMeasures'] = preventiveMeasures;
 
@@ -770,6 +808,10 @@ class PreventiveMeasures {
   String pmOutflowPhotoURL;
   String pmOccurrenceMeasure;
   String pmOccurrencePhotoURL;
+  DateTime pmOccurrenceTargetDate;
+  DateTime pmOutflowTargetDate;
+  String pmOccurrenceResp;
+  String pmOutflowResp;
 }
 
 class CorrectiveMeasures {
@@ -777,6 +819,10 @@ class CorrectiveMeasures {
   String cmOutflowPhotoURL;
   String cmOccurrenceMeasure;
   String cmOccurrencePhotoURL;
+  DateTime cmOccurrenceTargetDate;
+  DateTime cmOutflowTargetDate;
+  String cmOccurrenceResp;
+  String cmOutflowResp;
 }
 
 class StandardizationDetails {

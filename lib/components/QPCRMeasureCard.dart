@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/networking.dart';
@@ -19,11 +20,18 @@ class _QPCRMeasureCardState extends State<QPCRMeasureCard> {
   var pmOccurrenceController = TextEditingController();
   var cmOutflowController = TextEditingController();
   var cmOccurrenceController = TextEditingController();
-
+  TextEditingController cmOutflowResp = TextEditingController();
+  TextEditingController cmOccurrenceResp = TextEditingController();
+  TextEditingController pmOutflowResp = TextEditingController();
+  TextEditingController pmOccurrenceResp = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   bool isReady = false;
 
+  DateTime cmOutflowTargetDate;
+  DateTime cmOccurrenceTargetDate;
+  DateTime pmOutflowTargetDate;
+  DateTime pmOccurrenceTargetDate;
   @override
   void initState() {
     // TODO: implement initState
@@ -33,11 +41,106 @@ class _QPCRMeasureCardState extends State<QPCRMeasureCard> {
 
     pmOccurrenceController.text = globalQpcr
         .measures[widget.index].preventiveMeasures.pmOccurrenceMeasure;
+    pmOutflowResp.text =
+        globalQpcr.measures[widget.index].preventiveMeasures.pmOutflowResp;
+    pmOutflowTargetDate = globalQpcr
+        .measures[widget.index].preventiveMeasures.pmOutflowTargetDate;
+    pmOccurrenceResp.text =
+        globalQpcr.measures[widget.index].preventiveMeasures.pmOccurrenceResp;
+    pmOccurrenceTargetDate = globalQpcr
+        .measures[widget.index].preventiveMeasures.pmOccurrenceTargetDate;
     cmOccurrenceController.text = globalQpcr
         .measures[widget.index].correctiveMeasures.cmOccurrenceMeasure;
     cmOutflowController.text =
         globalQpcr.measures[widget.index].correctiveMeasures.cmOutflowMeasure;
+    cmOutflowResp.text =
+        globalQpcr.measures[widget.index].correctiveMeasures.cmOutflowResp;
+
+    cmOutflowTargetDate = globalQpcr
+        .measures[widget.index].correctiveMeasures.cmOutflowTargetDate;
+    cmOccurrenceResp.text =
+        globalQpcr.measures[widget.index].correctiveMeasures.cmOccurrenceResp;
+    cmOccurrenceTargetDate = globalQpcr
+        .measures[widget.index].correctiveMeasures.cmOccurrenceTargetDate;
+
     isReady = true;
+  }
+
+  getTextField(
+      String name, var controller, String validator, int minLine, int maxLine) {
+    return Container(
+      width: screenSize.screenWidth * 40,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: screenSize.screenWidth * 5,
+            vertical: screenSize.screenWidth * 1),
+        child: TextFormField(
+            validator: (val) => val.length < 1 ? validator : null,
+            controller: controller,
+            minLines: minLine,
+            maxLines: maxLine,
+            style: TextStyle(
+                color: Colors.black87, fontSize: screenSize.screenHeight * 2),
+            // focusNode: focusNode,
+            decoration: InputDecoration(
+              hintText: name,
+              border: OutlineInputBorder(
+                  borderRadius:
+                      BorderRadius.circular(screenSize.screenHeight * 2)),
+            )),
+      ),
+    );
+  }
+
+  getDatePicker(DateTime targetDate) {
+    return Container(
+        width: screenSize.screenWidth * 30,
+        //height: screenSize.screenHeight * 10,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.blueGrey),
+            borderRadius: BorderRadius.circular(screenSize.screenHeight * 1)),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: screenSize.screenHeight,
+              horizontal: screenSize.screenWidth * 2),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ReusableButton(
+                  onPress: () async {
+                    showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime.now().add(Duration(days: 730)),
+                    ).then((date) {
+                      targetDate = date;
+                      setState(() {});
+                    });
+                  },
+                  content: "Target Date",
+                  height: screenSize.screenHeight * 5,
+                  width: screenSize.screenWidth * 15),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: screenSize.screenWidth * 2),
+                child: Container(
+                  width: screenSize.screenWidth * 50,
+                  height: screenSize.screenHeight * 8,
+                  child: targetDate != null
+                      ? Center(
+                          child: Text(targetDate.day.toString() +
+                              " / " +
+                              targetDate.month.toString() +
+                              " / " +
+                              targetDate.year.toString()),
+                        )
+                      : Center(child: Text("Please select a date")),
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 
   SizeConfig screenSize;
@@ -50,7 +153,7 @@ class _QPCRMeasureCardState extends State<QPCRMeasureCard> {
         width: globalQpcr.measures.length > 1
             ? screenSize.screenWidth * 90
             : screenSize.screenWidth * 100,
-        height: screenSize.screenHeight * 75,
+        //height: screenSize.screenHeight * 100,
         child: isReady
             ? Padding(
                 padding: EdgeInsets.symmetric(
@@ -65,7 +168,9 @@ class _QPCRMeasureCardState extends State<QPCRMeasureCard> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(top: 16.0),
-                        child: Text('Cause ${widget.index + 1}'),
+                        child: Text('Cause ${widget.index + 1}',
+                            style: TextStyle(
+                                fontSize: screenSize.screenHeight * 3)),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 16.0),
@@ -75,63 +180,38 @@ class _QPCRMeasureCardState extends State<QPCRMeasureCard> {
                         padding: EdgeInsets.symmetric(
                             horizontal: screenSize.screenWidth * 5,
                             vertical: screenSize.screenWidth * 2),
-                        child: Text("Corrective Measures"),
+                        child: Text(
+                          "Corrective Measures",
+                          style:
+                              TextStyle(fontSize: screenSize.screenHeight * 3),
+                        ),
                       ),
                       Container(
                         width: screenSize.screenWidth * 80,
                         child: Row(
                           children: [
-                            Container(
-                              width: screenSize.screenWidth * 40,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: screenSize.screenWidth * 5,
-                                    vertical: screenSize.screenWidth * 1),
-                                child: TextFormField(
-                                    validator: (val) => val.length < 1
-                                        ? 'Enter Corrective Outflow Measure'
-                                        : null,
-                                    controller: cmOutflowController,
-                                    minLines: 5,
-                                    maxLines: 5,
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontSize: screenSize.screenHeight * 2),
-                                    // focusNode: focusNode,
-                                    decoration: InputDecoration(
-                                      hintText: 'Corrective Outflow Prevention',
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              screenSize.screenHeight * 2)),
-                                    )),
-                              ),
-                            ),
-                            Container(
-                              width: screenSize.screenWidth * 40,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: screenSize.screenWidth * 5,
-                                    vertical: screenSize.screenWidth * 1),
-                                child: TextFormField(
-                                    validator: (val) => val.length < 1
-                                        ? 'Enter Corrective Occurrence Measure'
-                                        : null,
-                                    controller: cmOccurrenceController,
-                                    minLines: 5,
-                                    maxLines: 5,
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontSize: screenSize.screenHeight * 2),
-                                    // focusNode: focusNode,
-                                    decoration: InputDecoration(
-                                      hintText:
-                                          'Corrective Occurrence Prevention',
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              screenSize.screenHeight * 2)),
-                                    )),
-                              ),
-                            ),
+                            Column(children: [
+                              getTextField(
+                                  "Corrective Outflow Prevention",
+                                  cmOutflowController,
+                                  "Enter Corrective Outflow Measure",
+                                  5,
+                                  5),
+                              getDatePicker(cmOutflowTargetDate),
+                              getTextField('Responsibility', cmOutflowResp,
+                                  'Enter Responsible Person', 1, 1),
+                            ]),
+                            Column(children: [
+                              getTextField(
+                                  "Corrective Occurrence Prevention",
+                                  cmOccurrenceController,
+                                  "Enter Corrective Occurrence Measure",
+                                  5,
+                                  5),
+                              getDatePicker(cmOccurrenceTargetDate),
+                              getTextField('Responsibility', cmOccurrenceResp,
+                                  'Enter Responsible Person', 1, 1),
+                            ]),
                           ],
                         ),
                       ),
@@ -139,66 +219,36 @@ class _QPCRMeasureCardState extends State<QPCRMeasureCard> {
                         padding: EdgeInsets.symmetric(
                             horizontal: screenSize.screenWidth * 5,
                             vertical: screenSize.screenWidth * 2),
-                        child: Text("Preventive Measures"),
+                        child: Text("Preventive Measures",
+                            style: TextStyle(
+                                fontSize: screenSize.screenHeight * 3)),
                       ),
                       Container(
                         width: screenSize.screenWidth * 80,
                         child: Row(
                           children: [
-                            Container(
-                              width: screenSize.screenWidth * 40,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: screenSize.screenWidth * 5,
-                                    vertical: screenSize.screenWidth * 1),
-                                child: TextFormField(
-                                  validator: (val) => val.length < 1
-                                      ? 'Enter Preventive Outflow Measure'
-                                      : null,
-                                  controller: pmOutflowController,
-                                  textAlign: TextAlign.start,
-                                  minLines: 5,
-                                  maxLines: 5,
-                                  style: TextStyle(
-                                      color: Colors.black87,
-                                      fontSize: screenSize.screenHeight * 2),
-                                  // focusNode: focusNode,
-                                  decoration: InputDecoration(
-                                    hintText: 'Preventive Outflow Prevention',
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            screenSize.screenHeight * 2)),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: screenSize.screenWidth * 40,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: screenSize.screenWidth * 5,
-                                    vertical: screenSize.screenWidth * 1),
-                                child: TextFormField(
-                                  validator: (val) => val.length < 1
-                                      ? 'Enter Preventive Occurrence Measure'
-                                      : null,
-                                  minLines: 5,
-                                  maxLines: 5,
-                                  style: TextStyle(
-                                      color: Colors.black87,
-                                      fontSize: screenSize.screenHeight * 2),
-                                  // focusNode: focusNode,
-                                  decoration: InputDecoration(
-                                    hintText:
-                                        'Preventive Occurrence Prevention',
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            screenSize.screenHeight * 2)),
-                                  ),
-                                  controller: pmOccurrenceController,
-                                ),
-                              ),
-                            ),
+                            Column(children: [
+                              getTextField(
+                                  "Preventive Outflow Prevention",
+                                  pmOutflowController,
+                                  "Enter Preventive Outflow Measure",
+                                  5,
+                                  5),
+                              getDatePicker(pmOutflowTargetDate),
+                              getTextField('Responsibility', pmOutflowResp,
+                                  'Enter Responsible Person', 1, 1),
+                            ]),
+                            Column(children: [
+                              getTextField(
+                                  "Preventive Occurrence Prevention",
+                                  pmOccurrenceController,
+                                  "Enter Preventive Occurrence Measure",
+                                  5,
+                                  5),
+                              getDatePicker(pmOccurrenceTargetDate),
+                              getTextField('Responsibility', pmOccurrenceResp,
+                                  'Enter Responsible Person', 1, 1),
+                            ]),
                           ],
                         ),
                       ),
@@ -208,33 +258,80 @@ class _QPCRMeasureCardState extends State<QPCRMeasureCard> {
                           child: ReusableButton(
                             onPress: () async {
                               if (_formKey.currentState.validate()) {
-                                isReady = false;
-                                setState(() {});
-                                globalQpcr.measures[widget.index]
-                                        .correctiveMeasures.cmOutflowMeasure =
-                                    cmOutflowController.text;
-                                globalQpcr
-                                        .measures[widget.index]
-                                        .correctiveMeasures
-                                        .cmOccurrenceMeasure =
-                                    cmOccurrenceController.text;
-                                globalQpcr.measures[widget.index]
-                                        .preventiveMeasures.pmOutflowMeasure =
-                                    pmOutflowController.text;
-                                globalQpcr
-                                        .measures[widget.index]
-                                        .preventiveMeasures
-                                        .pmOccurrenceMeasure =
-                                    pmOccurrenceController.text;
-                                Networking networking = Networking();
-                                QPCRList qpcrList = QPCRList();
-                                var data = qpcrList.QpcrToMap(globalQpcr);
+                                if (cmOccurrenceTargetDate != null &&
+                                    pmOccurrenceTargetDate != null &&
+                                    cmOutflowTargetDate != null &&
+                                    pmOutflowTargetDate != null) {
+                                  isReady = false;
+                                  setState(() {});
+                                  globalQpcr.measures[widget.index]
+                                          .correctiveMeasures.cmOutflowMeasure =
+                                      cmOutflowController.text;
+                                  globalQpcr
+                                          .measures[widget.index]
+                                          .correctiveMeasures
+                                          .cmOccurrenceMeasure =
+                                      cmOccurrenceController.text;
+                                  globalQpcr.measures[widget.index]
+                                          .preventiveMeasures.pmOutflowMeasure =
+                                      pmOutflowController.text;
+                                  globalQpcr
+                                          .measures[widget.index]
+                                          .preventiveMeasures
+                                          .pmOccurrenceMeasure =
+                                      pmOccurrenceController.text;
 
-                                var d = await networking.postData(
-                                    'QPCR/QPCRSave', {"newQPCR": data});
-                                globalQpcr = qpcrList.getQPCR(d);
-                                isReady = true;
-                                setState(() {});
+                                  globalQpcr
+                                      .measures[widget.index]
+                                      .correctiveMeasures
+                                      .cmOutflowResp = cmOutflowResp.text;
+                                  globalQpcr
+                                      .measures[widget.index]
+                                      .correctiveMeasures
+                                      .cmOccurrenceResp = cmOccurrenceResp.text;
+                                  globalQpcr
+                                      .measures[widget.index]
+                                      .preventiveMeasures
+                                      .pmOccurrenceResp = pmOccurrenceResp.text;
+
+                                  globalQpcr
+                                      .measures[widget.index]
+                                      .preventiveMeasures
+                                      .pmOutflowResp = pmOutflowResp.text;
+
+                                  globalQpcr
+                                          .measures[widget.index]
+                                          .correctiveMeasures
+                                          .cmOutflowTargetDate =
+                                      cmOutflowTargetDate;
+                                  globalQpcr
+                                          .measures[widget.index]
+                                          .preventiveMeasures
+                                          .pmOutflowTargetDate =
+                                      pmOutflowTargetDate;
+                                  globalQpcr
+                                          .measures[widget.index]
+                                          .correctiveMeasures
+                                          .cmOccurrenceTargetDate =
+                                      cmOccurrenceTargetDate;
+                                  globalQpcr
+                                          .measures[widget.index]
+                                          .preventiveMeasures
+                                          .pmOccurrenceTargetDate =
+                                      pmOccurrenceTargetDate;
+                                  Networking networking = Networking();
+                                  QPCRList qpcrList = QPCRList();
+                                  var data = qpcrList.QpcrToMap(globalQpcr);
+
+                                  var d = await networking.postData(
+                                      'QPCR/QPCRSave', {"newQPCR": data});
+                                  globalQpcr = qpcrList.getQPCR(d);
+                                  isReady = true;
+                                  setState(() {});
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: "Please enter target date");
+                                }
                               }
                             },
                             content: "Save",
