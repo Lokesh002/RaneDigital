@@ -80,7 +80,7 @@ class _FTAGenerateScreenState extends State<FTAGenerateScreen> {
       data: formData,
     );
 
-    // print(response.data);
+    log(response.data.toString());
 
     Navigator.pop(context);
 
@@ -159,13 +159,13 @@ class _FTAGenerateScreenState extends State<FTAGenerateScreen> {
                                                     .last
                                                     .split('picker')
                                                     .last
-                                            : 'Please Add OK Photo'),
+                                            : 'Please Add FTA Photo'),
                                   ),
                                   ReusableButton(
                                       onPress: () {
                                         getFTAImage(context);
                                       },
-                                      content: "OK Image",
+                                      content: "Upload Image",
                                       height: screenSize.screenHeight * 7,
                                       width: screenSize.screenWidth * 10)
                                 ],

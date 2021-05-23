@@ -23,9 +23,14 @@ class FTAListScreen extends StatefulWidget {
 class _FTAListScreenState extends State<FTAListScreen> {
   List<FTA> ftaList = [];
   String parentDesc;
-
+  String photoURL;
   bool isLoaded = false;
   getData() async {
+    if (widget.parentFta != null) {
+      if (widget.parentFta.photo != null && widget.parentFta.photo != "") {
+        photoURL = widget.parentFta.photo;
+      }
+    }
     parentDesc = widget.parentDesc;
     Networking networking = Networking();
     var d = await networking.postData(
@@ -52,7 +57,7 @@ class _FTAListScreenState extends State<FTAListScreen> {
     screenSize = SizeConfig(context);
     return WillPopScope(
       onWillPop: () {
-        Navigator.pop(context, parentDesc);
+        Navigator.pop(context, {"desc": parentDesc, "photo": photoURL});
         return;
       },
       child: Scaffold(
@@ -70,8 +75,10 @@ class _FTAListScreenState extends State<FTAListScreen> {
                               widget.machineID,
                               widget.lineID,
                               ftaList))).then((value) {
-                    this.ftaList = value;
-                    setState(() {});
+                    if (value != null) {
+                      this.ftaList = value;
+                      setState(() {});
+                    }
                   });
                 },
                 child: Icon(
@@ -145,8 +152,13 @@ class _FTAListScreenState extends State<FTAListScreen> {
                                                           child:
                                                               FloatingActionButton(
                                                             heroTag: 'edit',
+                                                            backgroundColor:
+                                                                Colors.white,
                                                             child: Icon(
-                                                                Icons.edit),
+                                                              Icons.edit,
+                                                              color:
+                                                                  Colors.teal,
+                                                            ),
                                                             onPressed: () {
                                                               print(
                                                                   widget.photo);
@@ -158,11 +170,21 @@ class _FTAListScreenState extends State<FTAListScreen> {
                                                                               .parentId,
                                                                           widget
                                                                               .parentDesc,
-                                                                          null))).then(
+                                                                          widget
+                                                                              .parentFta
+                                                                              .photo))).then(
                                                                   (value) {
-                                                                this.parentDesc =
-                                                                    value;
-                                                                setState(() {});
+                                                                if (value !=
+                                                                    null) {
+                                                                  this.parentDesc =
+                                                                      value[
+                                                                          "desc"];
+                                                                  this.photoURL =
+                                                                      value[
+                                                                          'photo'];
+                                                                  setState(
+                                                                      () {});
+                                                                }
                                                               });
                                                             },
                                                           ),
@@ -173,15 +195,9 @@ class _FTAListScreenState extends State<FTAListScreen> {
                                                 ),
                                               ),
                                               Center(
-                                                  child: widget.parentFta
-                                                                  .photo !=
-                                                              null &&
-                                                          widget.parentFta
-                                                                  .photo !=
-                                                              ""
-                                                      ? Image.network(
-                                                          widget
-                                                              .parentFta.photo,
+                                                  child: photoURL != null &&
+                                                          photoURL != ""
+                                                      ? Image.network(photoURL,
                                                           fit: BoxFit.contain)
                                                       : SizedBox()),
                                             ],
@@ -225,8 +241,13 @@ class _FTAListScreenState extends State<FTAListScreen> {
                                                           ftaList[index - 1]
                                                               .photo))).then(
                                               (v) {
-                                            ftaList[index - 1].description = v;
-                                            setState(() {});
+                                            if (v != null) {
+                                              ftaList[index - 1].description =
+                                                  v['desc'];
+                                              ftaList[index - 1].photo =
+                                                  v['photo'];
+                                              setState(() {});
+                                            }
                                           });
                                         },
                                         child: Material(

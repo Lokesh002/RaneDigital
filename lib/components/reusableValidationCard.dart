@@ -44,7 +44,10 @@ class _ValidationCardState extends State<ValidationCard> {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            Text('Cause ${widget.index + 1}'),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Cause ${widget.index + 1}'),
+            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(widget.qpcr2.validationReports[widget.index].cause),

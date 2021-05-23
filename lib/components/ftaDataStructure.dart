@@ -27,7 +27,7 @@ class FTA {
 class FTAList {
   List<FTA> getFTAList(decodedData) {
     List<FTA> ftaList = [];
-    //log(decodedData.toString());
+    log("HAHAHHA \n   " + decodedData.toString());
     List data = decodedData;
     for (int i = 0; i < data.length; i++) {
       FTA fta = FTA(

@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           height: screenSize.screenHeight * 10,
                           width: screenSize.screenWidth * 80,
-                          content: "Production Monitoring System",
+                          content: "PMS",
                         ),
                         SizedBox(height: screenSize.screenHeight * 5),
                         ReusableButton(

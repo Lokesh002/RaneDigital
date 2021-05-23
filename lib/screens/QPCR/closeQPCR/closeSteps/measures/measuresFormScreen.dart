@@ -98,7 +98,7 @@ class _MeasuresScreenState extends State<MeasuresScreen> {
                 child: ListView(
                   children: [
                     Container(
-                      height: screenSize.screenHeight * 140,
+                      height: screenSize.screenHeight * 144,
                       width: double.infinity,
                       child: ListView.builder(
                         itemBuilder: (context, index) => QPCRMeasureCard(
