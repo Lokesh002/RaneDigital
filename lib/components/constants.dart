@@ -31,7 +31,6 @@ const departments = [
   'HR',
   'Safety',
   'SQA',
-  'QAD',
-  'Accounts',
-  'CorpMED'
+  'QAD'
+
 ];
