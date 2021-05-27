@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rane_dms/components/ftaDataStructure.dart';
 import 'package:rane_dms/components/networking.dart';
+import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 import 'package:rane_dms/screens/FTA/ftaEditScreen.dart';
 import 'package:rane_dms/screens/FTA/ftaGenerateScreen.dart';
@@ -25,7 +27,12 @@ class _FTAListScreenState extends State<FTAListScreen> {
   String parentDesc;
   String photoURL;
   bool isLoaded = false;
+  bool editAccess = false;
+  bool addAccess = false;
   getData() async {
+    editAccess = await savedData.getFTAEditAccess();
+    addAccess = await savedData.getFTAAddAccess();
+
     if (widget.parentFta != null) {
       if (widget.parentFta.photo != null && widget.parentFta.photo != "") {
         photoURL = widget.parentFta.photo;
@@ -43,6 +50,7 @@ class _FTAListScreenState extends State<FTAListScreen> {
     setState(() {});
   }
 
+  SavedData savedData = SavedData();
   @override
   void initState() {
     // TODO: implement initState
@@ -66,20 +74,24 @@ class _FTAListScreenState extends State<FTAListScreen> {
                 backgroundColor: Colors.teal,
                 heroTag: 'add',
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => FTAGenerateScreen(
-                              widget.parentId,
-                              widget.parentDesc,
-                              widget.machineID,
-                              widget.lineID,
-                              ftaList))).then((value) {
-                    if (value != null) {
-                      this.ftaList = value;
-                      setState(() {});
-                    }
-                  });
+                  if (addAccess) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FTAGenerateScreen(
+                                widget.parentId,
+                                widget.parentDesc,
+                                widget.machineID,
+                                widget.lineID,
+                                ftaList))).then((value) {
+                      if (value != null) {
+                        this.ftaList = value;
+                        setState(() {});
+                      }
+                    });
+                  } else {
+                    Fluttertoast.showToast(msg: "You are not authorized.");
+                  }
                 },
                 child: Icon(
                   Icons.add_rounded,
@@ -159,33 +171,37 @@ class _FTAListScreenState extends State<FTAListScreen> {
                                                               color:
                                                                   Colors.teal,
                                                             ),
-                                                            onPressed: () {
-                                                              print(
-                                                                  widget.photo);
-                                                              Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder: (context) => FTAEditScreen(
-                                                                          widget
-                                                                              .parentId,
-                                                                          widget
-                                                                              .parentDesc,
-                                                                          widget
-                                                                              .parentFta
-                                                                              .photo))).then(
-                                                                  (value) {
-                                                                if (value !=
-                                                                    null) {
-                                                                  this.parentDesc =
-                                                                      value[
-                                                                          "desc"];
-                                                                  this.photoURL =
-                                                                      value[
-                                                                          'photo'];
-                                                                  setState(
-                                                                      () {});
-                                                                }
-                                                              });
+                                                            onPressed:
+                                                                () async {
+                                                              if (editAccess) {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) => FTAEditScreen(
+                                                                            widget
+                                                                                .parentId,
+                                                                            widget
+                                                                                .parentDesc,
+                                                                            widget.parentFta.photo))).then(
+                                                                    (value) {
+                                                                  if (value !=
+                                                                      null) {
+                                                                    this.parentDesc =
+                                                                        value[
+                                                                            "desc"];
+                                                                    this.photoURL =
+                                                                        value[
+                                                                            'photo'];
+                                                                    setState(
+                                                                        () {});
+                                                                  }
+                                                                });
+                                                              } else {
+                                                                Fluttertoast
+                                                                    .showToast(
+                                                                        msg:
+                                                                            "You do not have access");
+                                                              }
                                                             },
                                                           ),
                                                         ),
@@ -200,6 +216,16 @@ class _FTAListScreenState extends State<FTAListScreen> {
                                                       ? Image.network(photoURL,
                                                           fit: BoxFit.contain)
                                                       : SizedBox()),
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: screenSize
+                                                            .screenHeight *
+                                                        2),
+                                                child: Divider(
+                                                  color: Colors.teal,
+                                                  thickness: 2,
+                                                ),
+                                              )
                                             ],
                                           )
                                         : Center(

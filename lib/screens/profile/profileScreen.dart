@@ -322,6 +322,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         await savedData.setUserId(null);
                                         await savedData
                                             .setAddNewUserAccess(null);
+                                        await savedData.setFTAEditAccess(null);
+                                        await savedData.setFTAAddAccess(null);
+                                        await savedData
+                                            .setFTADeleteAccess(null);
+                                        await savedData.setFTAViewAccess(null);
                                         await savedData.setAccessDept(null);
                                         await savedData.setPfuAccess(null);
                                         print(savedData.getAddNewUserAccess());

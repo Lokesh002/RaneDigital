@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rane_dms/components/ReusableBorderButton.dart';
 import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
@@ -70,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                         SizedBox(height: screenSize.screenHeight * 5),
-                        ReusableButton(
+                        ReusableBorderButton(
                           onPress: () {
                             Navigator.pushNamed(context, '/documentMainScreen');
                           },
@@ -79,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           content: "DRS",
                         ),
                         SizedBox(height: screenSize.screenHeight * 5),
-                        ReusableButton(
+                        ReusableBorderButton(
                           onPress: () {
                             Navigator.pushNamed(context, '/pfuMainScreen');
                           },
@@ -87,30 +88,30 @@ class _HomeScreenState extends State<HomeScreen> {
                           width: screenSize.screenWidth * 80,
                           content: "PFU",
                         ),
+                        // SizedBox(height: screenSize.screenHeight * 5),
+                        // ReusableButton(
+                        //   onPress: () async {
+                        //     Navigator.pushNamed(context, '/QPCRMainScreen');
+                        //   },
+                        //   height: screenSize.screenHeight * 10,
+                        //   width: screenSize.screenWidth * 80,
+                        //   content: "QPCR",
+                        // ),
                         SizedBox(height: screenSize.screenHeight * 5),
-                        ReusableButton(
-                          onPress: () async {
-                            Navigator.pushNamed(context, '/QPCRMainScreen');
-                          },
-                          height: screenSize.screenHeight * 10,
-                          width: screenSize.screenWidth * 80,
-                          content: "QPCR",
-                        ),
-                        SizedBox(height: screenSize.screenHeight * 5),
-                        ReusableButton(
-                          onPress: () async {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              //Here DecodedData is a locally saved variable containing selected course data
-                              return PMSMainScreen();
-                            }));
-                          },
-                          height: screenSize.screenHeight * 10,
-                          width: screenSize.screenWidth * 80,
-                          content: "PMS",
-                        ),
-                        SizedBox(height: screenSize.screenHeight * 5),
-                        ReusableButton(
+                        // ReusableButton(
+                        //   onPress: () async {
+                        //     Navigator.push(context,
+                        //         MaterialPageRoute(builder: (context) {
+                        //       //Here DecodedData is a locally saved variable containing selected course data
+                        //       return PMSMainScreen();
+                        //     }));
+                        //   },
+                        //   height: screenSize.screenHeight * 10,
+                        //   width: screenSize.screenWidth * 80,
+                        //   content: "PMS",
+                        // ),
+                        // SizedBox(height: screenSize.screenHeight * 5),
+                        ReusableBorderButton(
                           onPress: () async {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {

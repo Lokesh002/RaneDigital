@@ -45,7 +45,12 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     await savedData.setDepartment(department);
     await savedData.setGenId(genId);
     await savedData.setUserId(userId);
+    await savedData.setFTAEditAccess(access["ftaEdit"]);
+    await savedData.setFTAAddAccess(access["ftaAdd"]);
+    await savedData.setFTADeleteAccess(access["ftaDelete"]);
+    await savedData.setFTAViewAccess(access["ftaSee"]);
     await savedData.setAddNewUserAccess(access["addNewUser"]);
+
     List<String> accDept = [];
     for (int i = 0; i < access['accessDept'].length; i++) {
       accDept.add(access['accessDept'][i].toString());

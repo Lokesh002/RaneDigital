@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rane_dms/components/ReusableBorderButton.dart';
 import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/courseCard.dart';
 import 'package:rane_dms/components/networking.dart';
@@ -81,7 +82,7 @@ class _PFUMainScreenState extends State<PFUMainScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ReusableButton(
+                ReusableBorderButton(
                   onPress: () {
                     Navigator.pushNamed(context, '/generatePFUScreen');
                   },
@@ -90,7 +91,7 @@ class _PFUMainScreenState extends State<PFUMainScreen> {
                   content: "Generate PFU",
                 ),
                 SizedBox(height: screenSize.screenHeight * 5),
-                ReusableButton(
+                ReusableBorderButton(
                   onPress: () {
                     Navigator.pushNamed(context, '/viewPFUScreen');
                   },
@@ -99,7 +100,7 @@ class _PFUMainScreenState extends State<PFUMainScreen> {
                   content: "View PFU History",
                 ),
                 SizedBox(height: screenSize.screenHeight * 5),
-                ReusableButton(
+                ReusableBorderButton(
                   onPress: () {
                     Navigator.pushNamed(context, '/closePFUScreen');
                   },

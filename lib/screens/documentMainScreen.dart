@@ -138,7 +138,7 @@ class _DocumentMainScreenState extends State<DocumentMainScreen> {
                   crossAxisCount: departments.length > 6 ? 3 : 2),
               itemBuilder: (BuildContext context, int index) {
                 return ReusableCard(
-                  colour: Theme.of(context).primaryColor,
+                  colour: Theme.of(context).backgroundColor,
                   cardChild: IconContent(
                     icon: "images/${departments[index]}.png",
                     label: departments[index],

@@ -90,6 +90,13 @@ class _FTAGenerateScreenState extends State<FTAGenerateScreen> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    ftaDescController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
 

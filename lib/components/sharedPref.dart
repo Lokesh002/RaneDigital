@@ -319,7 +319,7 @@ class SavedData {
     final savedUserName = await SharedPreferences.getInstance();
     final name = savedUserName.getBool('addNewUserAccess');
     if (name == null) {
-      return null;
+      return false;
     } else
       return name;
   }
@@ -334,6 +334,62 @@ class SavedData {
     final name = savedUserName.getStringList('accessDept');
     if (name == null) {
       return null;
+    } else
+      return name;
+  }
+
+  setFTAEditAccess(bool name) async {
+    final savedUserName = await SharedPreferences.getInstance();
+    await savedUserName.setBool('FTAEditAcces', name);
+  }
+
+  Future<bool> getFTAEditAccess() async {
+    final savedUserName = await SharedPreferences.getInstance();
+    final name = savedUserName.getBool('FTAEditAcces');
+    if (name == null) {
+      return false;
+    } else
+      return name;
+  }
+
+  setFTAAddAccess(bool name) async {
+    final savedUserName = await SharedPreferences.getInstance();
+    await savedUserName.setBool('FTAAddAccess', name);
+  }
+
+  Future<bool> getFTAAddAccess() async {
+    final savedUserName = await SharedPreferences.getInstance();
+    final name = savedUserName.getBool('FTAAddAccess');
+    if (name == null) {
+      return false;
+    } else
+      return name;
+  }
+
+  setFTAViewAccess(bool name) async {
+    final savedUserName = await SharedPreferences.getInstance();
+    await savedUserName.setBool('FTAViewAccess', name);
+  }
+
+  Future<bool> getFTAViewAccess() async {
+    final savedUserName = await SharedPreferences.getInstance();
+    final name = savedUserName.getBool('FTAViewAccess');
+    if (name == null) {
+      return false;
+    } else
+      return name;
+  }
+
+  setFTADeleteAccess(bool name) async {
+    final savedUserName = await SharedPreferences.getInstance();
+    await savedUserName.setBool('FTADeleteAccess', name);
+  }
+
+  Future<bool> getFTADeleteAccess() async {
+    final savedUserName = await SharedPreferences.getInstance();
+    final name = savedUserName.getBool('FTADeleteAccess');
+    if (name == null) {
+      return false;
     } else
       return name;
   }

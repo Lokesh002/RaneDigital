@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rane_dms/components/lineDataStructure.dart';
+import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 import 'package:rane_dms/screens/FTA/ftaListScreen.dart';
 
@@ -14,9 +15,11 @@ class FTAMachineListScreen extends StatefulWidget {
 class _FTAMachineListScreenState extends State<FTAMachineListScreen> {
   List<Machines> machines = [];
   bool isLoaded = false;
+
   getMachines() async {
     machines = widget.machineList;
-
+    SavedData savedData = SavedData();
+    print(await savedData.getFTAEditAccess());
     this.isLoaded = true;
     setState(() {});
   }

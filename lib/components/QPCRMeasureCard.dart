@@ -197,7 +197,68 @@ class _QPCRMeasureCardState extends State<QPCRMeasureCard> {
                                   "Enter Corrective Outflow Measure",
                                   5,
                                   5),
-                              getDatePicker(cmOutflowTargetDate),
+                              Container(
+                                  width: screenSize.screenWidth * 30,
+                                  //height: screenSize.screenHeight * 10,
+                                  decoration: BoxDecoration(
+                                      border:
+                                          Border.all(color: Colors.blueGrey),
+                                      borderRadius: BorderRadius.circular(
+                                          screenSize.screenHeight * 1)),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: screenSize.screenHeight,
+                                        horizontal: screenSize.screenWidth * 2),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ReusableButton(
+                                            onPress: () async {
+                                              showDatePicker(
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime.now(),
+                                                lastDate: DateTime.now()
+                                                    .add(Duration(days: 730)),
+                                              ).then((date) {
+                                                cmOutflowTargetDate = date;
+                                                setState(() {});
+                                              });
+                                            },
+                                            content: "Target Date",
+                                            height: screenSize.screenHeight * 5,
+                                            width: screenSize.screenWidth * 15),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal:
+                                                  screenSize.screenWidth * 2),
+                                          child: Container(
+                                            width: screenSize.screenWidth * 50,
+                                            height: screenSize.screenHeight * 8,
+                                            child: cmOutflowTargetDate != null
+                                                ? Center(
+                                                    child: Text(
+                                                        cmOutflowTargetDate.day
+                                                                .toString() +
+                                                            " / " +
+                                                            cmOutflowTargetDate
+                                                                .month
+                                                                .toString() +
+                                                            " / " +
+                                                            cmOutflowTargetDate
+                                                                .year
+                                                                .toString()),
+                                                  )
+                                                : Center(
+                                                    child: Text(
+                                                        "Please select a date")),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                              //  getDatePicker(cmOutflowTargetDate),
                               getTextField('Responsibility', cmOutflowResp,
                                   'Enter Responsible Person', 1, 1),
                             ]),
@@ -208,7 +269,70 @@ class _QPCRMeasureCardState extends State<QPCRMeasureCard> {
                                   "Enter Corrective Occurrence Measure",
                                   5,
                                   5),
-                              getDatePicker(cmOccurrenceTargetDate),
+                              Container(
+                                  width: screenSize.screenWidth * 30,
+                                  //height: screenSize.screenHeight * 10,
+                                  decoration: BoxDecoration(
+                                      border:
+                                          Border.all(color: Colors.blueGrey),
+                                      borderRadius: BorderRadius.circular(
+                                          screenSize.screenHeight * 1)),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: screenSize.screenHeight,
+                                        horizontal: screenSize.screenWidth * 2),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ReusableButton(
+                                            onPress: () async {
+                                              showDatePicker(
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime.now(),
+                                                lastDate: DateTime.now()
+                                                    .add(Duration(days: 730)),
+                                              ).then((date) {
+                                                cmOccurrenceTargetDate = date;
+                                                setState(() {});
+                                              });
+                                            },
+                                            content: "Target Date",
+                                            height: screenSize.screenHeight * 5,
+                                            width: screenSize.screenWidth * 15),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal:
+                                                  screenSize.screenWidth * 2),
+                                          child: Container(
+                                            width: screenSize.screenWidth * 50,
+                                            height: screenSize.screenHeight * 8,
+                                            child: cmOccurrenceTargetDate !=
+                                                    null
+                                                ? Center(
+                                                    child: Text(
+                                                        cmOccurrenceTargetDate
+                                                                .day
+                                                                .toString() +
+                                                            " / " +
+                                                            cmOccurrenceTargetDate
+                                                                .month
+                                                                .toString() +
+                                                            " / " +
+                                                            cmOccurrenceTargetDate
+                                                                .year
+                                                                .toString()),
+                                                  )
+                                                : Center(
+                                                    child: Text(
+                                                        "Please select a date")),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                              //  getDatePicker(cmOccurrenceTargetDate),
                               getTextField('Responsibility', cmOccurrenceResp,
                                   'Enter Responsible Person', 1, 1),
                             ]),
@@ -234,7 +358,68 @@ class _QPCRMeasureCardState extends State<QPCRMeasureCard> {
                                   "Enter Preventive Outflow Measure",
                                   5,
                                   5),
-                              getDatePicker(pmOutflowTargetDate),
+                              Container(
+                                  width: screenSize.screenWidth * 30,
+                                  //height: screenSize.screenHeight * 10,
+                                  decoration: BoxDecoration(
+                                      border:
+                                          Border.all(color: Colors.blueGrey),
+                                      borderRadius: BorderRadius.circular(
+                                          screenSize.screenHeight * 1)),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: screenSize.screenHeight,
+                                        horizontal: screenSize.screenWidth * 2),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ReusableButton(
+                                            onPress: () async {
+                                              showDatePicker(
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime.now(),
+                                                lastDate: DateTime.now()
+                                                    .add(Duration(days: 730)),
+                                              ).then((date) {
+                                                pmOutflowTargetDate = date;
+                                                setState(() {});
+                                              });
+                                            },
+                                            content: "Target Date",
+                                            height: screenSize.screenHeight * 5,
+                                            width: screenSize.screenWidth * 15),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal:
+                                                  screenSize.screenWidth * 2),
+                                          child: Container(
+                                            width: screenSize.screenWidth * 50,
+                                            height: screenSize.screenHeight * 8,
+                                            child: pmOutflowTargetDate != null
+                                                ? Center(
+                                                    child: Text(
+                                                        pmOutflowTargetDate.day
+                                                                .toString() +
+                                                            " / " +
+                                                            pmOutflowTargetDate
+                                                                .month
+                                                                .toString() +
+                                                            " / " +
+                                                            pmOutflowTargetDate
+                                                                .year
+                                                                .toString()),
+                                                  )
+                                                : Center(
+                                                    child: Text(
+                                                        "Please select a date")),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                              //getDatePicker(pmOutflowTargetDate),
                               getTextField('Responsibility', pmOutflowResp,
                                   'Enter Responsible Person', 1, 1),
                             ]),
@@ -245,7 +430,69 @@ class _QPCRMeasureCardState extends State<QPCRMeasureCard> {
                                   "Enter Preventive Occurrence Measure",
                                   5,
                                   5),
-                              getDatePicker(pmOccurrenceTargetDate),
+                              Container(
+                                  width: screenSize.screenWidth * 30,
+                                  //height: screenSize.screenHeight * 10,
+                                  decoration: BoxDecoration(
+                                      border:
+                                          Border.all(color: Colors.blueGrey),
+                                      borderRadius: BorderRadius.circular(
+                                          screenSize.screenHeight * 1)),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: screenSize.screenHeight,
+                                        horizontal: screenSize.screenWidth * 2),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ReusableButton(
+                                            onPress: () async {
+                                              showDatePicker(
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime.now(),
+                                                lastDate: DateTime.now()
+                                                    .add(Duration(days: 730)),
+                                              ).then((date) {
+                                                pmOccurrenceTargetDate = date;
+                                                setState(() {});
+                                              });
+                                            },
+                                            content: "Target Date",
+                                            height: screenSize.screenHeight * 5,
+                                            width: screenSize.screenWidth * 15),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal:
+                                                  screenSize.screenWidth * 2),
+                                          child: Container(
+                                            width: screenSize.screenWidth * 50,
+                                            height: screenSize.screenHeight * 8,
+                                            child: pmOccurrenceTargetDate !=
+                                                    null
+                                                ? Center(
+                                                    child: Text(
+                                                        pmOccurrenceTargetDate
+                                                                .day
+                                                                .toString() +
+                                                            " / " +
+                                                            pmOccurrenceTargetDate
+                                                                .month
+                                                                .toString() +
+                                                            " / " +
+                                                            pmOccurrenceTargetDate
+                                                                .year
+                                                                .toString()),
+                                                  )
+                                                : Center(
+                                                    child: Text(
+                                                        "Please select a date")),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )), //getDatePicker(pmOccurrenceTargetDate),
                               getTextField('Responsibility', pmOccurrenceResp,
                                   'Enter Responsible Person', 1, 1),
                             ]),
