@@ -19,7 +19,7 @@ const kLabelTextStyle = TextStyle(
   color: Colors.white,
 );
 
-const String ipAddress = 'http://10.0.2.2:3000/';
+const String ipAddress = 'http://192.168.50.15/';
 const String version = '1.0.2';
 QPCR globalQpcr;
 const departments = [
