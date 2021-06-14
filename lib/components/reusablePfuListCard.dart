@@ -184,7 +184,9 @@ class ReusablePFUListCard extends StatelessWidget {
                                   fontSize: screenSize.screenHeight * 3),
                             ),
                             Text(
-                              raisingPerson,
+                              raisingPerson != null && raisingPerson != ""
+                                  ? raisingPerson
+                                  : "",
                               softWrap: true,
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -216,7 +218,10 @@ class ReusablePFUListCard extends StatelessWidget {
                                     fontSize: screenSize.screenHeight * 3),
                               ),
                               Text(
-                                effectingAreas,
+                                effectingAreas != null &&
+                                        effectingAreas.isNotEmpty
+                                    ? effectingAreas
+                                    : "",
                                 softWrap: true,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -333,7 +338,9 @@ class ReusablePFUListCard extends StatelessWidget {
                               height: screenSize.screenHeight * 1,
                             ),
                             Text(
-                              acceptingPerson,
+                              acceptingPerson != null && acceptingPerson != ""
+                                  ? acceptingPerson
+                                  : "",
                               softWrap: true,
                               textAlign: TextAlign.center,
                               style: TextStyle(

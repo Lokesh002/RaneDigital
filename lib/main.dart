@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
     ]);
 
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Rane Digital',
       theme: ThemeData(
           primaryColor: Colors.blue,
           accentColor: Color(0xffe0e0e0),

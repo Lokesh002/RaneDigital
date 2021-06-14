@@ -224,7 +224,12 @@ class _DeletePFUScreenState extends State<DeletePFUScreen> {
                 getElement(
                     "Responsible Department", widget.pfu.deptResponsible),
                 getElement("Raising Date", widget.pfu.raisingDate.toString()),
-                getElement("Raising Person", widget.pfu.raisingPerson),
+                getElement(
+                    "Raising Person",
+                    widget.pfu.raisingPerson != null &&
+                            widget.pfu.raisingPerson != ""
+                        ? widget.pfu.raisingPerson
+                        : ""),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -254,7 +259,10 @@ class _DeletePFUScreenState extends State<DeletePFUScreen> {
                             EdgeInsets.only(right: screenSize.screenWidth * 5),
                         children: [
                           Text(
-                            widget.pfu.rejectingReason,
+                            widget.pfu.rejectingReason != null &&
+                                    widget.pfu.rejectingReason != ""
+                                ? widget.pfu.rejectingReason
+                                : "",
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: screenSize.screenHeight * 2,

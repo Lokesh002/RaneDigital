@@ -245,11 +245,19 @@ class _MyPFUStatusScreenState extends State<MyPFUStatusScreen> {
                     "Responsible Department", widget.pfu.deptResponsible),
                 getElement("Raising Date",
                     widget.pfu.raisingDate.toString().substring(0, 10)),
-                getElement("Raising Person", widget.pfu.raisingPerson),
+                getElement(
+                    "Raising Person",
+                    widget.pfu.raisingPerson != null &&
+                            widget.pfu.raisingPerson != ''
+                        ? widget.pfu.raisingPerson
+                        : ""),
                 getElement(
                     "PFU Accepted By:",
                     (widget.pfu.status >= 1)
-                        ? widget.pfu.acceptingPerson
+                        ? widget.pfu.acceptingPerson != null &&
+                                widget.pfu.acceptingPerson != ''
+                            ? widget.pfu.acceptingPerson
+                            : ""
                         : "-"),
                 getElement("Root Cause",
                     (widget.pfu.status >= 2) ? widget.pfu.rootCause : '-'),

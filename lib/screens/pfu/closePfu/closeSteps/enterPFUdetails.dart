@@ -241,8 +241,18 @@ class _EnterPFUDetailsState extends State<EnterPFUDetails> {
                 getElement(
                     "Responsible Department", widget.pfu.deptResponsible),
                 getElement("Raising Date", widget.pfu.raisingDate.toString()),
-                getElement("Raising Person", widget.pfu.raisingPerson),
-                getElement("PFU Accepted By:", widget.pfu.acceptingPerson),
+                getElement(
+                    "Raising Person",
+                    widget.pfu.raisingPerson != null &&
+                            widget.pfu.raisingPerson != ''
+                        ? widget.pfu.raisingPerson
+                        : ""),
+                getElement(
+                    "PFU Accepted By:",
+                    widget.pfu.acceptingPerson != null &&
+                            widget.pfu.acceptingPerson != ''
+                        ? widget.pfu.acceptingPerson
+                        : ""),
                 SizedBox(
                   height: screenSize.screenHeight * 50,
                   width: screenSize.screenWidth * 100,

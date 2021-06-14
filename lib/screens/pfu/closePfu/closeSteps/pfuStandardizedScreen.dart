@@ -248,8 +248,18 @@ class _PFUStandardizeScreenState extends State<PFUStandardizeScreen> {
                 getElement(
                     "Responsible Department", widget.pfu.deptResponsible),
                 getElement("Raising Date", widget.pfu.raisingDate.toString()),
-                getElement("Raising Person", widget.pfu.raisingPerson),
-                getElement("PFU Accepted By:", widget.pfu.acceptingPerson),
+                getElement(
+                    "Raising Person",
+                    widget.pfu.raisingPerson != null &&
+                            widget.pfu.raisingPerson != ''
+                        ? widget.pfu.raisingPerson
+                        : ""),
+                getElement(
+                    "PFU Accepted By:",
+                    widget.pfu.acceptingPerson != null &&
+                            widget.pfu.acceptingPerson != ''
+                        ? widget.pfu.acceptingPerson
+                        : ""),
                 GestureDetector(
                     onTap: () {
                       if (genId == '14076') {
