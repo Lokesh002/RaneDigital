@@ -43,8 +43,20 @@ class _SplashScreenState extends State<SplashScreen> {
         body: Center(
           child: Container(
             width: screenSize.screenWidth * 100,
-            height: screenSize.screenHeight * 70,
-            child: Hero(tag: "logo", child: Image.asset("images/logo.png")),
+            height: screenSize.screenHeight * 100,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: screenSize.screenWidth * 100,
+                  height: screenSize.screenHeight * 70,
+                  child:
+                      Hero(tag: "logo", child: Image.asset("images/logo.png")),
+                ),
+                Text('Made By: Lokesh Joshi')
+              ],
+            ),
           ),
         ));
   }

@@ -312,7 +312,12 @@ class _AcceptPFUScreenState extends State<AcceptPFUScreen> {
                 getElement(
                     "Responsible Department", widget.pfu.deptResponsible),
                 getElement("Raising Date", widget.pfu.raisingDate.toString()),
-                getElement("Raising Person", widget.pfu.raisingPerson),
+                getElement(
+                    "Raising Person",
+                    widget.pfu.raisingPerson != null &&
+                            widget.pfu.raisingPerson != ''
+                        ? widget.pfu.raisingPerson
+                        : ""),
                 SizedBox(
                   height: screenSize.screenHeight * 50,
                   width: screenSize.screenWidth * 100,

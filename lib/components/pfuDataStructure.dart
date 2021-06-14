@@ -6,25 +6,25 @@ class PFUList {
   String getEffectingAreas(
       {bool P, bool Q, bool C, bool D, bool S, bool M, bool E}) {
     String query = '';
-    if (P) {
+    if (P != null && P) {
       query += 'P ';
     }
-    if (Q) {
+    if (Q != null && Q) {
       query += 'Q ';
     }
-    if (C) {
+    if (C != null && C) {
       query += 'C ';
     }
-    if (D) {
+    if (D != null && D) {
       query += 'D ';
     }
-    if (S) {
+    if (S != null && S) {
       query += 'S ';
     }
-    if (M) {
+    if (M != null && M) {
       query += 'M ';
     }
-    if (E) {
+    if (E != null && E) {
       query += 'E';
     }
     return query;
@@ -99,7 +99,10 @@ class PFUList {
         // print("getting rasing date");
         pfu.raisingDate = DateTime.parse(data[i]['raisingDate']);
         // print("getting rperson");
-        pfu.raisingPerson = data[i]['raisingPerson']['username'];
+        if (data[i]['raisingPerson'] != null &&
+            data[i]['raisingPerson'] != "") {
+          pfu.raisingPerson = data[i]['raisingPerson']['username'];
+        }
         // print("getting line");
         pfu.lineName = data[i]['line']['name'];
         pfu.lineId = data[i]['line']['_id'].toString();
