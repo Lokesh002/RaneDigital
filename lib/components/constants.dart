@@ -32,5 +32,4 @@ const departments = [
   'Safety',
   'SQA',
   'QAD'
-
 ];
