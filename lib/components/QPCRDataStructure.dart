@@ -120,15 +120,28 @@ class QPCRList {
             data['measures'][j]['correctiveMeasures']['CMOutflowMeasure'];
         correctiveMeasures.cmOutflowPhotoURL =
             data['measures'][j]['correctiveMeasures']['CMOutflowPhotoURL'];
-
-        correctiveMeasures.cmOccurrenceTargetDate = data['measures'][j]
-            ['correctiveMeasures']['CMOccurrenceMeasureTargetDate'];
+        if (data['measures'][j]['correctiveMeasures']
+                    ['CMOccurrenceMeasureTargetDate'] !=
+                null &&
+            data['measures'][j]['correctiveMeasures']
+                    ['CMOccurrenceMeasureTargetDate'] !=
+                '')
+          correctiveMeasures.cmOccurrenceTargetDate = DateTime.parse(
+              data['measures'][j]['correctiveMeasures']
+                  ['CMOccurrenceMeasureTargetDate']);
         correctiveMeasures.cmOccurrenceResp = data['measures'][j]
             ['correctiveMeasures']['CMOccurenceResponsibility'];
         correctiveMeasures.cmOutflowResp =
             data['measures'][j]['correctiveMeasures']['CMOutflowResponsibiliy'];
-        correctiveMeasures.cmOutflowTargetDate = data['measures'][j]
-            ['correctiveMeasures']['CMOutflowMeasureTargetDate'];
+        if (data['measures'][j]['correctiveMeasures']
+                    ['CMOutflowMeasureTargetDate'] !=
+                null &&
+            data['measures'][j]['correctiveMeasures']
+                    ['CMOutflowMeasureTargetDate'] !=
+                '')
+          correctiveMeasures.cmOutflowTargetDate = DateTime.parse(
+              data['measures'][j]['correctiveMeasures']
+                  ['CMOutflowMeasureTargetDate']);
 
         measures.correctiveMeasures = correctiveMeasures;
 
@@ -140,14 +153,28 @@ class QPCRList {
             data['measures'][j]['preventiveMeasures']['PMOutflowMeasure'];
         preventiveMeasures.pmOutflowPhotoURL =
             data['measures'][j]['preventiveMeasures']['PMOutflowPhotoURL'];
-        preventiveMeasures.pmOccurrenceTargetDate = data['measures'][j]
-            ['preventiveMeasures']['PMOccurrenceMeasureTargetDate'];
+        if (data['measures'][j]['preventiveMeasures']
+                    ['PMOccurrenceMeasureTargetDate'] !=
+                null &&
+            data['measures'][j]['preventiveMeasures']
+                    ['PMOccurrenceMeasureTargetDate'] !=
+                '')
+          preventiveMeasures.pmOccurrenceTargetDate = DateTime.parse(
+              data['measures'][j]['preventiveMeasures']
+                  ['PMOccurrenceMeasureTargetDate']);
         preventiveMeasures.pmOccurrenceResp = data['measures'][j]
             ['preventiveMeasures']['PMOccurenceResponsibility'];
         preventiveMeasures.pmOutflowResp =
             data['measures'][j]['preventiveMeasures']['PMOutflowResponsibiliy'];
-        preventiveMeasures.pmOutflowTargetDate = data['measures'][j]
-            ['preventiveMeasures']['PMOutflowMeasureTargetDate'];
+        if (data['measures'][j]['preventiveMeasures']
+                    ['PMOutflowMeasureTargetDate'] !=
+                null &&
+            data['measures'][j]['preventiveMeasures']
+                    ['PMOutflowMeasureTargetDate'] !=
+                '')
+          preventiveMeasures.pmOutflowTargetDate = DateTime.parse(
+              data['measures'][j]['preventiveMeasures']
+                  ['PMOutflowMeasureTargetDate']);
         measures.preventiveMeasures = preventiveMeasures;
         qpcr.measures.add(measures);
       }
@@ -174,10 +201,15 @@ class QPCRList {
     if (data['teamInvolved'] != null) {
       qpcr.teamInvolved = [];
       for (int j = 0; j < data['teamInvolved'].length; j++) {
-        qpcr.teamInvolved[j].id = data['teamInvolved'][j]['_id'];
-        qpcr.teamInvolved[j].username = data['teamInvolved'][j]['username'];
-        qpcr.teamInvolved[j].department = data['teamInvolved'][j]['department'];
-        qpcr.teamInvolved[j].genId = data['teamInvolved'][j]['genId'];
+        Team member = Team();
+
+        member.username = data['teamInvolved'][j]['username'];
+        member.isLeader = data['teamInvolved'][j]['isLeader'];
+        member.date = data['teamInvolved'][j]['date'] != null &&
+                data['teamInvolved'][j]['date'] != ""
+            ? DateTime.parse(data['teamInvolved'][j]['date'])
+            : null;
+        qpcr.teamInvolved.add(member);
       }
     }
     if (data['effectivenessMonitoring'] != null) {
@@ -452,12 +484,16 @@ class QPCRList {
         if (data[i]['teamInvolved'] != null) {
           qpcr.teamInvolved = [];
           for (int j = 0; j < data[i]['teamInvolved'].length; j++) {
-            qpcr.teamInvolved[j].id = data[i]['teamInvolved'][j]['_id'];
+            //  qpcr.teamInvolved[j].id = data[i]['teamInvolved'][j]['_id'];
             qpcr.teamInvolved[j].username =
                 data[i]['teamInvolved'][j]['username'];
-            qpcr.teamInvolved[j].department =
-                data[i]['teamInvolved'][j]['department'];
-            qpcr.teamInvolved[j].genId = data[i]['teamInvolved'][j]['genId'];
+            qpcr.teamInvolved[j].isLeader =
+                data[i]['teamInvolved'][j]['isLeader'];
+            qpcr.teamInvolved[j].date =
+                data[i]['teamInvolved'][j]['date'] != null &&
+                        data[i]['teamInvolved'][j]['date'] != ""
+                    ? DateTime.parse(data[i]['teamInvolved'][j]['date'])
+                    : null;
           }
         }
         if (data[i]['effectivenessMonitoring'] != null) {
@@ -630,13 +666,13 @@ class QPCRList {
           qpcr.measures[i].preventiveMeasures.pmOccurrencePhotoURL;
 
       preventiveMeasures['PMOutflowMeasureTargetDate'] =
-          qpcr.measures[i].preventiveMeasures.pmOutflowTargetDate;
+          qpcr.measures[i].preventiveMeasures.pmOutflowTargetDate.toString();
       preventiveMeasures['PMOutflowResponsibiliy'] =
           qpcr.measures[i].preventiveMeasures.pmOutflowResp;
       preventiveMeasures['PMOccurenceResponsibility'] =
           qpcr.measures[i].preventiveMeasures.pmOccurrenceResp;
       preventiveMeasures['PMOccurrenceMeasureTargetDate'] =
-          qpcr.measures[i].preventiveMeasures.pmOccurrenceTargetDate;
+          qpcr.measures[i].preventiveMeasures.pmOccurrenceTargetDate.toString();
 
       correctiveMeasures['CMOutflowMeasure'] =
           qpcr.measures[i].correctiveMeasures.cmOutflowMeasure;
@@ -647,13 +683,13 @@ class QPCRList {
       correctiveMeasures['CMOccurencePhotoURL'] =
           qpcr.measures[i].correctiveMeasures.cmOccurrencePhotoURL;
       correctiveMeasures['CMOutflowMeasureTargetDate'] =
-          qpcr.measures[i].correctiveMeasures.cmOutflowTargetDate;
+          qpcr.measures[i].correctiveMeasures.cmOutflowTargetDate.toString();
       correctiveMeasures['CMOutflowResponsibiliy'] =
           qpcr.measures[i].correctiveMeasures.cmOutflowResp;
       correctiveMeasures['CMOccurenceResponsibility'] =
           qpcr.measures[i].correctiveMeasures.cmOccurrenceResp;
       correctiveMeasures['CMOccurrenceMeasureTargetDate'] =
-          qpcr.measures[i].correctiveMeasures.cmOccurrenceTargetDate;
+          qpcr.measures[i].correctiveMeasures.cmOccurrenceTargetDate.toString();
 
       measures['correctiveMeasures'] = correctiveMeasures;
       measures['preventiveMeasures'] = preventiveMeasures;
@@ -682,6 +718,19 @@ class QPCRList {
       standardization["otherStandardization"] =
           qpcr.standardization.otherStandardization;
       qpcrMap['standardization'] = standardization;
+    }
+    if (qpcr.teamInvolved != null) {
+      qpcrMap['teamInvolved'] = [];
+      for (int i = 0; i < qpcr.teamInvolved.length; i++) {
+        Map<String, dynamic> teamMember = Map<String, dynamic>();
+        teamMember['name'] = qpcr.teamInvolved[i].username;
+        teamMember['isLeader'] = qpcr.teamInvolved[i].isLeader;
+        teamMember['date'] = qpcr.teamInvolved[i].date != null
+            ? qpcr.teamInvolved[i].date.toString()
+            : null;
+
+        qpcrMap['teamInvolved'].add(teamMember);
+      }
     }
     return qpcrMap;
   }
@@ -731,7 +780,7 @@ class QPCR {
 
   StandardizationDetails standardization;
 
-  List<User> teamInvolved = [];
+  List<Team> teamInvolved = [];
 
   List<CAPAEffectivenessDetails> effectivenessMonitoring = [];
   List<HorizontalDeploymentDetails> horizontalDeploymentDetails = [];
@@ -740,6 +789,12 @@ class QPCR {
   String submissionRejectingReason;
 
   String acceptingPerson;
+}
+
+class Team {
+  String username;
+  bool isLeader;
+  DateTime date;
 }
 
 class DetectionStage {
