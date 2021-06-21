@@ -91,28 +91,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(height: screenSize.screenHeight * 5),
                         ReusableBorderButton(
                           onPress: () async {
-                            Navigator.pushNamed(context, '/QPCRMainScreen');
-                          },
-                          height: screenSize.screenHeight * 10,
-                          width: screenSize.screenWidth * 80,
-                          content: "QPCR",
-                        ),
-                        SizedBox(height: screenSize.screenHeight * 5),
-                        ReusableBorderButton(
-                          onPress: () async {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              //Here DecodedData is a locally saved variable containing selected course data
-                              return PMSMainScreen();
-                            }));
-                          },
-                          height: screenSize.screenHeight * 10,
-                          width: screenSize.screenWidth * 80,
-                          content: "PMS",
-                        ),
-                        SizedBox(height: screenSize.screenHeight * 5),
-                        ReusableBorderButton(
-                          onPress: () async {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
                               //Here DecodedData is a locally saved variable containing selected course data
@@ -122,6 +100,31 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: screenSize.screenHeight * 10,
                           width: screenSize.screenWidth * 80,
                           content: "FTA",
+                        ),
+                        SizedBox(height: screenSize.screenHeight * 5),
+                        ReusableBorderButton(
+                          onPress: () async {
+                            Fluttertoast.showToast(
+                                msg: "This page is under construction.");
+                            // Navigator.pushNamed(context, '/QPCRMainScreen');
+                          },
+                          height: screenSize.screenHeight * 10,
+                          width: screenSize.screenWidth * 80,
+                          content: "QPCR",
+                        ),
+                        SizedBox(height: screenSize.screenHeight * 5),
+                        ReusableBorderButton(
+                          onPress: () async {
+                            Fluttertoast.showToast(
+                                msg: "This page is under construction.");
+                            // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            //   //Here DecodedData is a locally saved variable containing selected course data
+                            //   return PMSMainScreen();
+                            // }));
+                          },
+                          height: screenSize.screenHeight * 10,
+                          width: screenSize.screenWidth * 80,
+                          content: "PMS",
                         ),
                       ],
                     ),
