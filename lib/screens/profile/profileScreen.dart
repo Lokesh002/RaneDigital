@@ -49,7 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String accountType = '';
   String photo;
   int balance;
-  SavedData savedData = SavedData();
+
   String levelOfSubscription = '';
   File _image;
 
@@ -100,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   //   );
   //   print(response.data);
   //   photo = response.data;
-  //   savedData.setProfileImage(photo);
+  //   SavedData.setProfileImage(photo);
   //   Navigator.pop(context);
   //   return (response.data);
   // }
@@ -110,6 +110,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     SizeConfig screenSize = SizeConfig(context);
 
     return Scaffold(
+        appBar: AppBar(
+          title: Text("Profile"),
+        ),
         backgroundColor: Theme.of(context).accentColor,
         body: Builder(
           builder: (context) => Column(
@@ -181,7 +184,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Center(
                     child: Container(
                       width: screenSize.screenWidth * 80,
-                      height: screenSize.screenHeight * 100,
+                      height: screenSize.screenHeight * 90,
                       child: Column(
                         children: <Widget>[
                           SizedBox(
@@ -313,23 +316,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       top: screenSize.screenHeight * 5),
                                   child: Center(
                                     child: ReusableButton(
-                                      onPress: () async {
-                                        await savedData.setLoggedIn(false);
-                                        await savedData.setUserName(null);
-                                        await savedData.setAccountType(null);
-                                        await savedData.setDepartment(null);
-                                        await savedData.setGenId(null);
-                                        await savedData.setUserId(null);
-                                        await savedData
-                                            .setAddNewUserAccess(null);
-                                        await savedData.setFTAEditAccess(null);
-                                        await savedData.setFTAAddAccess(null);
-                                        await savedData
-                                            .setFTADeleteAccess(null);
-                                        await savedData.setFTAViewAccess(null);
-                                        await savedData.setAccessDept(null);
-                                        await savedData.setPfuAccess(null);
-                                        print(savedData.getAddNewUserAccess());
+                                      onPress: () {
+                                        SavedData.setLoggedIn(false);
+                                        SavedData.setUserName(null);
+                                        SavedData.setAccountType(null);
+                                        SavedData.setDepartment(null);
+                                        SavedData.setGenId(null);
+                                        SavedData.setUserId(null);
+                                        SavedData.setAddNewUserAccess(null);
+                                        SavedData.setFTAEditAccess(null);
+                                        SavedData.setFTAAddAccess(null);
+                                        SavedData.setFTADeleteAccess(null);
+                                        SavedData.setFTAViewAccess(null);
+                                        SavedData.setAccessDept(null);
+                                        SavedData.setPfuAccess(null);
+                                        print(SavedData.getAddNewUserAccess());
                                         Navigator.pop(context);
                                         Navigator.pushReplacementNamed(
                                             context, '/loginScreen');
@@ -401,12 +402,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ));
   }
 
-  void getData() async {
-    name = await savedData.getUserName();
-    genId = await savedData.getGenId();
-    department = await savedData.getDepartment();
-    accountType = await savedData.getAccountType();
-    accessDept = await savedData.getAccessDept();
+  void getData() {
+    name = SavedData.getUserName();
+    genId = SavedData.getGenId();
+    department = SavedData.getDepartment();
+    accountType = SavedData.getAccountType();
+    accessDept = SavedData.getAccessDept();
     setState(() {});
   }
 }

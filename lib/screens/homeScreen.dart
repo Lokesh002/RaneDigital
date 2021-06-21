@@ -14,8 +14,6 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-SavedData savedData = SavedData();
-
 class _HomeScreenState extends State<HomeScreen> {
   SizeConfig screenSize;
 
@@ -47,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: screenSize.screenHeight * 30,
                                 child: Image.asset(
                                   "images/logo.png",
+                                  fit: BoxFit.contain,
                                   height: screenSize.screenHeight * 30,
                                   width: screenSize.screenWidth * 80,
                                 )),
@@ -71,15 +70,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                         SizedBox(height: screenSize.screenHeight * 5),
-                        ReusableBorderButton(
-                          onPress: () {
-                            Navigator.pushNamed(context, '/documentMainScreen');
-                          },
-                          height: screenSize.screenHeight * 10,
-                          width: screenSize.screenWidth * 80,
-                          content: "DRS",
-                        ),
-                        SizedBox(height: screenSize.screenHeight * 5),
+                        // ReusableBorderButton(
+                        //   onPress: () {
+                        //     Navigator.pushNamed(context, '/documentMainScreen');
+                        //   },
+                        //   height: screenSize.screenHeight * 10,
+                        //   width: screenSize.screenWidth * 80,
+                        //   content: "DRS",
+                        // ),
+                        // SizedBox(height: screenSize.screenHeight * 5),
                         ReusableBorderButton(
                           onPress: () {
                             Navigator.pushNamed(context, '/pfuMainScreen');
@@ -89,28 +88,28 @@ class _HomeScreenState extends State<HomeScreen> {
                           content: "PFU",
                         ),
                         SizedBox(height: screenSize.screenHeight * 5),
-                        ReusableBorderButton(
-                          onPress: () async {
-                            Navigator.pushNamed(context, '/QPCRMainScreen');
-                          },
-                          height: screenSize.screenHeight * 10,
-                          width: screenSize.screenWidth * 80,
-                          content: "QPCR",
-                        ),
-                        SizedBox(height: screenSize.screenHeight * 5),
-                        ReusableBorderButton(
-                          onPress: () async {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              //Here DecodedData is a locally saved variable containing selected course data
-                              return PMSMainScreen();
-                            }));
-                          },
-                          height: screenSize.screenHeight * 10,
-                          width: screenSize.screenWidth * 80,
-                          content: "PMS",
-                        ),
-                        SizedBox(height: screenSize.screenHeight * 5),
+                        // ReusableBorderButton(
+                        //   onPress: () async {
+                        //     Navigator.pushNamed(context, '/QPCRMainScreen');
+                        //   },
+                        //   height: screenSize.screenHeight * 10,
+                        //   width: screenSize.screenWidth * 80,
+                        //   content: "QPCR",
+                        // ),
+                        // SizedBox(height: screenSize.screenHeight * 5),
+                        // ReusableBorderButton(
+                        //   onPress: () async {
+                        //     Navigator.push(context,
+                        //         MaterialPageRoute(builder: (context) {
+                        //       //Here DecodedData is a locally saved variable containing selected course data
+                        //       return PMSMainScreen();
+                        //     }));
+                        //   },
+                        //   height: screenSize.screenHeight * 10,
+                        //   width: screenSize.screenWidth * 80,
+                        //   content: "PMS",
+                        // ),
+                        // SizedBox(height: screenSize.screenHeight * 5),
                         ReusableBorderButton(
                           onPress: () async {
                             Navigator.push(context,
@@ -139,7 +138,8 @@ class _HomeScreenState extends State<HomeScreen> {
     if (currentBackPressTime == null ||
         now.difference(currentBackPressTime) > Duration(seconds: 2)) {
       currentBackPressTime = now;
-      Fluttertoast.showToast(msg: "Press back again to exit!");
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Press back again to exit!")));
       return Future.value(false);
     }
     return Future.value(true);

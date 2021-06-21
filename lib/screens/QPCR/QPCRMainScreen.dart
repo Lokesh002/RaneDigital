@@ -15,7 +15,6 @@ SavedData savedData = SavedData();
 
 class _QPCRMainScreenState extends State<QPCRMainScreen> {
   SizeConfig screenSize;
-  SavedData savedData = SavedData();
 
   @override
   void initState() {
@@ -27,7 +26,7 @@ class _QPCRMainScreenState extends State<QPCRMainScreen> {
   String accountType;
 
   getData() async {
-    accountType = await savedData.getAccountType();
+    accountType = SavedData.getAccountType();
     setState(() {});
   }
 

@@ -182,14 +182,18 @@ class _AdminPasswordScreenState extends State<AdminPasswordScreen> {
                                       Navigator.pushReplacementNamed(
                                           context, '/registerUserScreen');
                                     } else {
-                                      Fluttertoast.showToast(
-                                          msg: "Enter correct details");
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  "Enter correct details")));
                                     }
                                   } else {
-                                    Fluttertoast.showToast(msg: "$result");
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text("$result")));
                                   }
                                 } else {
-                                  Fluttertoast.showToast(msg: "$result");
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text("$result")));
                                 }
                               }
                             },

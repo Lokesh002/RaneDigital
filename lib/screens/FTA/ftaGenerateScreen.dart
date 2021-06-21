@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:file_selector/file_selector.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rane_dms/components/ReusableButton.dart';
@@ -39,30 +41,73 @@ class _FTAGenerateScreenState extends State<FTAGenerateScreen> {
   }
 
   void getdata() async {
-    SavedData savedData = SavedData();
-    raisingPerson = await savedData.getUserId();
+    raisingPerson = SavedData.getUserId();
   }
 
   File _ftaImage;
-
-  final ImagePicker _picker = ImagePicker();
-  getFTAImage(BuildContext cntext) async {
-    try {
-      var image = await _picker.getImage(
-        source: ImageSource.gallery,
-        imageQuality: 50,
-        maxHeight: screenSize.screenHeight * 50,
-        maxWidth: screenSize.screenWidth * 100,
-      );
-      setState(() {
-        _ftaImage = File(image.path);
-        print("image path: $image");
-      });
-    } catch (e) {
-      setState(() {
-        print(e);
-      });
+  //
+  // final ImagePicker _picker = ImagePicker();
+  // getFTAImage(BuildContext cntext) async {
+  //   try {
+  //     var image = await _picker.getImage(
+  //       source: ImageSource.gallery,
+  //       imageQuality: 50,
+  //       maxHeight: screenSize.screenHeight * 50,
+  //       maxWidth: screenSize.screenWidth * 100,
+  //     );
+  //     setState(() {
+  //       _ftaImage = File(image.path);
+  //       print("image path: $image");
+  //     });
+  //   } catch (e) {
+  //     setState(() {
+  //       print(e);
+  //     });
+  //   }
+  // }
+  void _openImageFile(BuildContext context) async {
+    final XTypeGroup typeGroup = XTypeGroup(
+      label: 'images',
+      extensions: ['jpg', 'jpeg', 'bmp', 'png'],
+    );
+    final List<XFile> files = await openFiles(acceptedTypeGroups: [typeGroup]);
+    if (files.isEmpty) {
+      // Operation was canceled by the user.
+      return;
     }
+    final XFile file = files[0];
+    final String fileName = file.name;
+    final String filePath = file.path;
+
+    await showDialog(
+      context: context,
+      builder: (context) => imageDisplay(fileName, filePath),
+    );
+  }
+
+  imageDisplay(String fileName, String filePath) {
+    return AlertDialog(
+      title: Text(fileName),
+      // On web the filePath is a blob url
+      // while on other platforms it is a system path.
+      content: kIsWeb ? Image.network(filePath) : Image.file(File(filePath)),
+      actions: [
+        TextButton(
+          child: const Text('Done'),
+          onPressed: () {
+            _ftaImage = File(filePath);
+            setState(() {});
+            Navigator.pop(context);
+          },
+        ),
+        TextButton(
+          child: const Text('Cancel'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
   }
 
   Future<FTA> uploadImage(File file, BuildContext context, String id) async {
@@ -122,7 +167,7 @@ class _FTAGenerateScreenState extends State<FTAGenerateScreen> {
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: screenSize.screenWidth * 5,
-                              vertical: screenSize.screenWidth * 10),
+                              vertical: screenSize.screenWidth * 5),
                           child: TextFormField(
                               validator: (val) =>
                                   val.length < 1 ? 'Enter Description' : null,
@@ -158,7 +203,11 @@ class _FTAGenerateScreenState extends State<FTAGenerateScreen> {
                                         vertical: screenSize.screenHeight * 2),
                                     child: _ftaImage != null
                                         ? Image.memory(
-                                            _ftaImage.readAsBytesSync())
+                                            _ftaImage.readAsBytesSync(),
+                                            height:
+                                                screenSize.screenHeight * 30,
+                                            fit: BoxFit.contain,
+                                          )
                                         : Text(_ftaImage != null
                                             ? 'Img' +
                                                 _ftaImage.path
@@ -170,7 +219,7 @@ class _FTAGenerateScreenState extends State<FTAGenerateScreen> {
                                   ),
                                   ReusableButton(
                                       onPress: () {
-                                        getFTAImage(context);
+                                        _openImageFile(context);
                                       },
                                       content: "Upload Image",
                                       height: screenSize.screenHeight * 7,

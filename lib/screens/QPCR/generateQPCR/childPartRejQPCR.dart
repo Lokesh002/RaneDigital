@@ -10,6 +10,7 @@ import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/lineDataStructure.dart';
 import 'package:rane_dms/components/networking.dart';
+import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 import 'package:rane_dms/screens/authentication/adminPasswordScreen.dart';
 import 'package:rane_dms/screens/homeScreen.dart';
@@ -111,11 +112,11 @@ class _ChildPartRejQPCRScreenState extends State<ChildPartRejQPCRScreen> {
   String raisingDepartment;
   getLine() async {
     lineList = await lineDataStructure.getLines();
-    raisingDepartment = await savedData.getDepartment();
+    raisingDepartment = SavedData.getDepartment();
     this.isLoaded = true;
-    dept = await savedData.getDepartment();
+    dept = SavedData.getDepartment();
     setState(() {});
-    accountType = await savedData.getAccountType();
+    accountType = SavedData.getAccountType();
   }
 
   List<DropdownMenuItem> getDepartmentList() {
@@ -998,8 +999,7 @@ class _ChildPartRejQPCRScreenState extends State<ChildPartRejQPCRScreen> {
                                                               : defectRank),
                                       "defectiveQuantity": defectiveQty,
                                       "raisingDepartment": dept,
-                                      "raisingPerson":
-                                          await savedData.getUserId(),
+                                      "raisingPerson": SavedData.getUserId(),
                                       "raisingDate": DateTime.now()
                                           .toString()
                                           .substring(0, 10),

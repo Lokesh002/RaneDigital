@@ -5,6 +5,7 @@ import 'package:rane_dms/components/ReusableCard.dart';
 import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/icon_content.dart';
 import 'package:rane_dms/components/networking.dart';
+import 'package:rane_dms/components/sharedPref.dart';
 
 import 'package:rane_dms/components/sizeConfig.dart';
 import 'package:rane_dms/screens/documentScreens/deptHome.dart';
@@ -72,7 +73,7 @@ class _DocumentMainScreenState extends State<DocumentMainScreen> {
     print(allowed);
     this.allowed = allowed['allowed'];
 
-    myDept = await savedData.getDepartment();
+    myDept = SavedData.getDepartment();
   }
 
   @override
@@ -86,6 +87,9 @@ class _DocumentMainScreenState extends State<DocumentMainScreen> {
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text("DRS"),
+      ),
       backgroundColor: Colors.white,
       body: Column(
         children: [
@@ -95,7 +99,7 @@ class _DocumentMainScreenState extends State<DocumentMainScreen> {
                   child: Image.asset(
                 "images/logo.png",
                 width: screenSize.screenWidth * 80,
-                height: screenSize.screenHeight * 25,
+                height: screenSize.screenHeight * 20,
               )),
               Center(
                 child: Padding(
@@ -131,11 +135,11 @@ class _DocumentMainScreenState extends State<DocumentMainScreen> {
           //           ),
           //         )),
           Container(
-            height: screenSize.screenHeight * 78,
+            height: screenSize.screenHeight * 70,
             width: screenSize.screenWidth * 100,
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: departments.length > 6 ? 3 : 2),
+                  crossAxisCount: departments.length > 6 ? 5 : 4),
               itemBuilder: (BuildContext context, int index) {
                 return ReusableCard(
                   colour: Theme.of(context).backgroundColor,

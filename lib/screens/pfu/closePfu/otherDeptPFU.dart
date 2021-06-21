@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:rane_dms/components/networking.dart';
@@ -24,10 +26,9 @@ class OtherDeptPFU extends StatefulWidget {
 class _OtherDeptPFUState extends State<OtherDeptPFU> {
   bool isLoaded = false;
   List<PFU> pfuList = [];
-  SavedData savedData = SavedData();
 
   getData() async {
-    String myDept = await savedData.getDepartment();
+    String myDept = SavedData.getDepartment();
     Networking networking = Networking();
     print(widget.selectedDepartment);
     print(myDept);
@@ -37,7 +38,8 @@ class _OtherDeptPFUState extends State<OtherDeptPFU> {
       "raisingDepartment": widget.selectedDepartment,
       "departmentResponsible": myDept
     });
-    print(data);
+    log("hey baby");
+    log(data.toString());
     PFUList pfuListMaker = PFUList();
     if (data != null) {
       pfuList = pfuListMaker.getPFUList(data);
@@ -136,6 +138,9 @@ class _OtherDeptPFUState extends State<OtherDeptPFU> {
     SizeConfig screenSize = SizeConfig(context);
     if (!isLoaded) {
       return Scaffold(
+        appBar: AppBar(
+          title: Text(""),
+        ),
         backgroundColor: Color(0xffffffff),
         body: Center(
           child: Container(
@@ -149,6 +154,9 @@ class _OtherDeptPFUState extends State<OtherDeptPFU> {
       );
     } else {
       return Scaffold(
+        appBar: AppBar(
+          title: Text(""),
+        ),
         backgroundColor: Theme.of(context).backgroundColor,
         body: ListView(
           children: [

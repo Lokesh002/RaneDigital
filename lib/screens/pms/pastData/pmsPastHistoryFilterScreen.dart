@@ -76,9 +76,9 @@ class _PMSPastDataFilterScreenState extends State<PMSPastDataFilterScreen> {
     lineList = await lineDataStructure.getLines();
 
     this.isLoaded = true;
-    dept = await savedData.getDepartment();
+    dept = SavedData.getDepartment();
     setState(() {});
-    accountType = await savedData.getAccountType();
+    accountType = SavedData.getAccountType();
   }
 
   @override

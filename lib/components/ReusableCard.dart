@@ -16,8 +16,8 @@ class ReusableCard extends StatelessWidget {
         // width: screenSize.screenWidth * 40,
         // height: screenSize.screenHeight * 20,
         margin: EdgeInsets.symmetric(
-            vertical: screenSize.screenHeight * 2.5,
-            horizontal: screenSize.screenWidth * 5),
+            vertical: screenSize.screenHeight * 1.5,
+            horizontal: screenSize.screenWidth * 2),
         child: cardChild,
         padding: EdgeInsets.symmetric(horizontal: screenSize.screenWidth * 2.5),
         decoration: BoxDecoration(

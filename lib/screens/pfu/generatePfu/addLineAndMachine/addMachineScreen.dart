@@ -32,6 +32,9 @@ class _AddMachineScreenState extends State<AddMachineScreen> {
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text(""),
+      ),
       backgroundColor: Colors.white,
       body: ListView(children: <Widget>[
         Container(
@@ -46,7 +49,7 @@ class _AddMachineScreenState extends State<AddMachineScreen> {
                       height: screenSize.screenHeight * 15,
                       child: Image.asset(
                         "images/logo.png",
-                        fit: BoxFit.fitWidth,
+                        fit: BoxFit.contain,
                       ),
                     ),
                     SizedBox(
@@ -161,12 +164,14 @@ class _AddMachineScreenState extends State<AddMachineScreen> {
                           'lineId': widget.selectedLine.lineId
                         });
                         if (data != null) {
-                          Fluttertoast.showToast(msg: "Successfully added.");
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Successfully added.")));
                           Navigator.pop(context);
                           Navigator.pop(context);
                           Navigator.pushNamed(context, '/generatePFUScreen');
                         } else {
-                          Fluttertoast.showToast(msg: "Error in adding Line");
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Error in adding Line")));
                           Navigator.pop(context);
                         }
                       }

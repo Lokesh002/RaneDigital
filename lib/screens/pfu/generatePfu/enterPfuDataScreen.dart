@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:file_selector/file_selector.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rane_dms/components/ReusableButton.dart';
@@ -73,8 +75,6 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
     problemDescController.clear();
   }
 
-  SavedData savedData = SavedData();
-
   List<DropdownMenuItem> getDepartmentList() {
     List<DropdownMenuItem> departmentList = [];
 
@@ -103,7 +103,7 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
 
   getData() async {
     raisingDepartment = widget.dept;
-    userId = await savedData.getUserId();
+    userId = SavedData.getUserId();
   }
 
   SizeConfig screenSize;
@@ -114,25 +114,71 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
     getData();
   }
 
-  final ImagePicker _picker = ImagePicker();
-  getImageFromGallery(BuildContext cntext) async {
-    try {
-      var image = await _picker.getImage(
-        source: ImageSource.gallery,
-        imageQuality: 50,
-        maxHeight: screenSize.screenHeight * 50,
-        maxWidth: screenSize.screenWidth * 100,
-      );
-      setState(() {
-        _image = File(image.path);
-        print("image path: $image");
-      });
-    } catch (e) {
-      setState(() {
-        print(e);
-      });
+  void _openImageFile(BuildContext context) async {
+    final XTypeGroup typeGroup = XTypeGroup(
+      label: 'images',
+      extensions: ['jpg', 'jpeg', 'bmp', 'png'],
+    );
+    final List<XFile> files = await openFiles(acceptedTypeGroups: [typeGroup]);
+    if (files.isEmpty) {
+      // Operation was canceled by the user.
+      return;
     }
+    final XFile file = files[0];
+    final String fileName = file.name;
+    final String filePath = file.path;
+
+    await showDialog(
+      context: context,
+      builder: (context) => imageDisplay(fileName, filePath),
+    );
   }
+
+  imageDisplay(String fileName, String filePath) {
+    return AlertDialog(
+      title: Text(fileName),
+      // On web the filePath is a blob url
+      // while on other platforms it is a system path.
+      content: kIsWeb ? Image.network(filePath) : Image.file(File(filePath)),
+      actions: [
+        TextButton(
+          child: const Text('Done'),
+          onPressed: () {
+            _image = File(filePath);
+            setState(() {});
+            Navigator.pop(context);
+          },
+        ),
+        TextButton(
+          child: const Text('Cancel'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
+  }
+
+  // final ImagePicker _picker = ImagePicker();
+  // getImageFromGallery(BuildContext cntext) async {
+  //   try {
+  //     var image = await _picker.getImage(
+  //       source: ImageSource.gallery,
+  //       imageQuality: 50,
+  //       maxHeight: screenSize.screenHeight * 50,
+  //       maxWidth: screenSize.screenWidth * 100,
+  //     );
+  //     setState(() {
+  //       _image = File(image.path);
+  //
+  //       print("image path: $image");
+  //     });
+  //   } catch (e) {
+  //     setState(() {
+  //       print(e);
+  //     });
+  //   }
+  // }
 
   Future<int> uploadImage(File file, BuildContext context) async {
     showAlertDiaprint(context);
@@ -158,6 +204,9 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Enter Data"),
+      ),
       backgroundColor: Colors.white,
       body: ListView(
         children: <Widget>[
@@ -168,7 +217,7 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
                 height: screenSize.screenHeight * 15,
                 child: Image.asset(
                   "images/logo.png",
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.contain,
                 ),
               ),
               SizedBox(
@@ -504,7 +553,9 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
                                   right: screenSize.screenWidth * 3),
                               child: ReusableButton(
                                   onPress: () async {
-                                    await getImageFromGallery(context);
+                                    _openImageFile(context);
+
+                                    // await getImageFromGallery(context);
                                   },
                                   content: "Add Photo",
                                   height: screenSize.screenHeight * 5,
@@ -582,26 +633,33 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
                                         await uploadImage(_image, context);
 
                                     if (statusCode == 200) {
-                                      Fluttertoast.showToast(
-                                          msg: "Successfully Added PFU.");
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  "Successfully Added PFU.")));
 
                                       Navigator.pop(context);
                                       Navigator.pop(context);
                                     }
                                   } else {
-                                    Fluttertoast.showToast(msg: "Error.");
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text("Error.")));
+                                    // Fluttertoast.showToast(msg: "Error.");
                                   }
                                 } else {
-                                  Fluttertoast.showToast(msg: "Error.");
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text("Error.")));
                                 }
                               } else {
-                                Fluttertoast.showToast(
-                                    msg: "Please add a photo first.");
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content:
+                                            Text("Please add a photo first.")));
                               }
                             } else {
-                              Fluttertoast.showToast(
-                                  msg:
-                                      "Please choose atleast one impacting area.");
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  content: Text(
+                                      "Please choose atleast one impacting area.")));
                             }
                           }
                         }),

@@ -576,8 +576,10 @@ class _QPCRMeasureCardState extends State<QPCRMeasureCard> {
                                   isReady = true;
                                   setState(() {});
                                 } else {
-                                  Fluttertoast.showToast(
-                                      msg: "Please enter target date");
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              "Please enter target date")));
                                 }
                               }
                             },

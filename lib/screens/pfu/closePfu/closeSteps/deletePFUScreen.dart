@@ -83,6 +83,9 @@ class _DeletePFUScreenState extends State<DeletePFUScreen> {
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text(""),
+      ),
       body: Container(
         height: double.infinity,
         width: double.infinity,

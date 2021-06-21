@@ -75,9 +75,9 @@ class _GeneratePFUScreenState extends State<GeneratePFUScreen> {
     lineList = await lineDataStructure.getLines();
 
     this.isLoaded = true;
-    dept = await savedData.getDepartment();
+    dept = SavedData.getDepartment();
     setState(() {});
-    accountType = await savedData.getAccountType();
+    accountType = SavedData.getAccountType();
   }
 
   @override
@@ -104,6 +104,9 @@ class _GeneratePFUScreenState extends State<GeneratePFUScreen> {
       );
     } else {
       return Scaffold(
+        appBar: AppBar(
+          title: Text("Generate PFU"),
+        ),
         backgroundColor: Theme.of(context).backgroundColor,
         body: ListView(
           children: <Widget>[
@@ -114,7 +117,7 @@ class _GeneratePFUScreenState extends State<GeneratePFUScreen> {
                   height: screenSize.screenHeight * 15,
                   child: Image.asset(
                     "images/logo.png",
-                    fit: BoxFit.fitWidth,
+                    fit: BoxFit.contain,
                   ),
                 ),
                 SizedBox(
@@ -207,8 +210,12 @@ class _GeneratePFUScreenState extends State<GeneratePFUScreen> {
                                           Navigator.pushNamed(
                                               context, '/addLineScreen');
                                         } else {
-                                          Fluttertoast.showToast(
-                                              msg: "Only Admins can add Line.");
+                                          final snackBar = SnackBar(
+                                              content: Text(
+                                                  "Only Admins can add Line."));
+
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
                                         }
                                       },
                                       elevation: 5.0,
@@ -311,14 +318,23 @@ class _GeneratePFUScreenState extends State<GeneratePFUScreen> {
                                               return AddMachineScreen(line);
                                             }));
                                           } else {
-                                            Fluttertoast.showToast(
-                                                msg:
-                                                    "Please select a line first.");
+                                            // Fluttertoast.showToast(
+                                            //     msg:
+                                            //         "Please select a line first.");
+                                            final snackBar = SnackBar(
+                                                content: Text(
+                                                    'Please select a line first.'));
+
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(snackBar);
                                           }
                                         } else {
-                                          Fluttertoast.showToast(
-                                              msg:
-                                                  "Only Admins can add Machine.");
+                                          final snackBar = SnackBar(
+                                              content: Text(
+                                                  "Only Admins can add Machine."));
+
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
                                         }
                                       },
                                       elevation: 5.0,

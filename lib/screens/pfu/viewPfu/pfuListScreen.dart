@@ -124,7 +124,6 @@ class _PFUListScreenState extends State<PFUListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //setOrientation(context);
     AutoOrientation.landscapeRightMode();
     SizeConfig screenSize = SizeConfig(context);
     if (!isLoaded) {
@@ -134,6 +133,9 @@ class _PFUListScreenState extends State<PFUListScreen> {
           return true;
         },
         child: Scaffold(
+          appBar: AppBar(
+            title: Text("Loading"),
+          ),
           backgroundColor: Color(0xffffffff),
           body: Center(
             child: Container(
@@ -148,6 +150,9 @@ class _PFUListScreenState extends State<PFUListScreen> {
       );
     } else {
       return Scaffold(
+        appBar: AppBar(
+          title: Text("PFU List"),
+        ),
         backgroundColor: Theme.of(context).backgroundColor,
         body: ListView(
           children: [
@@ -195,7 +200,7 @@ class _PFUListScreenState extends State<PFUListScreen> {
                                       fontSize: screenSize.screenHeight * 3),
                                 ),
                                 Text(
-                                  "Machine\n",
+                                  "Machine",
                                   softWrap: true,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,

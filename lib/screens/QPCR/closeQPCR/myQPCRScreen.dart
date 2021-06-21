@@ -20,7 +20,6 @@ class MyQPCRScreen extends StatefulWidget {
 class _MyQPCRScreenState extends State<MyQPCRScreen> {
   bool isLoaded = false;
   List<QPCR> qpcrList = [];
-  SavedData savedData = SavedData();
 
   Color getQPCRColor(int status) {
     switch (status) {
@@ -43,7 +42,7 @@ class _MyQPCRScreenState extends State<MyQPCRScreen> {
 
   getData() async {
     print(widget.selectedDepartment);
-    String myDept = await savedData.getDepartment();
+    String myDept = SavedData.getDepartment();
     Networking networking = Networking();
 
     var data = await networking.postData('QPCR/getQPCRListShort', {

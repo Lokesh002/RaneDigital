@@ -81,9 +81,9 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
 
   String photo = ipAddress + 'PFUpics/logo.png';
   String genId;
-  SavedData savedData = SavedData();
+
   getData() async {
-    genId = await savedData.getGenId();
+    genId = SavedData.getGenId();
   }
 
   @override
@@ -96,6 +96,9 @@ class _PFUTakeActionScreenState extends State<PFUTakeActionScreen> {
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text(""),
+      ),
       body: Container(
         height: double.infinity,
         width: double.infinity,

@@ -24,8 +24,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   }
 
   getData() async {
-    SavedData savedData = SavedData();
-    userId = await savedData.getUserId();
+    userId = SavedData.getUserId();
   }
 
   @override
@@ -124,8 +123,10 @@ class _ChangePasswordState extends State<ChangePassword> {
                                 if (result != "Error!") {
                                   Navigator.pop(context);
                                 } else {
-                                  Fluttertoast.showToast(
-                                      msg: "Enter correct details");
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text("Enter correct details")));
                                 }
                               }
                             },

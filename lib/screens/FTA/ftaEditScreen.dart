@@ -2,6 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:file_selector/file_selector.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -38,32 +40,75 @@ class _FTAEditScreenState extends State<FTAEditScreen> {
 
   bool deleteAccess = false;
   void getdata() async {
-    SavedData savedData = SavedData();
-    deleteAccess = await savedData.getFTADeleteAccess();
-    raisingPerson = await savedData.getUserId();
+    deleteAccess = SavedData.getFTADeleteAccess();
+    raisingPerson = SavedData.getUserId();
     ftaDescController.text = widget.earlierDescription;
   }
 
   File _ftaImage;
 
-  final ImagePicker _picker = ImagePicker();
-  getFTAImage(BuildContext cntext) async {
-    try {
-      var image = await _picker.getImage(
-        source: ImageSource.gallery,
-        imageQuality: 50,
-        maxHeight: screenSize.screenHeight * 50,
-        maxWidth: screenSize.screenWidth * 100,
-      );
-      setState(() {
-        _ftaImage = File(image.path);
-        print("image path: $image");
-      });
-    } catch (e) {
-      setState(() {
-        print(e);
-      });
+  // final ImagePicker _picker = ImagePicker();
+  // getFTAImage(BuildContext cntext) async {
+  //   try {
+  //     var image = await _picker.getImage(
+  //       source: ImageSource.gallery,
+  //       imageQuality: 50,
+  //       maxHeight: screenSize.screenHeight * 50,
+  //       maxWidth: screenSize.screenWidth * 100,
+  //     );
+  //     setState(() {
+  //       _ftaImage = File(image.path);
+  //       print("image path: $image");
+  //     });
+  //   } catch (e) {
+  //     setState(() {
+  //       print(e);
+  //     });
+  //   }
+  // }
+  void _openImageFile(BuildContext context) async {
+    final XTypeGroup typeGroup = XTypeGroup(
+      label: 'images',
+      extensions: ['jpg', 'jpeg', 'bmp', 'png'],
+    );
+    final List<XFile> files = await openFiles(acceptedTypeGroups: [typeGroup]);
+    if (files.isEmpty) {
+      // Operation was canceled by the user.
+      return;
     }
+    final XFile file = files[0];
+    final String fileName = file.name;
+    final String filePath = file.path;
+
+    await showDialog(
+      context: context,
+      builder: (context) => imageDisplay(fileName, filePath),
+    );
+  }
+
+  imageDisplay(String fileName, String filePath) {
+    return AlertDialog(
+      title: Text(fileName),
+      // On web the filePath is a blob url
+      // while on other platforms it is a system path.
+      content: kIsWeb ? Image.network(filePath) : Image.file(File(filePath)),
+      actions: [
+        TextButton(
+          child: const Text('Done'),
+          onPressed: () {
+            _ftaImage = File(filePath);
+            setState(() {});
+            Navigator.pop(context);
+          },
+        ),
+        TextButton(
+          child: const Text('Cancel'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
   }
 
   Future<FTA> uploadImage(File file, BuildContext context, String id) async {
@@ -167,9 +212,20 @@ class _FTAEditScreenState extends State<FTAEditScreen> {
                                                 screenSize.screenHeight * 2),
                                         child: _ftaImage != null
                                             ? Image.memory(
-                                                _ftaImage.readAsBytesSync())
+                                                _ftaImage.readAsBytesSync(),
+                                                height:
+                                                    screenSize.screenHeight *
+                                                        30,
+                                                fit: BoxFit.contain,
+                                              )
                                             : widget.oldPhoto != null
-                                                ? Image.network(widget.oldPhoto)
+                                                ? Image.network(
+                                                    widget.oldPhoto,
+                                                    height: screenSize
+                                                            .screenHeight *
+                                                        30,
+                                                    fit: BoxFit.contain,
+                                                  )
                                                 : Text(_ftaImage != null
                                                     ? 'Img' +
                                                         _ftaImage.path
@@ -181,7 +237,7 @@ class _FTAEditScreenState extends State<FTAEditScreen> {
                                       ),
                                       ReusableButton(
                                           onPress: () {
-                                            getFTAImage(context);
+                                            _openImageFile(context);
                                           },
                                           content: "Upload Image",
                                           height: screenSize.screenHeight * 7,
@@ -222,9 +278,9 @@ class _FTAEditScreenState extends State<FTAEditScreen> {
                                   FlutterError.onError(e);
                                 }
                               } else {
-                                Fluttertoast.showToast(
-                                    msg:
-                                        "You are not authorized to delete FTA.");
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    content: Text(
+                                        "You are not authorized to delete FTA.")));
                               }
                               // log(this.ftaList[0].parentId.toString());
                             },

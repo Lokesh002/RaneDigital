@@ -99,6 +99,9 @@ class _EnterPFUDetailsState extends State<EnterPFUDetails> {
     screenSize = SizeConfig(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(""),
+      ),
       body: Container(
         height: double.infinity,
         width: screenSize.screenWidth * 100,

@@ -16,7 +16,6 @@ SavedData savedData = SavedData();
 
 class _PFUMainScreenState extends State<PFUMainScreen> {
   SizeConfig screenSize;
-  SavedData savedData = SavedData();
 
   @override
   void initState() {
@@ -28,7 +27,7 @@ class _PFUMainScreenState extends State<PFUMainScreen> {
   String accountType;
 
   getData() async {
-    accountType = await savedData.getAccountType();
+    accountType = SavedData.getAccountType();
     setState(() {});
   }
 
@@ -53,7 +52,8 @@ class _PFUMainScreenState extends State<PFUMainScreen> {
                       Networking networking = Networking();
                       var data = await networking.getData('PFU/makeBackup');
                       if (data != null) {
-                        Fluttertoast.showToast(msg: data['msg']);
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text(data['msg'])));
                       }
                     },
                     height: screenSize.screenHeight * 5,

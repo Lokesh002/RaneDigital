@@ -171,6 +171,9 @@ class _AcceptPFUScreenState extends State<AcceptPFUScreen> {
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text(""),
+      ),
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -370,7 +373,7 @@ class _AcceptPFUScreenState extends State<AcceptPFUScreen> {
                               Networking networking = Networking();
                               await networking.postData('PFU/acceptPFU', {
                                 'pfuId': widget.pfu.id,
-                                'acceptingPerson': await savedData.getUserName()
+                                'acceptingPerson': SavedData.getUserName()
                               });
 
                               Navigator.pop(context);

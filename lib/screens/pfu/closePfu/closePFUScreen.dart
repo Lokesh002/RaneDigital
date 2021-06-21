@@ -19,14 +19,14 @@ class _ClosePFUScreenState extends State<ClosePFUScreen> {
   bool isLoaded = false;
   int height = 180;
   int weight = 65;
-  SavedData savedData = SavedData();
+
   String raisingDepartment;
   var age = 20;
 
   List<String> finalDepartments = [];
 
   getDepartments() async {
-    raisingDepartment = await savedData.getDepartment();
+    raisingDepartment = SavedData.getDepartment();
     for (int i = 0; i < departments.length; i++) {
       print(departments[i]);
       if (departments[i] != raisingDepartment) {
@@ -48,6 +48,9 @@ class _ClosePFUScreenState extends State<ClosePFUScreen> {
   Widget build(BuildContext context) {
     if (!isLoaded) {
       return Scaffold(
+        appBar: AppBar(
+          title: Text("Select Department"),
+        ),
         backgroundColor: Color(0xffffffff),
         body: Center(
           child: Container(
@@ -62,13 +65,16 @@ class _ClosePFUScreenState extends State<ClosePFUScreen> {
     } else {
       SizeConfig screenSize = SizeConfig(context);
       return Scaffold(
+        appBar: AppBar(
+          title: Text("Select Department"),
+        ),
         body: Container(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: screenSize.screenHeight * 11,
+                  height: screenSize.screenHeight * 12,
                   child: Padding(
                     padding: EdgeInsets.only(top: screenSize.screenHeight * 7),
                     child: Container(
@@ -85,11 +91,11 @@ class _ClosePFUScreenState extends State<ClosePFUScreen> {
                   ),
                 ),
                 Container(
-                  height: screenSize.screenHeight * 82,
+                  height: screenSize.screenHeight * 72,
                   width: screenSize.screenWidth * 100,
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: finalDepartments.length > 6 ? 3 : 2),
+                        crossAxisCount: finalDepartments.length > 6 ? 6 : 5),
                     itemBuilder: (BuildContext context, int index) {
                       return ReusableCard(
                         onPress: () {

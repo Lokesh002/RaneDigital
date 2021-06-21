@@ -124,7 +124,6 @@ class _AcceptQPCRScreenState extends State<AcceptQPCRScreen> {
     );
   }
 
-  SavedData savedData = SavedData();
   @override
   void dispose() {
     rejectReasonController.dispose();
@@ -699,8 +698,7 @@ class _AcceptQPCRScreenState extends State<AcceptQPCRScreen> {
                                   Networking networking = Networking();
                                   await networking.postData('QPCR/acceptQPCR', {
                                     'qpcrId': widget.qpcr.id,
-                                    'acceptingPerson':
-                                        await savedData.getUserName(),
+                                    'acceptingPerson': SavedData.getUserName(),
                                     "targetDate": _dateTime.toString()
                                   });
 

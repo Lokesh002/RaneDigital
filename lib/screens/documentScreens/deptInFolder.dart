@@ -189,17 +189,20 @@ class _DeptInFolderState extends State<DeptInFolder> {
                     onTap: () async {
                       print(docsList[index].link);
                       //if (docsList[index].link.contains(".pdf", 41)) {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        //Here DecodedData is a locally saved variable containing selected course data
-                        return OpenPDF(docsList[index].link);
-                      }));
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (context) {
+                      //
+                      //   return OpenPDF(docsList[index].link);
+                      // }));
 //                      }
 //                      else {
-//                        await download(
-//                            docsList[index].link, docsList[index].name);
-//                        Navigator.pop(context);
+//                       await download(
+//                           docsList[index].link, docsList[index].name);
+//                       // Navigator.pop(context);
 //                      }
+                      Process.run(
+                          'C:\\Program Files (x86)\\Adobe\\Reader 11.0\\Reader\\AcroRd32.exe',
+                          ['C:\\Users\\lokes\\Downloads\\Resume (1).pdf']);
                     },
                     dept: widget.dept,
                     size: docsList[index].size);

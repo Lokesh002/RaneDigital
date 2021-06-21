@@ -16,7 +16,6 @@ SavedData savedData = SavedData();
 
 class _PMSMainScreenState extends State<PMSMainScreen> {
   SizeConfig screenSize;
-  SavedData savedData = SavedData();
 
   @override
   void initState() {
@@ -28,7 +27,7 @@ class _PMSMainScreenState extends State<PMSMainScreen> {
   String accountType;
 
   getData() async {
-    accountType = await savedData.getAccountType();
+    accountType = SavedData.getAccountType();
     setState(() {});
   }
 

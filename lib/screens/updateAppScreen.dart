@@ -12,6 +12,8 @@ import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 import 'dart:async';
 import 'package:flutter/widgets.dart';
+import 'package:path_provider/path_provider.dart';
+
 //import 'package:flutter_downloader/flutter_downloader.dart';
 
 class UpdateAppScreen extends StatefulWidget with WidgetsBindingObserver {
@@ -63,8 +65,10 @@ class _UpdateAppScreenState extends State<UpdateAppScreen> {
   }
 
   Future download(String url, String name) async {
-    String path = await ExtStorage.getExternalStoragePublicDirectory(
-        ExtStorage.DIRECTORY_DOWNLOADS);
+    Directory docDir = await getApplicationDocumentsDirectory();
+    var pList = docDir.path.split("\\");
+    pList[pList.length - 1] = "Downloads";
+    String path = pList.join('\\');
     String fullPath = "$path/$name";
 
     try {
@@ -83,8 +87,8 @@ class _UpdateAppScreenState extends State<UpdateAppScreen> {
             downloadComplete = true;
             Navigator.pop(context);
             setState(() {
-              Fluttertoast.showToast(
-                  msg: "Go to Internal Storage/Downloads to check the file.");
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("Go to Downloads to check the file.")));
             });
           }
         });
@@ -173,7 +177,7 @@ class _UpdateAppScreenState extends State<UpdateAppScreen> {
               child: MaterialButton(
                 onPressed: () async {
                   await download(
-                      ipAddress + "app/RaneDigital.apk", "RaneDigital.apk");
+                      ipAddress + "desktop/RaneDigital.exe", "RaneDigital.exe");
                 },
                 height: screenSize.screenHeight * 5,
                 minWidth: screenSize.screenWidth * 30,

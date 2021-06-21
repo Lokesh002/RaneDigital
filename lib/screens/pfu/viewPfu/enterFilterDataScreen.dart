@@ -145,6 +145,9 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
     screenSize = SizeConfig(context);
     if (!isLoaded) {
       return Scaffold(
+        appBar: AppBar(
+          title: Text("PFU Filters"),
+        ),
         backgroundColor: Color(0xffffffff),
         body: Center(
           child: Container(
@@ -158,6 +161,9 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
       );
     } else {
       return Scaffold(
+        appBar: AppBar(
+          title: Text("PFU Filters"),
+        ),
         backgroundColor: Colors.white,
         body: Container(
           width: double.infinity,
@@ -275,9 +281,10 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
                                           setState(() {});
                                         });
                                       } else {
-                                        Fluttertoast.showToast(
-                                            msg:
-                                                "Please enter from date first.");
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    "Please enter from date first.")));
                                       }
                                     },
                                     content: "To",
@@ -871,9 +878,9 @@ class _EnterFilterDataScreenState extends State<EnterFilterDataScreen> {
                             );
                           }));
                         } else {
-                          Fluttertoast.showToast(
-                              msg:
-                                  "Please select 'From Date' and 'To Date' first.");
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  "Please select 'From Date' and 'To Date' first.")));
                         }
                       },
                       child: Text(

@@ -18,8 +18,8 @@ class _FTAMachineListScreenState extends State<FTAMachineListScreen> {
 
   getMachines() async {
     machines = widget.machineList;
-    SavedData savedData = SavedData();
-    print(await savedData.getFTAEditAccess());
+
+    print(SavedData.getFTAEditAccess());
     this.isLoaded = true;
     setState(() {});
   }

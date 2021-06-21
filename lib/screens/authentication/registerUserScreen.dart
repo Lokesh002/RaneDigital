@@ -37,28 +37,25 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
 
   dataSaveToSharedPref(String userId, String name, String genId,
       String department, String accountType, var access) async {
-    SavedData savedData = SavedData();
-
-    await savedData.setLoggedIn(true);
-    await savedData.setUserName(name);
-    await savedData.setAccountType(accountType);
-    await savedData.setDepartment(department);
-    await savedData.setGenId(genId);
-    await savedData.setUserId(userId);
-    await savedData.setFTAEditAccess(access["ftaEdit"]);
-    await savedData.setFTAAddAccess(access["ftaAdd"]);
-    await savedData.setFTADeleteAccess(access["ftaDelete"]);
-    await savedData.setFTAViewAccess(access["ftaSee"]);
-    await savedData.setAddNewUserAccess(access["addNewUser"]);
+    SavedData.setLoggedIn(true);
+    SavedData.setUserName(name);
+    SavedData.setAccountType(accountType);
+    SavedData.setDepartment(department);
+    SavedData.setGenId(genId);
+    SavedData.setUserId(userId);
+    SavedData.setFTAEditAccess(access["ftaEdit"]);
+    SavedData.setFTAAddAccess(access["ftaAdd"]);
+    SavedData.setFTADeleteAccess(access["ftaDelete"]);
+    SavedData.setFTAViewAccess(access["ftaSee"]);
+    SavedData.setAddNewUserAccess(access["addNewUser"]);
 
     List<String> accDept = [];
     for (int i = 0; i < access['accessDept'].length; i++) {
       accDept.add(access['accessDept'][i].toString());
     }
 
-    await savedData.setAccessDept(accDept);
-    await savedData.setPfuAccess(access["pfu"]);
-    print(savedData.getAddNewUserAccess());
+    SavedData.setAccessDept(accDept);
+    SavedData.setPfuAccess(access["pfu"]);
   }
 
   clearTextInput() {
@@ -598,19 +595,24 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                                     Navigator.pushReplacementNamed(
                                         context, '/homeScreen');
                                   } else {
-                                    Fluttertoast.showToast(msg: userData);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text(userData)));
                                   }
                                 } else {
-                                  Fluttertoast.showToast(msg: "Error");
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text("Error")));
                                 }
                               }
                             } else {
-                              Fluttertoast.showToast(
-                                  msg: "Please select account type");
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content:
+                                          Text("Please select account type")));
                             }
                           } else {
-                            Fluttertoast.showToast(
-                                msg: "Please select atleast one department.");
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    "Please select atleast one department.")));
                           }
                         }),
                   ),

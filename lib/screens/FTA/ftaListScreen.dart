@@ -30,8 +30,8 @@ class _FTAListScreenState extends State<FTAListScreen> {
   bool editAccess = false;
   bool addAccess = false;
   getData() async {
-    editAccess = await savedData.getFTAEditAccess();
-    addAccess = await savedData.getFTAAddAccess();
+    editAccess = SavedData.getFTAEditAccess();
+    addAccess = SavedData.getFTAAddAccess();
 
     if (widget.parentFta != null) {
       if (widget.parentFta.photo != null && widget.parentFta.photo != "") {
@@ -69,6 +69,9 @@ class _FTAListScreenState extends State<FTAListScreen> {
         return;
       },
       child: Scaffold(
+        appBar: AppBar(
+          title: Text("FTA List"),
+        ),
         floatingActionButton: isLoaded
             ? FloatingActionButton(
                 backgroundColor: Colors.teal,
@@ -90,7 +93,8 @@ class _FTAListScreenState extends State<FTAListScreen> {
                       }
                     });
                   } else {
-                    Fluttertoast.showToast(msg: "You are not authorized.");
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("You are not authorized.")));
                   }
                 },
                 child: Icon(
@@ -197,10 +201,11 @@ class _FTAListScreenState extends State<FTAListScreen> {
                                                                   }
                                                                 });
                                                               } else {
-                                                                Fluttertoast
-                                                                    .showToast(
-                                                                        msg:
-                                                                            "You do not have access");
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(SnackBar(
+                                                                        content:
+                                                                            Text("You do not have access")));
                                                               }
                                                             },
                                                           ),
@@ -214,6 +219,9 @@ class _FTAListScreenState extends State<FTAListScreen> {
                                                   child: photoURL != null &&
                                                           photoURL != ""
                                                       ? Image.network(photoURL,
+                                                          height: screenSize
+                                                                  .screenHeight *
+                                                              40,
                                                           fit: BoxFit.contain)
                                                       : SizedBox()),
                                               Padding(

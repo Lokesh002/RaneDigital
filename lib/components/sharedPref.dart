@@ -1,140 +1,109 @@
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 
 class SavedData {
-  setUserName(String name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setString('userName', name);
+  static String username;
+  static String genId;
+  static String department;
+  static String userId;
+  static List<String> lineData = [];
+  static bool loggedIn = false;
+  static String accountType;
+  static String photoURL;
+  static bool pfuAccess;
+  static bool cssEditAccess;
+  static bool cssViewAccess;
+  static bool cssVerifyAccess;
+
+  static bool qssEditAccess;
+  static bool qssViewAccess;
+  static bool qssVerifyAccess;
+  static bool cssAddAccess;
+  static bool qssAddAccess;
+  static bool addNewUserAccess = false;
+  static List<String> accessDept = [];
+  static bool ftaEditAccess = false;
+  static bool ftaAddAccess = false;
+  static bool ftaViewAccess = false;
+  static bool ftaDeleteAccess = false;
+
+  static setUserName(String name) {
+    username = name;
   }
 
-  Future<String> getUserName() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getString('userName');
+  static String getUserName() {
+    final name = username;
     if (name == null) {
       return null;
     } else
       return name;
   }
 
-  setGenId(String name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setString('genId', name);
+  static setGenId(String name) {
+    genId = name;
   }
 
-  Future<String> getGenId() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getString('genId');
+  static String getGenId() {
+    final name = genId;
     if (name == null) {
       return null;
     } else
       return name;
   }
 
-//  setPhone(String name) async {
-//    final savedUserName = await SharedPreferences.getInstance();
-//    await savedUserName.setString('Phone', name);
-//  }
-//
-//  Future<String> getPhone() async {
-//    final savedUserName = await SharedPreferences.getInstance();
-//    final name = savedUserName.getString('Phone');
-//    if (name == null) {
-//      return null;
-//    } else
-//      return name;
-//  }
-
-  setDepartment(String name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setString('department', name);
+  static setDepartment(String name) {
+    department = name;
   }
 
-  Future<String> getDepartment() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getString('department');
+  static String getDepartment() {
+    final name = department;
     if (name == null) {
       return null;
     } else
       return name;
   }
 
-  setUserId(String name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setString('userId', name);
+  static setUserId(String name) {
+    userId = name;
   }
 
-  Future<String> getUserId() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getString('userId');
+  static String getUserId() {
+    final name = userId;
     if (name == null) {
       return null;
     } else
       return name;
   }
 
-  setLineData(var lineData) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setStringList('lineData', lineData);
+  static setLineData(var name) {
+    lineData = name;
   }
 
-  Future<List<String>> getLineData() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getStringList('lineData');
+  static List<String> getLineData() {
+    final name = lineData;
     if (name == null) {
       return null;
     } else
       return name;
   }
-//  setAccessToken(String name) async {
-//    final savedUserName = await SharedPreferences.getInstance();
-//    await savedUserName.setString('AccessToken', name);
-//  }
-//
-//  Future<String> getAccessToken() async {
-//    final savedUserName = await SharedPreferences.getInstance();
-//    final name = savedUserName.getString('AccessToken');
-//    if (name == null) {
-//      return null;
-//    } else
-//      return name;
-//  }
 
-//  setBalance(int name) async {
-//    final savedUserName = await SharedPreferences.getInstance();
-//
-//    await savedUserName.setInt('Balance', name == null ? 0 : name);
-//  }
-
-//  Future<int> getBalance() async {
-//    final savedUserName = await SharedPreferences.getInstance();
-//    final name = savedUserName.getInt('Balance');
-//    if (name == null) {
-//      return 0;
-//    } else
-//      return name;
-//  }
-
-  setLoggedIn(bool name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setBool('LoggedIn', name);
+  static setLoggedIn(bool name) {
+    loggedIn = name;
   }
 
-  Future<bool> getLoggedIn() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getBool('LoggedIn');
+  static bool getLoggedIn() {
+    final name = loggedIn;
     if (name == null) {
       return false;
     } else
       return name;
   }
 
-  setAccountType(String name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setString('accountType', name);
+  static setAccountType(String name) {
+    accountType = name;
   }
 
-  Future<String> getAccountType() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getString('accountType');
+  static String getAccountType() {
+    final name = accountType;
     if (name == null) {
       return null;
     } else
@@ -142,252 +111,192 @@ class SavedData {
   }
 
 //To be coded for getting Image
-  setProfileImage(String name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setString('photoURL', name);
+  static setProfileImage(String name) {
+    photoURL = name;
   }
 
-  Future<String> getProfileImage() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getString('photoURL');
+  static String getProfileImage() {
+    final name = photoURL;
     if (name == null) {
       return null;
     } else
       return name;
   }
 
-//  setPrimaryColor(int name) async {
-//    final savedUserName = await SharedPreferences.getInstance();
-//    await savedUserName.setInt('PRIMARY', name);
-//  }
-//
-//  Future<int> getPrimaryColor() async {
-//    final savedUserName = await SharedPreferences.getInstance();
-//    final name = savedUserName.getInt('PRIMARY');
-//    if (name == null) {
-//      return null;
-//    } else
-//      return name;
-//  }
-//
-//  setAccentColor(int name) async {
-//    final savedUserName = await SharedPreferences.getInstance();
-//    await savedUserName.setInt('ACCENT', name);
-//  }
-//
-//  Future<int> getAccentColor() async {
-//    final savedUserName = await SharedPreferences.getInstance();
-//    final name = savedUserName.getInt('ACCENT');
-//    if (name == null) {
-//      return null;
-//    } else
-//      return name;
-//  }
-
-  setPfuAccess(bool name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setBool('pfuAccess', name);
+  static setPfuAccess(bool name) {
+    pfuAccess = name;
   }
 
-  Future<bool> getPfuAccess() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getBool('pfuAccess');
+  static bool getPfuAccess() {
+    final name = pfuAccess;
     if (name == null) {
       return null;
     } else
       return name;
   }
 
-  setCssEditAccess(bool name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setBool('cssEditAccess', name);
+  static setCssEditAccess(bool name) {
+    cssEditAccess = name;
   }
 
-  Future<bool> getCssEditAccess() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getBool('cssEditAccess');
+  static bool getCssEditAccess() {
+    final name = cssEditAccess;
     if (name == null) {
       return null;
     } else
       return name;
   }
 
-  setCssViewAccess(bool name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setBool('cssViewAccess', name);
+  static setCssViewAccess(bool name) {
+    cssViewAccess = name;
   }
 
-  Future<bool> getCssViewAccess() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getBool('cssViewAccess');
+  static bool getCssViewAccess() {
+    final name = cssViewAccess;
     if (name == null) {
       return null;
     } else
       return name;
   }
 
-  setQssEditAccess(bool name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setBool('qssEditAccess', name);
+  static setQssEditAccess(bool name) {
+    qssEditAccess = name;
   }
 
-  Future<bool> getQssEditAccess() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getBool('qssEditAccess');
+  static bool getQssEditAccess() {
+    final name = qssEditAccess;
     if (name == null) {
       return null;
     } else
       return name;
   }
 
-  setQssViewAccess(bool name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setBool('qssViewAccess', name);
+  static setQssViewAccess(bool name) {
+    qssViewAccess = name;
   }
 
-  Future<bool> getQssViewAccess() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getBool('qssViewAccess');
+  static bool getQssViewAccess() {
+    final name = qssViewAccess;
     if (name == null) {
       return null;
     } else
       return name;
   }
 
-  setQssVerifyAccess(bool name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setBool('qssVerifyAccess', name);
+  static setQssVerifyAccess(bool name) {
+    qssVerifyAccess = name;
   }
 
-  Future<bool> getQssVerifyAccess() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getBool('qssVerifyAccess');
+  static bool getQssVerifyAccess() {
+    final name = qssVerifyAccess;
     if (name == null) {
       return null;
     } else
       return name;
   }
 
-  setCssVerifyAccess(bool name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setBool('cssVerifyAccess', name);
+  static setCssVerifyAccess(bool name) {
+    cssVerifyAccess = name;
   }
 
-  Future<bool> getCssVerifyAccess() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getBool('cssVerifyAccess');
+  static bool getCssVerifyAccess() {
+    final name = cssVerifyAccess;
     if (name == null) {
       return null;
     } else
       return name;
   }
 
-  setCssAddAccess(bool name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setBool('cssAddAccess', name);
+  static setCssAddAccess(bool name) {
+    cssAddAccess = name;
   }
 
-  Future<bool> getCssAddAccess() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getBool('cssAddAccess');
+  static bool getCssAddAccess() {
+    final name = cssAddAccess;
     if (name == null) {
       return null;
     } else
       return name;
   }
 
-  setQssAddAccess(bool name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setBool('qssAddAccess', name);
+  static setQssAddAccess(bool name) {
+    qssAddAccess = name;
   }
 
-  Future<bool> getQssAddAccess() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getBool('qssAddAccess');
+  static bool getQssAddAccess() {
+    final name = qssAddAccess;
     if (name == null) {
       return null;
     } else
       return name;
   }
 
-  setAddNewUserAccess(bool name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setBool('addNewUserAccess', name);
+  static setAddNewUserAccess(bool name) {
+    addNewUserAccess = name;
   }
 
-  Future<bool> getAddNewUserAccess() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getBool('addNewUserAccess');
+  static bool getAddNewUserAccess() {
+    final name = addNewUserAccess;
     if (name == null) {
       return false;
     } else
       return name;
   }
 
-  setAccessDept(List<String> name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setStringList('accessDept', name);
+  static setAccessDept(List<String> name) {
+    accessDept = name;
   }
 
-  Future<List<String>> getAccessDept() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getStringList('accessDept');
+  static List<String> getAccessDept() {
+    final name = accessDept;
     if (name == null) {
       return null;
     } else
       return name;
   }
 
-  setFTAEditAccess(bool name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setBool('FTAEditAcces', name);
+  static setFTAEditAccess(bool name) {
+    ftaEditAccess = name;
   }
 
-  Future<bool> getFTAEditAccess() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getBool('FTAEditAcces');
+  static bool getFTAEditAccess() {
+    final name = ftaEditAccess;
     if (name == null) {
       return false;
     } else
       return name;
   }
 
-  setFTAAddAccess(bool name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setBool('FTAAddAccess', name);
+  static setFTAAddAccess(bool name) {
+    ftaAddAccess = name;
   }
 
-  Future<bool> getFTAAddAccess() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getBool('FTAAddAccess');
+  static bool getFTAAddAccess() {
+    final name = ftaAddAccess;
     if (name == null) {
       return false;
     } else
       return name;
   }
 
-  setFTAViewAccess(bool name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setBool('FTAViewAccess', name);
+  static setFTAViewAccess(bool name) {
+    ftaViewAccess = name;
   }
 
-  Future<bool> getFTAViewAccess() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getBool('FTAViewAccess');
+  static bool getFTAViewAccess() {
+    final name = ftaViewAccess;
     if (name == null) {
       return false;
     } else
       return name;
   }
 
-  setFTADeleteAccess(bool name) async {
-    final savedUserName = await SharedPreferences.getInstance();
-    await savedUserName.setBool('FTADeleteAccess', name);
+  static setFTADeleteAccess(bool name) {
+    ftaDeleteAccess = name;
   }
 
-  Future<bool> getFTADeleteAccess() async {
-    final savedUserName = await SharedPreferences.getInstance();
-    final name = savedUserName.getBool('FTADeleteAccess');
+  static bool getFTADeleteAccess() {
+    final name = ftaDeleteAccess;
     if (name == null) {
       return false;
     } else

@@ -53,7 +53,7 @@ class _OpenPDFState extends State<OpenPDF> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Rane DMS'),
+          title: Text('Rane DMS'),
         ),
         body: Center(
           child: Text('version $version'),

@@ -25,7 +25,6 @@ class MyPFUScreen extends StatefulWidget {
 class _MyPFUScreenState extends State<MyPFUScreen> {
   bool isLoaded = false;
   List<PFU> pfuList = [];
-  SavedData savedData = SavedData();
 
   Color getPFUColor(int status) {
     switch (status) {
@@ -48,7 +47,7 @@ class _MyPFUScreenState extends State<MyPFUScreen> {
 
   getData() async {
     print(widget.selectedDepartment);
-    String myDept = await savedData.getDepartment();
+    String myDept = SavedData.getDepartment();
     Networking networking = Networking();
 
     var data = await networking.postData('PFU/getPFU', {
@@ -123,6 +122,9 @@ class _MyPFUScreenState extends State<MyPFUScreen> {
     } else {
       return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
+        appBar: AppBar(
+          title: Text(""),
+        ),
         body: ListView(
           children: [
             Container(

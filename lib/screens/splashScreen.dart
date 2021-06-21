@@ -12,7 +12,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  SavedData savedData = SavedData();
+  //SavedData savedData = SavedData();
 
   @override
   void initState() {
@@ -20,9 +20,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
     Timer(Duration(seconds: 3), () async {
       Networking networking = Networking();
-      var updatedAppVersion = await networking.deleteData('updateApp');
-      if (updatedAppVersion == version) {
-        if (await savedData.getLoggedIn()) {
+      var updatedAppVersion = await networking.deleteData('updateDesktopApp');
+      if (updatedAppVersion == desktopVersion) {
+        if (await SavedData.getLoggedIn()) {
           Navigator.pushReplacementNamed(context, '/homeScreen');
         } else {
           Navigator.pushReplacementNamed(context, '/loginScreen');

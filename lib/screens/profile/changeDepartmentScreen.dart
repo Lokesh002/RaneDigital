@@ -24,14 +24,12 @@ class _ChangeDepartmentScreenState extends State<ChangeDepartmentScreen> {
     getData();
   }
 
-  SavedData savedData = SavedData();
   setSharedPref(String dept) async {
-    await savedData.setDepartment(dept);
+    SavedData.setDepartment(dept);
   }
 
   getData() async {
-    SavedData savedData = SavedData();
-    userId = await savedData.getUserId();
+    userId = SavedData.getUserId();
   }
 
   @override
@@ -132,8 +130,10 @@ class _ChangeDepartmentScreenState extends State<ChangeDepartmentScreen> {
                                   await setSharedPref(result['department']);
                                   Navigator.pop(context, result['department']);
                                 } else {
-                                  Fluttertoast.showToast(
-                                      msg: "Choose a new department.");
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              "Choose a new department.")));
                                 }
                               }
                             },

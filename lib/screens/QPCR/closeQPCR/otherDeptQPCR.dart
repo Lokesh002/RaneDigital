@@ -24,10 +24,9 @@ class OtherDeptQPCR extends StatefulWidget {
 class _OtherDeptQPCRState extends State<OtherDeptQPCR> {
   bool isLoaded = false;
   List<QPCR> qpcrList = [];
-  SavedData savedData = SavedData();
 
   getData() async {
-    String myDept = await savedData.getDepartment();
+    String myDept = SavedData.getDepartment();
     Networking networking = Networking();
     print(widget.selectedDepartment);
     print(myDept);

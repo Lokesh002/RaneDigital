@@ -19,14 +19,13 @@ class _CloseQPCRScreenState extends State<CloseQPCRScreen> {
   bool isLoaded = false;
   int height = 180;
   int weight = 65;
-  SavedData savedData = SavedData();
   String raisingDepartment;
   var age = 20;
 
   List<String> finalDepartments = [];
 
   getDepartments() async {
-    raisingDepartment = await savedData.getDepartment();
+    raisingDepartment = SavedData.getDepartment();
     for (int i = 0; i < departments.length; i++) {
       print(departments[i]);
       if (departments[i] != raisingDepartment) {
