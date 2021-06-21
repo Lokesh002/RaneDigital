@@ -67,10 +67,17 @@ class _UpdateAppScreenState extends State<UpdateAppScreen> {
   Future download(String url, String name) async {
     Directory docDir = await getApplicationDocumentsDirectory();
     var pList = docDir.path.split("\\");
-    pList[pList.length - 1] = "Downloads";
-    String path = pList.join('\\');
-    String fullPath = "$path/$name";
+    if (pList.contains("OneDrive")) {
+      pList[pList.length - 2] = "Downloads";
+      pList[pList.length - 1] = name;
+    } else {
+      pList[pList.length - 1] = "Downloads";
+      pList.add(name);
+    }
 
+    String path = pList.join('\\');
+    String fullPath = path;
+    print(fullPath);
     try {
       Dio dio = Dio();
       showAlertDialog(context);
@@ -99,7 +106,7 @@ class _UpdateAppScreenState extends State<UpdateAppScreen> {
                   validateStatus: (status) {
                     return status < 500;
                   }));
-      File file = File(fullPath);
+      File file = File(path);
       var raf = file.openSync(mode: FileMode.write);
       raf.writeFromSync(response.data);
       await raf.close();
