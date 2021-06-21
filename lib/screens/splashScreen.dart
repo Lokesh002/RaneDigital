@@ -21,6 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(Duration(seconds: 3), () async {
       Networking networking = Networking();
       var updatedAppVersion = await networking.deleteData('updateDesktopApp');
+      print(updatedAppVersion);
       if (updatedAppVersion == desktopVersion) {
         if (await SavedData.getLoggedIn()) {
           Navigator.pushReplacementNamed(context, '/homeScreen');

@@ -120,7 +120,7 @@ class _UpdateAppScreenState extends State<UpdateAppScreen> {
   @override
   void initState() {
     super.initState();
-    getPermission();
+    //getPermission();
   }
 
   DateTime currentBackPressTime;
@@ -139,7 +139,7 @@ class _UpdateAppScreenState extends State<UpdateAppScreen> {
                 child: Hero(
                   child: Image.asset(
                     "images/logo.png",
-                    fit: BoxFit.fitWidth,
+                    fit: BoxFit.contain,
                   ),
                   tag: "logo",
                 )),
@@ -184,7 +184,7 @@ class _UpdateAppScreenState extends State<UpdateAppScreen> {
               child: MaterialButton(
                 onPressed: () async {
                   await download(
-                      ipAddress + "desktop/RaneDigital.exe", "RaneDigital.exe");
+                      ipAddress + "desktop/RaneDigital.zip", "RaneDigital.zip");
                 },
                 height: screenSize.screenHeight * 5,
                 minWidth: screenSize.screenWidth * 30,
