@@ -7,7 +7,7 @@ import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/courseCard.dart';
 import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
-import 'file:///D:/Projects/Flutter/rane_dms/rane_dms/lib/screens/QPCR/closeQPCR/closeSteps/FishBone/manFishBone.dart';
+//import 'file:///D:/Projects/Flutter/rane_dms/rane_dms/lib/screens/QPCR/closeQPCR/closeSteps/FishBone/manFishBone.dart';
 import 'package:rane_dms/screens/QPCR/closeQPCR/closeSteps/FishBone/FishBoneTabScreen.dart';
 
 class Step1Screen extends StatefulWidget {
