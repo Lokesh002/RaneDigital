@@ -1,6 +1,15 @@
 import 'dart:developer';
-import 'dart:io';
-
+import 'dart:typed_data';
+import 'package:universal_io/io.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
+import 'dart:io' as io;
+import 'dart:html' as html;
+import 'dart:typed_data';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http_parser/http_parser.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +21,10 @@ import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 import 'package:dio/dio.dart';
-import 'package:image_picker/image_picker.dart';
+//import 'package:image_picker/image_picker.dart';
+
+import 'package:universal_io/prefer_universal/io.dart';
+//import 'package:file_picker_web/file_picker_web.dart' as webPicker;
 
 class EnterPFUDataScreen extends StatefulWidget {
   Line selectedLine;
@@ -56,6 +68,7 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
   String address;
   String accountType;
   File _image;
+  String filename;
   bool registeredSuccess = false;
   bool _impactProduction = false;
   bool _impactQuality = false;
@@ -64,7 +77,8 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
   bool _impactSafety = false;
   bool _impactMorale = false;
   bool _impactEnvironment = false;
-
+  List<int> _selectedFile;
+  Uint8List _bytesData;
   String pfuId;
   final _formKey = GlobalKey<FormState>();
   final problemController = TextEditingController();
@@ -114,89 +128,59 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
     getData();
   }
 
-  void _openImageFile(BuildContext context) async {
-    final XTypeGroup typeGroup = XTypeGroup(
-      label: 'images',
-      extensions: ['jpg', 'jpeg', 'bmp', 'png'],
-    );
-    final List<XFile> files = await openFiles(acceptedTypeGroups: [typeGroup]);
-    if (files.isEmpty) {
-      // Operation was canceled by the user.
-      return;
-    }
-    final XFile file = files[0];
-    final String fileName = file.name;
-    final String filePath = file.path;
+  startWebFilePicker() async {
+    html.InputElement uploadInput = html.FileUploadInputElement();
+    uploadInput.multiple = true;
+    uploadInput.draggable = true;
+    uploadInput.click();
 
-    await showDialog(
-      context: context,
-      builder: (context) => imageDisplay(fileName, filePath),
-    );
+    uploadInput.onChange.listen((e) {
+      final files = uploadInput.files;
+      final file = files[0];
+      final reader = new html.FileReader();
+      filename = file.name;
+
+      void _handleResult(Object result) {
+        setState(() {
+          _bytesData =
+              Base64Decoder().convert(result.toString().split(",").last);
+          _selectedFile = _bytesData;
+        });
+      }
+
+      reader.onLoadEnd.listen((e) {
+        log(file.type);
+        if (file.type.contains('image'))
+          _handleResult(reader.result);
+        else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Please add a JPG/JPEG/PNG file only.")));
+        }
+      });
+      reader.readAsDataUrl(file);
+    });
   }
 
-  imageDisplay(String fileName, String filePath) {
-    return AlertDialog(
-      title: Text(fileName),
-      // On web the filePath is a blob url
-      // while on other platforms it is a system path.
-      content: kIsWeb ? Image.network(filePath) : Image.file(File(filePath)),
-      actions: [
-        TextButton(
-          child: const Text('Done'),
-          onPressed: () {
-            _image = File(filePath);
-            setState(() {});
-            Navigator.pop(context);
-          },
-        ),
-        TextButton(
-          child: const Text('Cancel'),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ],
-    );
-  }
-
-  // final ImagePicker _picker = ImagePicker();
-  // getImageFromGallery(BuildContext cntext) async {
-  //   try {
-  //     var image = await _picker.getImage(
-  //       source: ImageSource.gallery,
-  //       imageQuality: 50,
-  //       maxHeight: screenSize.screenHeight * 50,
-  //       maxWidth: screenSize.screenWidth * 100,
-  //     );
-  //     setState(() {
-  //       _image = File(image.path);
-  //
-  //       print("image path: $image");
-  //     });
-  //   } catch (e) {
-  //     setState(() {
-  //       print(e);
-  //     });
-  //   }
-  // }
-
-  Future<int> uploadImage(File file, BuildContext context) async {
+  Future<int> uploadImage(BuildContext context) async {
     showAlertDiaprint(context);
 
     Dio dio = Dio();
-    String fileName = file.path.split('/').last;
-    FormData formData = FormData.fromMap({
-      "myPhoto": await MultipartFile.fromFile(file.path, filename: fileName),
-      "pfuId": pfuId,
-    });
-
-    Response response = await dio.post(
-      ipAddress + 'uploadPFUPhoto',
-      data: formData,
-    );
-    print(response.data);
+    //String fileName = file.path.split('/').last;
+    var request = new http.MultipartRequest(
+        "POST", Uri.parse(ipAddress + "uploadPFUPhoto"));
+    request.fields['pfuId'] = '$pfuId';
+    request.files.add(http.MultipartFile.fromBytes(
+      'myPhoto',
+      _selectedFile,
+      filename: filename,
+      contentType: new MediaType('application', 'octet-stream'),
+    ));
+    var response = await request.send();
 
     Navigator.pop(context);
+
+    log(response.statusCode.toString());
+    log(response.toString());
     return (response.statusCode);
   }
 
@@ -553,9 +537,7 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
                                   right: screenSize.screenWidth * 3),
                               child: ReusableButton(
                                   onPress: () async {
-                                    _openImageFile(context);
-
-                                    // await getImageFromGallery(context);
+                                    startWebFilePicker();
                                   },
                                   content: "Add Photo",
                                   height: screenSize.screenHeight * 5,
@@ -565,7 +547,7 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
                               width: screenSize.screenWidth * 50,
                               child: Text(
                                 _image != null
-                                    ? _image.path.split('/').last
+                                    ? "hello" //_image.path.split('/').last
                                     : "Please Add Photo",
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -605,7 +587,7 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
                                 !_impactSafety &&
                                 !_impactMorale &&
                                 !_impactEnvironment)) {
-                              if (_image != null) {
+                              if (_selectedFile != null) {
                                 Networking networking = Networking();
 
                                 var data =
@@ -629,8 +611,7 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
                                 if (data != null) {
                                   if (data != "Error") {
                                     pfuId = data['_id'];
-                                    int statusCode =
-                                        await uploadImage(_image, context);
+                                    int statusCode = await uploadImage(context);
 
                                     if (statusCode == 200) {
                                       ScaffoldMessenger.of(context)
