@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rane_dms/components/ReusableCard.dart';
 import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/icon_content.dart';
@@ -122,8 +121,8 @@ class _ClosePFUScreenState extends State<ClosePFUScreen> {
                         return TabBarScreen(selectedDepartment);
                       }));
                     else {
-                      Fluttertoast.showToast(
-                          msg: "Please select one department.");
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("Please select one department.")));
                     }
                   },
                   child: Container(

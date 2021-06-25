@@ -23,11 +23,11 @@ class _SplashScreenState extends State<SplashScreen> {
       //var updatedAppVersion = await networking.deleteData('updateDesktopApp');
       //print(updatedAppVersion);
       //  if (true) {
-      if (SavedData.getLoggedIn()) {
-        Navigator.pushReplacementNamed(context, '/homeScreen');
-      } else {
-        Navigator.pushReplacementNamed(context, '/loginScreen');
-      }
+      //if (SavedData.getLoggedIn()) {
+      // Navigator.pushReplacementNamed(context, '/homeScreen');
+      //} else {
+      Navigator.pushReplacementNamed(context, '/loginScreen');
+      // }
       //  } else {
       //   Navigator.pushReplacementNamed(context, '/updateAppScreen');
       // }

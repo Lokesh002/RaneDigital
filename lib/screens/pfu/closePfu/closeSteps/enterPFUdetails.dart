@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/networking.dart';
@@ -424,8 +423,10 @@ class _EnterPFUDetailsState extends State<EnterPFUDetails> {
                               Navigator.pop(context);
                               Navigator.pop(context);
                             } else {
-                              Fluttertoast.showToast(
-                                  msg: "Please enter all the fields.");
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          "Please enter all the fields.")));
                             }
                           },
                         ),

@@ -6,7 +6,6 @@ import 'package:rane_dms/components/lineDataStructure.dart';
 import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:convert' as convert;
 
 class LoginScreen extends StatefulWidget {

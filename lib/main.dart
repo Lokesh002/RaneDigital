@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
       themeMode: ThemeMode.light,
       routes: <String, WidgetBuilder>{
         '/': (context) => SplashScreen(),
-        '/documentMainScreen': (context) => DocumentMainScreen(),
+        // '/documentMainScreen': (context) => DocumentMainScreen(),
         '/homeScreen': (context) => HomeScreen(),
         '/loginScreen': (context) => LoginScreen(),
         '/adminPasswordScreen': (context) => AdminPasswordScreen(),
@@ -68,11 +68,11 @@ class _MyAppState extends State<MyApp> {
         '/closePFUScreen': (context) => ClosePFUScreen(),
         '/addLineScreen': (context) => AddLineScreen(),
         '/changePassword': (context) => ChangePassword(),
-        '/updateAppScreen': (context) => UpdateAppScreen(),
-        '/QPCRMainScreen': (context) => QPCRMainScreen(),
-        '/generateQPCRScreen': (context) => QPCRGenerateChoiceScreen(),
-        '/viewQPCRScreen': (context) => EnterQPCRFilterDataScreen(),
-        '/closeQPCRScreen': (context) => CloseQPCRScreen(),
+        // '/updateAppScreen': (context) => UpdateAppScreen(),
+        // '/QPCRMainScreen': (context) => QPCRMainScreen(),
+        // '/generateQPCRScreen': (context) => QPCRGenerateChoiceScreen(),
+        // '/viewQPCRScreen': (context) => EnterQPCRFilterDataScreen(),
+        // '/closeQPCRScreen': (context) => CloseQPCRScreen(),
       },
     );
   }

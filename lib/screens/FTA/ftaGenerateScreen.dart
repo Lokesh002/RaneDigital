@@ -9,7 +9,6 @@ import 'dart:typed_data';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http_parser/http_parser.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/constants.dart';
