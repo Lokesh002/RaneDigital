@@ -19,18 +19,18 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Timer(Duration(seconds: 3), () async {
-      Networking networking = Networking();
-      var updatedAppVersion = await networking.deleteData('updateDesktopApp');
-      print(updatedAppVersion);
-      if (updatedAppVersion == desktopVersion) {
-        if (await SavedData.getLoggedIn()) {
-          Navigator.pushReplacementNamed(context, '/homeScreen');
-        } else {
-          Navigator.pushReplacementNamed(context, '/loginScreen');
-        }
+      //Networking networking = Networking();
+      //var updatedAppVersion = await networking.deleteData('updateDesktopApp');
+      //print(updatedAppVersion);
+      //  if (true) {
+      if (SavedData.getLoggedIn()) {
+        Navigator.pushReplacementNamed(context, '/homeScreen');
       } else {
-        Navigator.pushReplacementNamed(context, '/updateAppScreen');
+        Navigator.pushReplacementNamed(context, '/loginScreen');
       }
+      //  } else {
+      //   Navigator.pushReplacementNamed(context, '/updateAppScreen');
+      // }
     });
   }
 
