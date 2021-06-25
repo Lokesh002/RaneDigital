@@ -1,12 +1,16 @@
-import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
-
+import 'dart:typed_data';
+import 'package:universal_io/io.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
+import 'dart:io' as io;
+import 'dart:html' as html;
+import 'dart:typed_data';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http_parser/http_parser.dart';
 import 'package:dio/dio.dart';
-import 'package:file_selector/file_selector.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:rane_dms/components/ReusableButton.dart';
 import 'package:rane_dms/components/constants.dart';
 import 'package:rane_dms/components/ftaDataStructure.dart';
@@ -14,7 +18,8 @@ import 'package:rane_dms/components/networking.dart';
 import 'package:rane_dms/components/sharedPref.dart';
 import 'package:rane_dms/components/sizeConfig.dart';
 import 'package:rane_dms/screens/QPCR/closeQPCR/closeSteps/acceptQPCRScreen.dart';
-import 'dart:convert' as convert;
+
+import 'package:universal_io/prefer_universal/io.dart';
 
 class FTAGenerateScreen extends StatefulWidget {
   final String parentId;
@@ -28,11 +33,37 @@ class FTAGenerateScreen extends StatefulWidget {
   _FTAGenerateScreenState createState() => _FTAGenerateScreenState();
 }
 
+showAlertDiaprint(BuildContext context) {
+  AlertDialog alert = AlertDialog(
+    content: new Row(
+      children: [
+        CircularProgressIndicator(
+          backgroundColor: Theme.of(context).primaryColor,
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        Container(margin: EdgeInsets.only(left: 5), child: Text("Loading")),
+      ],
+    ),
+  );
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
 class _FTAGenerateScreenState extends State<FTAGenerateScreen> {
   String raisingPerson;
   SizeConfig screenSize;
   TextEditingController ftaDescController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  List<int> _selectedFile;
+  Uint8List _bytesData;
+  String filename;
   @override
   void initState() {
     // TODO: implement initState
@@ -44,93 +75,64 @@ class _FTAGenerateScreenState extends State<FTAGenerateScreen> {
     raisingPerson = SavedData.getUserId();
   }
 
-  File _ftaImage;
-  //
-  // final ImagePicker _picker = ImagePicker();
-  // getFTAImage(BuildContext cntext) async {
-  //   try {
-  //     var image = await _picker.getImage(
-  //       source: ImageSource.gallery,
-  //       imageQuality: 50,
-  //       maxHeight: screenSize.screenHeight * 50,
-  //       maxWidth: screenSize.screenWidth * 100,
-  //     );
-  //     setState(() {
-  //       _ftaImage = File(image.path);
-  //       print("image path: $image");
-  //     });
-  //   } catch (e) {
-  //     setState(() {
-  //       print(e);
-  //     });
-  //   }
-  // }
-  void _openImageFile(BuildContext context) async {
-    final XTypeGroup typeGroup = XTypeGroup(
-      label: 'images',
-      extensions: ['jpg', 'jpeg', 'bmp', 'png'],
-    );
-    final List<XFile> files = await openFiles(acceptedTypeGroups: [typeGroup]);
-    if (files.isEmpty) {
-      // Operation was canceled by the user.
-      return;
-    }
-    final XFile file = files[0];
-    final String fileName = file.name;
-    final String filePath = file.path;
+  startWebFilePicker() async {
+    html.InputElement uploadInput = html.FileUploadInputElement();
+    uploadInput.multiple = false;
+    uploadInput.draggable = true;
+    uploadInput.click();
 
-    await showDialog(
-      context: context,
-      builder: (context) => imageDisplay(fileName, filePath),
-    );
-  }
+    uploadInput.onChange.listen((e) {
+      final files = uploadInput.files;
+      final file = files[0];
+      final reader = new html.FileReader();
+      filename = file.name;
 
-  imageDisplay(String fileName, String filePath) {
-    return AlertDialog(
-      title: Text(fileName),
-      // On web the filePath is a blob url
-      // while on other platforms it is a system path.
-      content: kIsWeb ? Image.network(filePath) : Image.file(File(filePath)),
-      actions: [
-        TextButton(
-          child: const Text('Done'),
-          onPressed: () {
-            _ftaImage = File(filePath);
-            setState(() {});
-            Navigator.pop(context);
-          },
-        ),
-        TextButton(
-          child: const Text('Cancel'),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ],
-    );
-  }
+      void _handleResult(Object result) {
+        setState(() {
+          _bytesData =
+              Base64Decoder().convert(result.toString().split(",").last);
+          _selectedFile = _bytesData;
+        });
+      }
 
-  Future<FTA> uploadImage(File file, BuildContext context, String id) async {
-    showAlertDialog(context);
-
-    Dio dio = Dio();
-    String fileName = file.path.split('/').last;
-    FormData formData = FormData.fromMap({
-      "myFTApic": await MultipartFile.fromFile(file.path, filename: fileName),
-      "id": id,
+      reader.onLoadEnd.listen((e) {
+        log(file.type);
+        if ((file.type.contains('jpeg') &&
+                (file.name.split('.').last == 'jpg' ||
+                    file.name.split('.').last == 'jpeg')) ||
+            file.type.contains('png'))
+          _handleResult(reader.result);
+        else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Please add a JPG/JPEG/PNG file only.")));
+        }
+      });
+      reader.readAsDataUrl(file);
     });
+  }
 
-    Response response = await dio.post(
-      ipAddress + 'FTA/uploadFTApic',
-      data: formData,
-    );
-
-    log(response.data.toString());
+  Future<FTA> uploadImage(BuildContext context, String id) async {
+    showAlertDiaprint(context);
+    var request = new http.MultipartRequest(
+        "POST", Uri.parse(ipAddress + "FTA/uploadFTApic"));
+    request.fields['id'] = '$id';
+    request.files.add(http.MultipartFile.fromBytes(
+      'myFTApic',
+      _selectedFile,
+      filename: filename,
+      contentType: new MediaType('application', 'octet-stream'),
+    ));
+    var response = await request.send();
 
     Navigator.pop(context);
 
+    log('code:' + response.statusCode.toString());
     FTAList f = FTAList();
-    List<FTA> fList = f.getFTAList([(response.data)]);
+
+    var a = convert.jsonDecode((await http.Response.fromStream(response)).body);
+    print(a.toString());
+
+    List<FTA> fList = f.getFTAList([a]);
     return (fList[0]);
   }
 
@@ -144,7 +146,6 @@ class _FTAGenerateScreenState extends State<FTAGenerateScreen> {
   @override
   Widget build(BuildContext context) {
     screenSize = SizeConfig(context);
-
     return WillPopScope(
       onWillPop: () {
         Navigator.pop(context, widget.ftaList);
@@ -201,25 +202,20 @@ class _FTAGenerateScreenState extends State<FTAGenerateScreen> {
                                     padding: EdgeInsets.symmetric(
                                         horizontal: screenSize.screenWidth * 2,
                                         vertical: screenSize.screenHeight * 2),
-                                    child: _ftaImage != null
+                                    child: _selectedFile != null
                                         ? Image.memory(
-                                            _ftaImage.readAsBytesSync(),
+                                            _selectedFile,
                                             height:
                                                 screenSize.screenHeight * 30,
                                             fit: BoxFit.contain,
                                           )
-                                        : Text(_ftaImage != null
-                                            ? 'Img' +
-                                                _ftaImage.path
-                                                    .split('/')
-                                                    .last
-                                                    .split('picker')
-                                                    .last
+                                        : Text(_selectedFile != null
+                                            ? filename
                                             : 'Please Add FTA Photo'),
                                   ),
                                   ReusableButton(
                                       onPress: () {
-                                        _openImageFile(context);
+                                        startWebFilePicker();
                                       },
                                       content: "Upload Image",
                                       height: screenSize.screenHeight * 7,
@@ -249,9 +245,8 @@ class _FTAGenerateScreenState extends State<FTAGenerateScreen> {
                           "line": widget.lineId,
                         });
                         List<FTA> fList = widget.ftaList;
-                        if (_ftaImage != null) {
-                          FTA f =
-                              await uploadImage(_ftaImage, context, d['_id']);
+                        if (_selectedFile != null) {
+                          FTA f = await uploadImage(context, d['_id']);
 
                           fList.add(f);
                         } else {

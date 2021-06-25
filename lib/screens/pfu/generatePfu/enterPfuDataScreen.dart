@@ -130,7 +130,7 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
 
   startWebFilePicker() async {
     html.InputElement uploadInput = html.FileUploadInputElement();
-    uploadInput.multiple = true;
+    uploadInput.multiple = false;
     uploadInput.draggable = true;
     uploadInput.click();
 
@@ -150,7 +150,10 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
 
       reader.onLoadEnd.listen((e) {
         log(file.type);
-        if (file.type.contains('image'))
+        if ((file.type.contains('jpeg') &&
+                (file.name.split('.').last == 'jpg' ||
+                    file.name.split('.').last == 'jpeg')) ||
+            file.type.contains('png'))
           _handleResult(reader.result);
         else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -164,8 +167,6 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
   Future<int> uploadImage(BuildContext context) async {
     showAlertDiaprint(context);
 
-    Dio dio = Dio();
-    //String fileName = file.path.split('/').last;
     var request = new http.MultipartRequest(
         "POST", Uri.parse(ipAddress + "uploadPFUPhoto"));
     request.fields['pfuId'] = '$pfuId';
@@ -546,8 +547,8 @@ class _EnterPFUDataScreenState extends State<EnterPFUDataScreen> {
                             Container(
                               width: screenSize.screenWidth * 50,
                               child: Text(
-                                _image != null
-                                    ? "hello" //_image.path.split('/').last
+                                _selectedFile != null
+                                    ? filename //_image.path.split('/').last
                                     : "Please Add Photo",
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
